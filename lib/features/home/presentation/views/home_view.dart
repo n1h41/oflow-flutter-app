@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:oflow/core/constants/colors.dart';
 
@@ -12,9 +13,14 @@ class HomeView extends StatelessWidget {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Hello! Davis",
-              style: Theme.of(context).textTheme.headlineLarge,
+            RichText(
+              text: TextSpan(
+                style: Theme.of(context).textTheme.titleLarge,
+                children: const [
+                  TextSpan(text: "Hello! "),
+                  TextSpan(text: "Davis"),
+                ],
+              ),
             ),
             Text(
               DateFormat.yMMMd().format(DateTime.now()),
@@ -46,64 +52,75 @@ class HomeView extends StatelessWidget {
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 0,
-                          blurRadius: 11,
-                          offset:
-                              const Offset(0, 0), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 70,
-                          height: 70,
-                          decoration: BoxDecoration(
-                            color: AppColors.accent,
-                            borderRadius: BorderRadius.circular(10),
+                  InkWell(
+                    onTap: () {
+                      context.go("/device");
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 0,
+                            blurRadius: 11,
+                            offset: const Offset(
+                                0, 0), // changes position of shadow
                           ),
-                        ),
-                        const SizedBox(
-                          width: 16,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Cropton Motor',
-                              style: Theme.of(context).textTheme.headlineMedium,
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 70,
+                            height: 70,
+                            decoration: BoxDecoration(
+                              color: KAppColors.accent,
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            RichText(
-                              text: TextSpan(
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                      color: AppColors.textPrimary
-                                          .withOpacity(0.4),
-                                    ),
-                                children: [
-                                  TextSpan(
-                                    text: "Last Used: ",
-                                  ),
-                                  TextSpan(
-                                    text: DateFormat.yMMMd()
-                                        .format(DateTime.now()),
-                                  ),
-                                ],
+                          ),
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Cropton Motor',
+                                style:
+                                    Theme.of(context).textTheme.titleMedium,
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              RichText(
+                                text: TextSpan(
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                        color: KAppColors.textPrimary
+                                            .withOpacity(0.4),
+                                      ),
+                                  children: [
+                                    const TextSpan(
+                                      text: "Last Used: ",
+                                    ),
+                                    TextSpan(
+                                      text: DateFormat.yMMMd()
+                                          .format(DateTime.now()),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Spacer(),
+                          const CircleAvatar(
+                            radius: 20,
+                            backgroundColor: KAppColors.accent,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -111,6 +128,12 @@ class HomeView extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: KAppColors.accent,
+        shape: const CircleBorder(),
+        onPressed: () {},
+        child: const Icon(Icons.add),
       ),
     );
   }
