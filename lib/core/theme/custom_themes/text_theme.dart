@@ -12,12 +12,12 @@ class KTextTheme {
       fontWeight: FontWeight.w900,
     ),
     headlineMedium: const TextStyle().copyWith(
-      fontSize: 26,
+      fontSize: 34,
       color: KAppColors.textPrimary,
       fontWeight: FontWeight.w700,
     ),
     headlineSmall: const TextStyle().copyWith(
-      fontSize: 18,
+      fontSize: 26,
       color: KAppColors.textPrimary,
       fontWeight: FontWeight.w500,
     ),
@@ -39,7 +39,7 @@ class KTextTheme {
     bodyLarge: const TextStyle().copyWith(
       fontSize: 18,
       color: KAppColors.textPrimary,
-      fontWeight: FontWeight.w300,
+      fontWeight: FontWeight.w400,
     ),
     bodyMedium: const TextStyle().copyWith(
       fontSize: 16,

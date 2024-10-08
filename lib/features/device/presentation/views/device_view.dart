@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:oflow/core/constants/colors.dart';
 
 import '../widgets/device_tile.dart';
@@ -41,10 +42,7 @@ class DeviceView extends StatelessWidget {
         ),
         title: Text(
           "Motor",
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(fontWeight: FontWeight.w400),
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       ),
       body: Column(
@@ -60,10 +58,16 @@ class DeviceView extends StatelessWidget {
                 DeviceTile(
                   title: "Schedule",
                   icon: Icons.timer,
+                  onTap: () {
+                    context.go('/device/schedule');
+                  },
                 ),
                 DeviceTile(
                   title: "History",
                   icon: Icons.history,
+                  onTap: () {
+                    context.go('/device/history');
+                  },
                 ),
                 DeviceTile(
                   title: "On/Off Timer",
@@ -105,7 +109,12 @@ class DeviceView extends StatelessWidget {
                             ),
                             Text(
                               "30 min",
-                              style: Theme.of(context).textTheme.headlineMedium,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
                             ),
                           ],
                         ),
@@ -126,7 +135,12 @@ class DeviceView extends StatelessWidget {
                             ),
                             Text(
                               "Offline",
-                              style: Theme.of(context).textTheme.headlineMedium,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
                             ),
                           ],
                         ),
