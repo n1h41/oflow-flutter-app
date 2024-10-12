@@ -88,7 +88,7 @@ class _DeviceViewState extends State<DeviceView> {
                 ),
                 DeviceTile(
                   title: "On/Off Timer",
-                  icon: KAppAssets.circlePower,
+                  icon: KAppAssets.circledPower,
                   onTap: () => showModalBottomSheet<void>(
                     context: context,
                     builder: (context) => const TimerBottomSheet(),
