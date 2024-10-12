@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:oflow/core/constants/colors.dart';
+
+import '../../../../core/constants/assets.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -89,8 +92,7 @@ class HomeView extends StatelessWidget {
                             children: [
                               Text(
                                 'Cropton Motor',
-                                style:
-                                    Theme.of(context).textTheme.titleMedium,
+                                style: Theme.of(context).textTheme.titleMedium,
                               ),
                               RichText(
                                 text: TextSpan(
@@ -115,9 +117,10 @@ class HomeView extends StatelessWidget {
                             ],
                           ),
                           const Spacer(),
-                          const CircleAvatar(
+                          CircleAvatar(
                             radius: 20,
                             backgroundColor: KAppColors.accent,
+                            child: SvgPicture.asset(KAppAssets.neArrow),
                           ),
                         ],
                       ),

@@ -1,11 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:oflow/core/constants/assets.dart';
 import 'package:oflow/core/constants/colors.dart';
+import 'package:oflow/features/device/presentation/widgets/power_setting_bottom_sheet.dart';
 
 import '../widgets/device_tile.dart';
+import '../widgets/timer_bottom_sheet.dart';
 
-class DeviceView extends StatelessWidget {
+class DeviceView extends StatefulWidget {
   const DeviceView({super.key});
+
+  @override
+  State<DeviceView> createState() => _DeviceViewState();
+}
+
+class _DeviceViewState extends State<DeviceView> {
+  late final ValueNotifier<bool> timerStatusNotifier;
+
+  @override
+  void initState() {
+    super.initState();
+    timerStatusNotifier = ValueNotifier<bool>(false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,25 +74,33 @@ class DeviceView extends StatelessWidget {
               children: [
                 DeviceTile(
                   title: "Schedule",
-                  icon: Icons.timer,
+                  icon: KAppAssets.schedule,
                   onTap: () {
                     context.go('/device/schedule');
                   },
                 ),
                 DeviceTile(
                   title: "History",
-                  icon: Icons.history,
+                  icon: KAppAssets.history,
                   onTap: () {
                     context.go('/device/history');
                   },
                 ),
                 DeviceTile(
                   title: "On/Off Timer",
-                  icon: Icons.timer,
+                  icon: KAppAssets.circlePower,
+                  onTap: () => showModalBottomSheet<void>(
+                    context: context,
+                    builder: (context) => const TimerBottomSheet(),
+                  ),
                 ),
                 DeviceTile(
                   title: "Power Settings",
-                  icon: Icons.settings,
+                  icon: KAppAssets.settings,
+                  onTap: () => showModalBottomSheet<void>(
+                    context: context,
+                    builder: (context) => const PowerSettingBottomSheet(),
+                  ),
                 ),
               ],
             ),
@@ -177,18 +202,75 @@ class DeviceView extends StatelessWidget {
                             color: KAppColors.borderPrimary,
                           ),
                         ),
-                        child: null,
+                        child: Center(
+                          child: Container(
+                            width: 218,
+                            height: 218,
+                            decoration: BoxDecoration(
+                              color: KAppColors.textWhite,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: KAppColors.accent.withOpacity(0.1),
+                                  blurRadius: 16,
+                                  spreadRadius: 0,
+                                  offset: const Offset(0, 9),
+                                ),
+                              ],
+                            ),
+                            child: ValueListenableBuilder(
+                                valueListenable: timerStatusNotifier,
+                                builder: (context, timerStatus, _) {
+                                  return Center(
+                                    child: InkWell(
+                                      onTap: () {
+                                        timerStatusNotifier.value =
+                                            !timerStatus;
+                                      },
+                                      child: Container(
+                                        width: 190,
+                                        height: 190,
+                                        decoration: BoxDecoration(
+                                          color: timerStatus
+                                              ? KAppColors.accent
+                                              : KAppColors.containerBackground,
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: KAppColors.borderPrimary,
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: SvgPicture.asset(
+                                            KAppAssets.power,
+                                            color: timerStatus
+                                                ? KAppColors.textWhite
+                                                : null,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          ),
+                        ),
                       ),
                       Positioned(
                         bottom: 5,
-                        child: Container(
-                          height: 10,
-                          width: 10,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: KAppColors.containerBackgroundDark
-                                .withOpacity(0.2),
-                          ),
+                        child: ValueListenableBuilder(
+                          valueListenable: timerStatusNotifier,
+                          builder: (context, timerStatus, _) {
+                            return Container(
+                              height: 10,
+                              width: 10,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: timerStatus
+                                    ? KAppColors.accent.withOpacity(0.8)
+                                    : KAppColors.containerBackgroundDark
+                                        .withOpacity(0.2),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],

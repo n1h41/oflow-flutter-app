@@ -42,6 +42,15 @@ class ScheduleView extends StatelessWidget {
           "Schedule",
           style: Theme.of(context).textTheme.bodyLarge,
         ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.add_circle,
+              color: KAppColors.accent,
+            ),
+          ),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(
@@ -85,9 +94,9 @@ class ScheduleView extends StatelessWidget {
                     ),
                   ],
                 ),
-                Spacer(),
+                const Spacer(),
                 Switch(
-                  trackOutlineColor: MaterialStateProperty.all(
+                  trackOutlineColor: WidgetStateProperty.all(
                     KAppColors.textWhite,
                   ),
                   inactiveThumbColor: KAppColors.textWhite,

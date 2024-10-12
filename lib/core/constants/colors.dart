@@ -18,7 +18,10 @@ class KAppColors {
 
   // Backgorund Container Colors
   static const Color containerBackground = Colors.white;
-  static const Color containerBackgroundDark  = Colors.black;
+  static const Color containerBackgroundDark = Colors.black;
+
+  // Circle Background Colors
+  static const Color circleBackground = Color(0X00000008);
 
   // Shadow Colors
   static Color shadowColor = Colors.black.withOpacity(0.6);

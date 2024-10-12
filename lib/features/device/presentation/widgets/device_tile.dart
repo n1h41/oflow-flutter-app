@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../../core/constants/colors.dart';
 
 class DeviceTile extends StatelessWidget {
   final String title;
-  final IconData icon;
+  final String icon;
   final void Function()? onTap;
 
   const DeviceTile({
@@ -31,7 +32,11 @@ class DeviceTile extends StatelessWidget {
               radius: 42,
               backgroundColor: KAppColors.containerBackground,
               // child: Icon(Icons.timer),
-              child: Icon(icon),
+              child: SvgPicture.asset(
+                width: 30,
+                height: 30,
+                icon,
+              ),
             ),
           ),
         ),
