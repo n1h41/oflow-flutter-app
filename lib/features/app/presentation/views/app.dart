@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:oflow/core/theme/app_theme.dart';
 
 import '../../../../core/router/router.dart';
 import '../../../../core/service_locator.dart';
+import '../../../../core/theme/app_theme.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -14,6 +14,11 @@ class MyApp extends StatelessWidget {
       title: 'Oflow application',
       themeMode: ThemeMode.light,
       theme: AppTheme.lightTheme,
+      builder: (context, child) {
+        return SafeArea(
+          child: child!,
+        );
+      },
     );
   }
 }

@@ -18,6 +18,8 @@ dependencies:
   flutter_svg: ^2.0.10+1
   wheel_picker: ^0.1.1
   mqtt5_client: ^4.5.3
+  shared_preferences: ^2.3.2
+  equatable: ^2.0.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

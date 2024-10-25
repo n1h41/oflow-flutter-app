@@ -1,10 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:mqtt5_client/mqtt5_client.dart';
+import 'package:mqtt5_client/mqtt5_server_client.dart';
 
 import '../../../../core/constants/colors.dart';
-import '../widgets/history_tile.dart';
 
-class HistoryView extends StatelessWidget {
+class HistoryView extends StatefulWidget {
   const HistoryView({super.key});
+
+  @override
+  State<HistoryView> createState() => _HistoryViewState();
+}
+
+class _HistoryViewState extends State<HistoryView> {
+  late final MqttServerClient client;
+
+  @override
+  void initState() {
+    super.initState();
+    /* client = MqttServerClient.withPort(
+      'broker.emqx.io',
+      'flutter_client',
+      443,
+      maxConnectionAttempts: 2,
+    ); */
+  }
+
+  _configureMqttClient() {
+    client.logging(on: false);
+    client.useWebSocket = true;
+    client.secure = false;
+    client.autoReconnect = true;
+    client.disconnectOnNoResponsePeriod = 90;
+    client.keepAlivePeriod = 30;
+  }
+
+  _subscribeToTopic() {
+    client.subscribe("C4DEE2879A60/status", MqttQos.atLeastOnce);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +83,7 @@ class HistoryView extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Expanded(
+            /* Expanded(
               child: ListView.separated(
                 shrinkWrap: true,
                 itemCount: 4,
@@ -63,10 +95,31 @@ class HistoryView extends StatelessWidget {
                 ),
               ),
             ),
+            const Divider(), */
+            Expanded(
+              child: StreamBuilder(
+                stream: client.updates,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView(
+                      shrinkWrap: true,
+                      children: const [],
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+            ),
             const Divider()
           ],
         ),
       ),
     );
   }
+
+  @override
+    void dispose() {
+      client.disconnect();
+      super.dispose();
+    }
 }
