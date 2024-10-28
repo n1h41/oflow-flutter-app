@@ -4,8 +4,8 @@ import 'core/service_locator.dart';
 import 'core/utils/local_storage/local_storage.dart';
 import 'features/app/presentation/views/app.dart';
 
-void main() {
+Future<void> main() async {
   initialiseDependencies();
-  LocalStorage.instance.init();
+  await LocalStorage.instance.init();
   runApp(const MyApp());
 }

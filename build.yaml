@@ -1,0 +1,33 @@
+targets:
+  $default:
+    builders:
+      source_gen|combining_builder:
+        generate_for:
+          - lib/**/**model.dart
+          - lib/**/**event.dart
+          - lib/**/**state.dart
+          - lib/**/**entity.dart
+          - lib/**/**params.dart
+        options:
+          build_extensions:
+            # I want this line to "work":
+            # '^lib/**/{{}}.dart': 'lib/generated/model/{{}}.g.dart'
+            "lib/{{path}}/{{file}}.dart": "lib/{{path}}/generated/{{file}}.g.dart"
+      freezed:
+        options:
+          build_extensions:
+            # I want this line to "work":
+            # '^lib/**/{{}}.dart': 'lib/generated/model/{{}}.freezed.dart'
+            "lib/{{path}}/{{file}}.dart": "lib/{{path}}/generated/{{file}}.freezed.dart"
+          field_rename: snake
+          explicit_to_json: true
+      json_serializable:
+        options:
+          field_rename: snake
+          explicit_to_json: true
+      auto_route_generator:auto_route_generator:
+        generate_for:
+          - lib/**/**view.dart
+      auto_route_generator:auto_router_generator: # this for @AutoRouterConfig
+        generate_for:
+          - lib/**/**router.dart
