@@ -13,6 +13,7 @@ _$SignUpParamsImpl _$$SignUpParamsImplFromJson(Map<String, dynamic> json) =>
       lastName: json['last_name'] as String,
       phoneNumber: json['phone_number'] as String,
       password: json['password'] as String,
+      $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$SignUpParamsImplToJson(_$SignUpParamsImpl instance) =>
@@ -22,4 +23,19 @@ Map<String, dynamic> _$$SignUpParamsImplToJson(_$SignUpParamsImpl instance) =>
       'last_name': instance.lastName,
       'phone_number': instance.phoneNumber,
       'password': instance.password,
+      'runtimeType': instance.$type,
+    };
+
+_$SignInParamsImpl _$$SignInParamsImplFromJson(Map<String, dynamic> json) =>
+    _$SignInParamsImpl(
+      email: json['email'] as String,
+      password: json['password'] as String,
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$SignInParamsImplToJson(_$SignInParamsImpl instance) =>
+    <String, dynamic>{
+      'email': instance.email,
+      'password': instance.password,
+      'runtimeType': instance.$type,
     };

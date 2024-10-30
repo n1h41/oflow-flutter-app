@@ -25,9 +25,9 @@ class KValidator {
     }
 
     // Check for uppercase letters
-    if (!value.contains(RegExp(r'[A-Z]'))) {
+    /* if (!value.contains(RegExp(r'[A-Z]'))) {
       return 'Password must contain at least one uppercase letter.';
-    }
+    } */
 
     // Check for numbers
     if (!value.contains(RegExp(r'[0-9]'))) {
