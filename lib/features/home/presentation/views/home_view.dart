@@ -57,7 +57,7 @@ class HomeView extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () {
-                      context.go("/device");
+                      context.go("/device/C4DEE2879A60");
                     },
                     child: Container(
                       padding: const EdgeInsets.all(16),
@@ -70,7 +70,9 @@ class HomeView extends StatelessWidget {
                             spreadRadius: 0,
                             blurRadius: 11,
                             offset: const Offset(
-                                0, 0), // changes position of shadow
+                              0,
+                              0,
+                            ), // changes position of shadow
                           ),
                         ],
                       ),

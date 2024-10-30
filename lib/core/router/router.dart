@@ -24,8 +24,10 @@ class AppRouter {
         builder: (context, state) => const HomeView(),
         routes: [
           GoRoute(
-            path: '/device',
-            builder: (context, state) => const DeviceView(),
+            path: '/device/:deviceMac',
+            builder: (context, state) => DeviceView(
+              deviceMac: state.pathParameters['deviceMac']!,
+            ),
             routes: [
               GoRoute(
                 path: '/history',

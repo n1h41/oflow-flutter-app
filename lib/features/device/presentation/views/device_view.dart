@@ -1,15 +1,23 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:oflow/core/constants/assets.dart';
-import 'package:oflow/core/constants/colors.dart';
-import 'package:oflow/features/device/presentation/widgets/power_setting_bottom_sheet.dart';
 
+
+import '../../../../core/constants/assets.dart';
+import '../../../../core/constants/colors.dart';
 import '../widgets/device_tile.dart';
+import '../widgets/power_setting_bottom_sheet.dart';
 import '../widgets/timer_bottom_sheet.dart';
 
 class DeviceView extends StatefulWidget {
-  const DeviceView({super.key});
+  final String deviceMac;
+
+  const DeviceView({
+    super.key,
+    required this.deviceMac,
+  });
 
   @override
   State<DeviceView> createState() => _DeviceViewState();

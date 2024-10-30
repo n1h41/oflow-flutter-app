@@ -14,28 +14,20 @@ class HistoryView extends StatefulWidget {
 class _HistoryViewState extends State<HistoryView> {
   late final MqttServerClient client;
 
+  var identityId = "C4DEE2879A60";
+  var signedUrl = "";
+
   @override
   void initState() {
     super.initState();
-    /* client = MqttServerClient.withPort(
-      'broker.emqx.io',
-      'flutter_client',
+    client = MqttServerClient.withPort(
+      signedUrl,
+      identityId,
       443,
       maxConnectionAttempts: 2,
-    ); */
-  }
-
-  _configureMqttClient() {
-    client.logging(on: false);
-    client.useWebSocket = true;
-    client.secure = false;
-    client.autoReconnect = true;
-    client.disconnectOnNoResponsePeriod = 90;
-    client.keepAlivePeriod = 30;
-  }
-
-  _subscribeToTopic() {
-    client.subscribe("C4DEE2879A60/status", MqttQos.atLeastOnce);
+    );
+    _configureMqttClient();
+    _connectToBroker();
   }
 
   @override
@@ -118,8 +110,47 @@ class _HistoryViewState extends State<HistoryView> {
   }
 
   @override
-    void dispose() {
+  void dispose() {
+    client.disconnect();
+    super.dispose();
+  }
+
+  _configureMqttClient() {
+    client.logging(on: false);
+    client.useWebSocket = true;
+    client.secure = false;
+    client.autoReconnect = true;
+    client.disconnectOnNoResponsePeriod = 90;
+    client.keepAlivePeriod = 30;
+    final MqttConnectMessage connMess =
+        MqttConnectMessage().withClientIdentifier(identityId);
+    client.connectionMessage = connMess;
+  }
+
+  _subscribeToTopic() {
+    client.subscribe("C4DEE2879A60/status", MqttQos.atLeastOnce);
+  }
+
+  void _connectToBroker() async {
+    try {
+      // TODO:
+      final status = await client.connect();
+      _listenForMessages();
+    } on Exception catch (e) {
+      debugPrint('MQTT client exception - $e');
       client.disconnect();
-      super.dispose();
     }
+  }
+
+  void _listenForMessages() {
+    client.updates.listen(
+      (event) {
+        for (var message in event) {
+          debugPrint('Topic event: ${message.toString()}');
+        }
+      },
+    );
+    // INFO: Subscribe to the topic
+    _subscribeToTopic();
+  }
 }
