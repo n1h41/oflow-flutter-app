@@ -13,19 +13,21 @@ class EnvConfig {
     Flavour.production => ApiEnv.production,
   };
 
-  static String get domain {
+  static String get baseUrl {
     switch (apiEnv) {
       case ApiEnv.localdev:
-        return "http://192.168.29.145:5000";
+        return "http://localhost:3000";
       case ApiEnv.dev:
-        return "http://purplerewards.dyndns.org:8083";
+        // TODO:
+        return "";
       case ApiEnv.production:
-        return "http://purplerewards.dyndns.org:8070";
+        // TODO:
+        return "";
     }
   }
 
-  static String get signIn => "$domain/auth/sign-in";
-  static String get signUp => "$domain/auth/sign-up";
+  static String get signIn => "$baseUrl/auth/sign-in";
+  static String get signUp => "$baseUrl/auth/sign-up";
 }
 
 enum ApiEnv {

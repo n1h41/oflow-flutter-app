@@ -15,10 +15,29 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.light,
       theme: AppTheme.lightTheme,
       builder: (context, child) {
-        return SafeArea(
-          child: child!,
+        return _Unfocus(
+          child: SafeArea(
+            child: child!,
+          ),
         );
       },
+    );
+  }
+}
+
+class _Unfocus extends StatelessWidget {
+  final Widget child;
+
+  const _Unfocus({
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: child,
     );
   }
 }
