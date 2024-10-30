@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:oflow/features/auth/domain/entity/authentication_result_entity.dart';
 
 import '../../../../core/utils/local_storage/local_storage.dart';
+import '../../domain/entity/authentication_result_entity.dart';
 import '../../domain/usecase/params/params.dart';
 import '../../domain/usecase/usecase.dart';
 import 'auth_state.dart';
@@ -19,12 +19,7 @@ class AuthBloc extends Cubit<AuthState> {
   }) : super(AuthState.initial());
 
   Future<void> signIn(SignInParams params) async {
-    emit(
-      state.copyWith(
-        status: AuthStatus.loading,
-        errorMessage: null,
-      ),
-    );
+    emit(AuthState.loading());
     final result = await usecase.signIn(params);
     await result.fold(
       (l) async => emit(
@@ -49,6 +44,26 @@ class AuthBloc extends Cubit<AuthState> {
     );
   }
 
+  Future<void> getAuthenticatedUser() async {
+    emit(AuthState.loading());
+    final authCreds = _getSavedLoginCredentials();
+    if (authCreds != null) {
+      emit(
+        state.copyWith(
+          status: AuthStatus.authenticated,
+          errorMessage: null,
+          authenticationResult: authCreds,
+        ),
+      );
+    } else {
+      emit(
+        state.copyWith(
+          status: AuthStatus.unauthenticated,
+        ),
+      );
+    }
+  }
+
   Future<void> _saveLoginCredentials(AuthenticationResultEntity r) async {
     // INFO: Save the token to local storage
     try {
@@ -58,6 +73,18 @@ class AuthBloc extends Cubit<AuthState> {
       );
     } catch (e) {
       throw Exception('Error saving login credentials: $e');
+    }
+  }
+
+  AuthenticationResultEntity? _getSavedLoginCredentials() {
+    try {
+      final creds = LocalStorage.instance.getString('AuthenticatedCredential');
+      if (creds != null) {
+        return AuthenticationResultEntity.fromJson(jsonDecode(creds));
+      }
+      return null;
+    } catch (e) {
+      throw Exception('Error getting saved login credentials: $e');
     }
   }
 }

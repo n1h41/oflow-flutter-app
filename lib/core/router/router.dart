@@ -1,5 +1,8 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/auth/presentation/bloc/auth_bloc.dart';
+import '../../features/auth/presentation/bloc/auth_state.dart';
 import '../../features/auth/presentation/views/sign_in_view.dart';
 import '../../features/auth/presentation/views/sign_up_view.dart';
 import '../../features/device/presentation/views/device_view.dart';
@@ -10,6 +13,14 @@ import '../../features/home/presentation/views/home_view.dart';
 class AppRouter {
   final _router = GoRouter(
     initialLocation: '/auth/sign-up',
+    redirect: (context, state) {
+      final authBloc = context.read<AuthBloc>();
+      if (authBloc.state.status != AuthStatus.authenticated &&
+          state.matchedLocation != '/auth/sign-in') {
+        return '/auth/sign-up';
+      }
+      return null;
+    },
     routes: [
       GoRoute(
         path: '/auth/sign-up',

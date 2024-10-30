@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
           create: (_) => AuthBloc(
             usecase: getIt<AuthUsecase>(),
             router: getIt<AppRouter>().router,
-          ),
+          )..getAuthenticatedUser(),
         ),
       ],
       child: MaterialApp.router(
