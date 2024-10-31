@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -32,7 +33,6 @@ class AuthBloc extends Cubit<AuthState> {
         // INFO: Save the token to local storage
         await _saveLoginCredentials(r);
 
-        router.replace('/device/C4DEE2879A60');
         emit(
           state.copyWith(
             status: AuthStatus.authenticated,
@@ -40,6 +40,8 @@ class AuthBloc extends Cubit<AuthState> {
             authenticationResult: r,
           ),
         );
+
+        router.replace('/device/C4DEE2879A60');
       },
     );
   }
@@ -47,6 +49,7 @@ class AuthBloc extends Cubit<AuthState> {
   Future<void> getAuthenticatedUser() async {
     emit(AuthState.loading());
     final authCreds = _getSavedLoginCredentials();
+    log(authCreds.toString());
     if (authCreds != null) {
       emit(
         state.copyWith(
@@ -55,6 +58,7 @@ class AuthBloc extends Cubit<AuthState> {
           authenticationResult: authCreds,
         ),
       );
+      router.replace('/');
     } else {
       emit(
         state.copyWith(

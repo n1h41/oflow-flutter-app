@@ -26,8 +26,8 @@ class _HistoryViewState extends State<HistoryView> {
       443,
       maxConnectionAttempts: 2,
     );
-    _configureMqttClient();
-    _connectToBroker();
+    // _configureMqttClient();
+    // _connectToBroker();
   }
 
   @override
@@ -88,7 +88,7 @@ class _HistoryViewState extends State<HistoryView> {
               ),
             ),
             const Divider(), */
-            Expanded(
+            /* Expanded(
               child: StreamBuilder(
                 stream: client.updates,
                 builder: (context, snapshot) {
@@ -101,7 +101,7 @@ class _HistoryViewState extends State<HistoryView> {
                   return const SizedBox.shrink();
                 },
               ),
-            ),
+            ), */
             const Divider()
           ],
         ),

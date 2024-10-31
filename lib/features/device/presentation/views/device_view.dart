@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
-
 import '../../../../core/constants/assets.dart';
 import '../../../../core/constants/colors.dart';
 import '../widgets/device_tile.dart';
@@ -84,14 +83,14 @@ class _DeviceViewState extends State<DeviceView> {
                   title: "Schedule",
                   icon: KAppAssets.schedule,
                   onTap: () {
-                    context.go('/device/schedule');
+                    context.go('/device/${widget.deviceMac}/schedule');
                   },
                 ),
                 DeviceTile(
                   title: "History",
                   icon: KAppAssets.history,
                   onTap: () {
-                    context.go('/device/history');
+                    context.go('/device/${widget.deviceMac}/history');
                   },
                 ),
                 DeviceTile(

@@ -19,6 +19,10 @@ class AppRouter {
           state.matchedLocation != '/auth/sign-in') {
         return '/auth/sign-up';
       }
+      if (authBloc.state.status == AuthStatus.authenticated &&
+          state.matchedLocation.contains('/auth')) {
+        return '/';
+      }
       return null;
     },
     routes: [

@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:convert/convert.dart';
 
-const _aws_sha_256 = 'AWS4-HMAC-SHA256';
-const _aws4_request = 'aws4_request';
-const _aws4 = 'AWS4';
+const awsSHA256 = 'AWS4-HMAC-SHA256';
+const aws4Request = 'aws4_request';
+const aws4 = 'AWS4';
 
 class Sigv4 {
   /// Generates a date string compliant with the `AWS Signature V4` standard
@@ -99,13 +99,13 @@ class Sigv4 {
     String credentialScope,
     String hashedCanonicalRequest,
   ) {
-    return '$_aws_sha_256\n$datetime\n$credentialScope\n$hashedCanonicalRequest';
+    return '$awsSHA256\n$datetime\n$credentialScope\n$hashedCanonicalRequest';
   }
 
   /// Builds the required credential scope
   static String buildCredentialScope(
       String datetime, String region, String service) {
-    return '${datetime.substring(0, 8)}/$region/$service/$_aws4_request';
+    return '${datetime.substring(0, 8)}/$region/$service/$aws4Request';
   }
 
   /// Builds a canonical string containing a complete request
@@ -134,7 +134,7 @@ class Sigv4 {
     Map<String, dynamic> headers,
     String signature,
   ) {
-    return _aws_sha_256 +
+    return awsSHA256 +
         ' Credential=' +
         accessKey +
         '/' +
@@ -156,14 +156,14 @@ class Sigv4 {
       sign(
         sign(
           sign(
-            utf8.encode('$_aws4$secretKey'),
+            utf8.encode('$aws4$secretKey'),
             datetime.substring(0, 8),
           ),
           region,
         ),
         service,
       ),
-      _aws4_request,
+      aws4Request,
     );
   }
 
