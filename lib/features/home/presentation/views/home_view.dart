@@ -6,7 +6,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:oflow/core/constants/colors.dart';
-import 'package:oflow/features/app/presentation/views/app.dart';
 import 'package:oflow/features/auth/presentation/bloc/auth_bloc.dart';
 
 import '../../../../core/constants/assets.dart';
@@ -143,7 +142,7 @@ class HomeView extends StatelessWidget {
         backgroundColor: KAppColors.accent,
         shape: const CircleBorder(),
         onPressed: () {
-          log(context.read<AuthBloc>().state.authenticationResult!.idToken!);
+          print(context.read<AuthBloc>().state.authenticationResult!.idToken!);
         },
         child: const Icon(Icons.add),
       ),

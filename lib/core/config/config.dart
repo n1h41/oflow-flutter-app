@@ -16,7 +16,7 @@ class EnvConfig {
   static String get baseUrl {
     switch (apiEnv) {
       case ApiEnv.localdev:
-        return "http://192.168.29.178:3000";
+        return "http://192.168.1.77:3000";
       case ApiEnv.dev:
         // TODO:
         return "";
