@@ -1,9 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
+import 'package:oflow/features/device/domain/entity/power_entity.dart';
 
 import '../../../../core/constants/assets.dart';
 import '../../../../core/constants/colors.dart';
@@ -27,15 +30,22 @@ class DeviceView extends StatefulWidget {
 class _DeviceViewState extends State<DeviceView> with MqttMixin {
   late final ValueNotifier<bool> timerStatusNotifier;
 
+  late final ValueNotifier<bool> isLoadingNotifier;
+  late final ValueNotifier<PowerEntity> statusDataNotifier;
+
   @override
   void initState() {
     super.initState();
     timerStatusNotifier = ValueNotifier<bool>(false);
+    isLoadingNotifier = ValueNotifier<bool>(true);
+    statusDataNotifier =
+        ValueNotifier<PowerEntity>(const PowerEntity(p: "0", o: "0"));
     _initMqtt();
   }
 
   _initMqtt() async {
     await configureMqttClient();
+    _listenForMessages();
   }
 
   @override
@@ -172,15 +182,19 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
                               "Status",
                               style: Theme.of(context).textTheme.labelSmall,
                             ),
-                            Text(
-                              "Offline",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                            ),
+                            ValueListenableBuilder(
+                                valueListenable: statusDataNotifier,
+                                builder: (context, statusData, _) {
+                                  return Text(
+                                    statusData.o == "1" ? "Online" : "Offline",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                  );
+                                }),
                           ],
                         ),
                       ),
@@ -233,19 +247,19 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
                               ],
                             ),
                             child: ValueListenableBuilder(
-                                valueListenable: timerStatusNotifier,
-                                builder: (context, timerStatus, _) {
+                                valueListenable: statusDataNotifier,
+                                builder: (context, statusData, _) {
                                   return Center(
                                     child: InkWell(
                                       onTap: () {
-                                        timerStatusNotifier.value =
-                                            !timerStatus;
+                                        /* timerStatusNotifier.value =
+                                            !timerStatus; */
                                       },
                                       child: Container(
                                         width: 190,
                                         height: 190,
                                         decoration: BoxDecoration(
-                                          color: timerStatus
+                                          color: statusData.p == "1"
                                               ? KAppColors.accent
                                               : KAppColors.containerBackground,
                                           shape: BoxShape.circle,
@@ -256,7 +270,7 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
                                         child: Center(
                                           child: SvgPicture.asset(
                                             KAppAssets.power,
-                                            color: timerStatus
+                                            color: statusData.p == "1"
                                                 ? KAppColors.textWhite
                                                 : null,
                                           ),
@@ -295,18 +309,34 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: KAppColors.accent,
+        shape: const CircleBorder(),
+        onPressed: () {
+          _checkIfDevicIsOnline();
+        },
+        child: SvgPicture.asset(KAppAssets.neArrow),
+      ),
     );
+  }
+
+  @override
+  void dispose() {
+    client.unsubscribeStringTopic("${widget.deviceMac}/status");
+    client.disconnect();
+    super.dispose();
   }
 
   _listenForMessages() {
     client.updates.listen(
       (event) {
         for (var message in event) {
+          isLoadingNotifier.value = true;
           MqttPublishMessage msg = message.payload as MqttPublishMessage;
           final pt = MqttUtilities.bytesToStringAsString(msg.payload.message!);
-          /* var splittedValue = pt.split(',');
-          splittedValue.removeLast();
-          splittedValue = splittedValue.reversed.toList(); */
+          debugPrint("MQTT Message: $pt");
+          statusDataNotifier.value = PowerEntity.fromJson(jsonDecode(pt));
+          isLoadingNotifier.value = false;
         }
       },
     );
@@ -315,6 +345,19 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
   }
 
   _subscribeToTopic() {
-    client.subscribe("C4DEE2879A60/status", MqttQos.atLeastOnce);
+    client.subscribe("${widget.deviceMac}/status", MqttQos.atLeastOnce);
+  }
+
+  _checkIfDevicIsOnline() {
+    // INFO: Publish to the topic
+    // conevert json string to uint8buffer
+    final payload = MqttPayloadBuilder();
+    payload.addString(jsonEncode(const PowerEntity(p: "1", o: "1").toJson()));
+    final messageIdentifier = client.publishMessage(
+      "${widget.deviceMac}/status",
+      MqttQos.atLeastOnce,
+      payload.payload!,
+    );
+    debugPrint("Message Identifier: $messageIdentifier");
   }
 }

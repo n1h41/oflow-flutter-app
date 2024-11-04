@@ -29,7 +29,9 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: '/history',
-                builder: (context, state) => const HistoryView(),
+                builder: (context, state) => HistoryView(
+                  deviceMac: state.pathParameters['deviceMac']!,
+                ),
               ),
               GoRoute(
                 path: '/schedule',

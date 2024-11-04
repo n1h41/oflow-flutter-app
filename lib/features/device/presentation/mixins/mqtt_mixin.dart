@@ -12,7 +12,6 @@ mixin MqttMixin {
 
   late final MqttServerClient client;
 
-  var devicMac = "C4DEE2879A60";
   var identityId = '';
   var signedUrl = '';
 

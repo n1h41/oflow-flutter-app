@@ -8,7 +8,9 @@ import '../../../../core/constants/colors.dart';
 import '../widgets/history_tile.dart';
 
 class HistoryView extends StatefulWidget {
-  const HistoryView({super.key});
+  final String deviceMac;
+
+  const HistoryView({super.key, required this.deviceMac});
 
   @override
   State<HistoryView> createState() => _HistoryViewState();
@@ -131,7 +133,7 @@ class _HistoryViewState extends State<HistoryView> with MqttMixin {
 
   @override
   void dispose() {
-    client.unsubscribeStringTopic("C4DEE2879A60/chats");
+    client.unsubscribeStringTopic("${widget.deviceMac}/chats");
     client.disconnect();
     log('MQTT client disconnected');
     super.dispose();
@@ -212,6 +214,7 @@ class _HistoryViewState extends State<HistoryView> with MqttMixin {
   }
 
   _subscribeToTopic() {
-    client.subscribe("C4DEE2879A60/chats", MqttQos.atLeastOnce);
+    client.subscribe("${widget.deviceMac}/chats", MqttQos.atLeastOnce);
+    // client.publishMessage("${widget.deviceMac}/chats", MqttQos.atLeastOnce, data)
   }
 }
