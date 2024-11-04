@@ -1,12 +1,9 @@
-import 'dart:developer';
-
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:oflow/core/constants/colors.dart';
-import 'package:oflow/features/auth/presentation/bloc/auth_bloc.dart';
 
 import '../../../../core/constants/assets.dart';
 
@@ -142,7 +139,14 @@ class HomeView extends StatelessWidget {
         backgroundColor: KAppColors.accent,
         shape: const CircleBorder(),
         onPressed: () {
-          print(context.read<AuthBloc>().state.authenticationResult!.idToken!);
+          // Get the user's id token
+          Amplify.Auth.fetchAuthSession().then((session) {
+            print(session.toJson());
+            /* final AWSCredentials credentials =
+                session.toJson()["credentials"] as AWSCredentials; */
+          });
+
+          // print(context.read<AuthBloc>().state.authenticationResult!.idToken!);
         },
         child: const Icon(Icons.add),
       ),

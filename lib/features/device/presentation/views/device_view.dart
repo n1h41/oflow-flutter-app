@@ -3,9 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mqtt5_client/mqtt5_client.dart';
 
 import '../../../../core/constants/assets.dart';
 import '../../../../core/constants/colors.dart';
+import '../mixins/mqtt_mixin.dart';
 import '../widgets/device_tile.dart';
 import '../widgets/power_setting_bottom_sheet.dart';
 import '../widgets/timer_bottom_sheet.dart';
@@ -22,13 +24,18 @@ class DeviceView extends StatefulWidget {
   State<DeviceView> createState() => _DeviceViewState();
 }
 
-class _DeviceViewState extends State<DeviceView> {
+class _DeviceViewState extends State<DeviceView> with MqttMixin {
   late final ValueNotifier<bool> timerStatusNotifier;
 
   @override
   void initState() {
     super.initState();
     timerStatusNotifier = ValueNotifier<bool>(false);
+    _initMqtt();
+  }
+
+  _initMqtt() async {
+    await configureMqttClient();
   }
 
   @override
@@ -289,5 +296,25 @@ class _DeviceViewState extends State<DeviceView> {
         ],
       ),
     );
+  }
+
+  _listenForMessages() {
+    client.updates.listen(
+      (event) {
+        for (var message in event) {
+          MqttPublishMessage msg = message.payload as MqttPublishMessage;
+          final pt = MqttUtilities.bytesToStringAsString(msg.payload.message!);
+          /* var splittedValue = pt.split(',');
+          splittedValue.removeLast();
+          splittedValue = splittedValue.reversed.toList(); */
+        }
+      },
+    );
+    // INFO: Subscribe to the topic
+    _subscribeToTopic();
+  }
+
+  _subscribeToTopic() {
+    client.subscribe("C4DEE2879A60/status", MqttQos.atLeastOnce);
   }
 }

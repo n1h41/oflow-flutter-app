@@ -1,3 +1,4 @@
+import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,22 +18,25 @@ class MyApp extends StatelessWidget {
           create: (_) => AuthBloc(
             usecase: getIt<AuthUsecase>(),
             router: getIt<AppRouter>().router,
-          )..getAuthenticatedUser(),
+          ) /* ..getAuthenticatedUser() */,
         ),
       ],
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        routerConfig: getIt<AppRouter>().router,
-        title: 'Oflow application',
-        themeMode: ThemeMode.light,
-        theme: AppTheme.lightTheme,
-        builder: (context, child) {
-          return _Unfocus(
-            child: SafeArea(
-              child: child!,
+      child: Authenticator(
+        child: MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            routerConfig: getIt<AppRouter>().router,
+            title: 'Oflow application',
+            themeMode: ThemeMode.light,
+            theme: AppTheme.lightTheme,
+            builder: Authenticator.builder()
+            /* builder: (context, child) {
+            return _Unfocus(
+              child: SafeArea(
+                child: child!,
+              ),
+            );
+          }, */
             ),
-          );
-        },
       ),
     );
   }

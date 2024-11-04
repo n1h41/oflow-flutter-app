@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 
 class HistoryTile extends StatelessWidget {
-  final String text;
-  final String date;
-  final String time;
+  final int statusCode;
+  final int epoch;
 
   const HistoryTile({
     super.key,
-    required this.text,
-    required this.date,
-    required this.time,
+    required this.epoch,
+    required this.statusCode,
   });
 
   @override
@@ -21,18 +19,24 @@ class HistoryTile extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            text,
+            status,
             style: Theme.of(context).textTheme.titleSmall,
           ),
-          Spacer(),
+          const Spacer(),
           Column(
             children: [
               Text(
-                date,
+                // show date from epoch
+                DateTime.fromMillisecondsSinceEpoch(epoch * 1000)
+                    .toString()
+                    .substring(0, 10),
                 style: Theme.of(context).textTheme.labelSmall,
               ),
               Text(
-                time,
+                // show time from epoch
+                DateTime.fromMillisecondsSinceEpoch(epoch * 1000)
+                    .toString()
+                    .substring(11, 16),
                 style: Theme.of(context).textTheme.labelSmall,
               ),
             ],
@@ -40,5 +44,22 @@ class HistoryTile extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String get status {
+    switch (statusCode) {
+      case 0:
+        return 'Pump off';
+      case 1:
+        return 'Pump on';
+      case 3:
+        return 'Timer exceeded';
+      case 4:
+        return 'Dry run';
+      case 5:
+        return 'Vaultage fault';
+      default:
+        return 'Unknown';
+    }
   }
 }

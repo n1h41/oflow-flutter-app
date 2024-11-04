@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
-import 'package:mqtt5_client/mqtt5_server_client.dart';
+import 'package:oflow/features/device/presentation/mixins/mqtt_mixin.dart';
 
 import '../../../../core/constants/colors.dart';
+import '../widgets/history_tile.dart';
 
 class HistoryView extends StatefulWidget {
   const HistoryView({super.key});
@@ -11,23 +14,28 @@ class HistoryView extends StatefulWidget {
   State<HistoryView> createState() => _HistoryViewState();
 }
 
-class _HistoryViewState extends State<HistoryView> {
-  late final MqttServerClient client;
+class _HistoryViewState extends State<HistoryView> with MqttMixin {
+  // late final MqttServerClient client;
 
-  var identityId = "C4DEE2879A60";
-  var signedUrl = "";
+  late final ValueNotifier<bool> isLoadingNotifier;
+  late final ValueNotifier<List<int>> historyDataListNotifier;
+
+  /* var devicMac = "C4DEE2879A60";
+  var identityId = '';
+  var signedUrl = ''; */
 
   @override
   void initState() {
     super.initState();
-    client = MqttServerClient.withPort(
-      signedUrl,
-      identityId,
-      443,
-      maxConnectionAttempts: 2,
-    );
-    // _configureMqttClient();
-    // _connectToBroker();
+    isLoadingNotifier = ValueNotifier<bool>(true);
+    historyDataListNotifier = ValueNotifier<List<int>>([]);
+    _initMqtt();
+  }
+
+  _initMqtt() async {
+    isLoadingNotifier.value = true;
+    await configureMqttClient();
+    _listenForMessages();
   }
 
   @override
@@ -75,34 +83,46 @@ class _HistoryViewState extends State<HistoryView> {
         ),
         child: Column(
           children: [
-            /* Expanded(
-              child: ListView.separated(
-                shrinkWrap: true,
-                itemCount: 4,
-                separatorBuilder: (context, _) => const Divider(),
-                itemBuilder: (context, _) => const HistoryTile(
-                  text: "Pump running",
-                  date: "23 Sep, 2024",
-                  time: "12:00",
-                ),
-              ),
-            ),
-            const Divider(), */
-            /* Expanded(
-              child: StreamBuilder(
-                stream: client.updates,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView(
-                      shrinkWrap: true,
-                      children: const [],
+            ValueListenableBuilder(
+              valueListenable: isLoadingNotifier,
+              builder: (context, isLoading, _) {
+                return ValueListenableBuilder(
+                  valueListenable: historyDataListNotifier,
+                  builder: (context, historyList, _) {
+                    if (isLoading) {
+                      return const Expanded(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                    if (historyList.isEmpty) {
+                      return const Expanded(
+                        child: Center(
+                          child: Text("No history found"),
+                        ),
+                      );
+                    }
+                    return Expanded(
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: historyList.length,
+                        separatorBuilder: (context, _) => const Divider(),
+                        itemBuilder: (context, index) {
+                          // get last number of int
+                          int statusCode = historyList[index].remainder(10);
+                          int epoch = historyList[index] ~/ 10;
+                          return HistoryTile(
+                            statusCode: statusCode,
+                            epoch: epoch,
+                          );
+                        },
+                      ),
                     );
-                  }
-                  return const SizedBox.shrink();
-                },
-              ),
-            ), */
-            const Divider()
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -111,11 +131,42 @@ class _HistoryViewState extends State<HistoryView> {
 
   @override
   void dispose() {
+    client.unsubscribeStringTopic("C4DEE2879A60/chats");
     client.disconnect();
+    log('MQTT client disconnected');
     super.dispose();
   }
 
-  _configureMqttClient() {
+  /* _configureMqttClient() async {
+    const port = 443;
+    const region = 'us-east-1';
+    // Your AWS IoT Core endpoint url
+    const baseUrl = 'a82k06ko9a2kk-ats.iot.$region.amazonaws.com';
+    const scheme = 'wss://';
+    const urlPath = '/mqtt';
+    // AWS IoT MQTT default port for websockets
+
+    final AuthSession authSession = await Amplify.Auth.fetchAuthSession();
+    final AWSCredentials credentials =
+        authSession.toJson()["credentials"] as AWSCredentials;
+
+    identityId = authSession.toJson()["identityId"] as String;
+
+    signedUrl = getWebSocketURL(
+      accessKey: credentials.accessKeyId,
+      secretKey: credentials.secretAccessKey,
+      sessionToken: credentials.sessionToken!,
+      region: region,
+      scheme: scheme,
+      endpoint: baseUrl,
+      urlPath: urlPath,
+    );
+    client = MqttServerClient.withPort(
+      signedUrl,
+      identityId,
+      port,
+      maxConnectionAttempts: 2,
+    );
     client.logging(on: false);
     client.useWebSocket = true;
     client.secure = false;
@@ -125,32 +176,42 @@ class _HistoryViewState extends State<HistoryView> {
     final MqttConnectMessage connMess =
         MqttConnectMessage().withClientIdentifier(identityId);
     client.connectionMessage = connMess;
-  }
+    _connectToBroker();
+  } */
 
-  _subscribeToTopic() {
-    client.subscribe("C4DEE2879A60/status", MqttQos.atLeastOnce);
-  }
-
-  void _connectToBroker() async {
+  /* void _connectToBroker() async {
     try {
       // TODO:
       final status = await client.connect();
+      debugPrint("MQTT Connection Status: $status");
       _listenForMessages();
     } on Exception catch (e) {
       debugPrint('MQTT client exception - $e');
       client.disconnect();
     }
-  }
+  } */
 
-  void _listenForMessages() {
+  _listenForMessages() {
     client.updates.listen(
       (event) {
         for (var message in event) {
-          debugPrint('Topic event: ${message.toString()}');
+          isLoadingNotifier.value = true;
+          MqttPublishMessage msg = message.payload as MqttPublishMessage;
+          final pt = MqttUtilities.bytesToStringAsString(msg.payload.message!);
+          var splittedValue = pt.split(',');
+          splittedValue.removeLast();
+          splittedValue = splittedValue.reversed.toList();
+          historyDataListNotifier.value =
+              splittedValue.map((e) => int.parse(e)).toList();
+          isLoadingNotifier.value = false;
         }
       },
     );
     // INFO: Subscribe to the topic
     _subscribeToTopic();
+  }
+
+  _subscribeToTopic() {
+    client.subscribe("C4DEE2879A60/chats", MqttQos.atLeastOnce);
   }
 }
