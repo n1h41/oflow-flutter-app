@@ -32,6 +32,14 @@ class HomeView extends StatelessWidget {
             )
           ],
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Amplify.Auth.signOut();
+            },
+            icon: const Icon(Icons.logout),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(

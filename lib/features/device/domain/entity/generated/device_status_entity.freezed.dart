@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of '../power_entity.dart';
+part of '../device_status_entity.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,45 +14,45 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-PowerEntity _$PowerEntityFromJson(Map<String, dynamic> json) {
-  return _PowerEntity.fromJson(json);
+DeviceStatusEntity _$DeviceStatusEntityFromJson(Map<String, dynamic> json) {
+  return _DeviceStatusEntity.fromJson(json);
 }
 
 /// @nodoc
-mixin _$PowerEntity {
+mixin _$DeviceStatusEntity {
   String get p => throw _privateConstructorUsedError;
   String get o => throw _privateConstructorUsedError;
 
-  /// Serializes this PowerEntity to a JSON map.
+  /// Serializes this DeviceStatusEntity to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of PowerEntity
+  /// Create a copy of DeviceStatusEntity
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $PowerEntityCopyWith<PowerEntity> get copyWith =>
+  $DeviceStatusEntityCopyWith<DeviceStatusEntity> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $PowerEntityCopyWith<$Res> {
-  factory $PowerEntityCopyWith(
-          PowerEntity value, $Res Function(PowerEntity) then) =
-      _$PowerEntityCopyWithImpl<$Res, PowerEntity>;
+abstract class $DeviceStatusEntityCopyWith<$Res> {
+  factory $DeviceStatusEntityCopyWith(
+          DeviceStatusEntity value, $Res Function(DeviceStatusEntity) then) =
+      _$DeviceStatusEntityCopyWithImpl<$Res, DeviceStatusEntity>;
   @useResult
   $Res call({String p, String o});
 }
 
 /// @nodoc
-class _$PowerEntityCopyWithImpl<$Res, $Val extends PowerEntity>
-    implements $PowerEntityCopyWith<$Res> {
-  _$PowerEntityCopyWithImpl(this._value, this._then);
+class _$DeviceStatusEntityCopyWithImpl<$Res, $Val extends DeviceStatusEntity>
+    implements $DeviceStatusEntityCopyWith<$Res> {
+  _$DeviceStatusEntityCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of PowerEntity
+  /// Create a copy of DeviceStatusEntity
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -74,25 +74,25 @@ class _$PowerEntityCopyWithImpl<$Res, $Val extends PowerEntity>
 }
 
 /// @nodoc
-abstract class _$$PowerEntityImplCopyWith<$Res>
-    implements $PowerEntityCopyWith<$Res> {
-  factory _$$PowerEntityImplCopyWith(
-          _$PowerEntityImpl value, $Res Function(_$PowerEntityImpl) then) =
-      __$$PowerEntityImplCopyWithImpl<$Res>;
+abstract class _$$DeviceStatusEntityImplCopyWith<$Res>
+    implements $DeviceStatusEntityCopyWith<$Res> {
+  factory _$$DeviceStatusEntityImplCopyWith(_$DeviceStatusEntityImpl value,
+          $Res Function(_$DeviceStatusEntityImpl) then) =
+      __$$DeviceStatusEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String p, String o});
 }
 
 /// @nodoc
-class __$$PowerEntityImplCopyWithImpl<$Res>
-    extends _$PowerEntityCopyWithImpl<$Res, _$PowerEntityImpl>
-    implements _$$PowerEntityImplCopyWith<$Res> {
-  __$$PowerEntityImplCopyWithImpl(
-      _$PowerEntityImpl _value, $Res Function(_$PowerEntityImpl) _then)
+class __$$DeviceStatusEntityImplCopyWithImpl<$Res>
+    extends _$DeviceStatusEntityCopyWithImpl<$Res, _$DeviceStatusEntityImpl>
+    implements _$$DeviceStatusEntityImplCopyWith<$Res> {
+  __$$DeviceStatusEntityImplCopyWithImpl(_$DeviceStatusEntityImpl _value,
+      $Res Function(_$DeviceStatusEntityImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of PowerEntity
+  /// Create a copy of DeviceStatusEntity
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -100,7 +100,7 @@ class __$$PowerEntityImplCopyWithImpl<$Res>
     Object? p = null,
     Object? o = null,
   }) {
-    return _then(_$PowerEntityImpl(
+    return _then(_$DeviceStatusEntityImpl(
       p: null == p
           ? _value.p
           : p // ignore: cast_nullable_to_non_nullable
@@ -115,11 +115,11 @@ class __$$PowerEntityImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$PowerEntityImpl implements _PowerEntity {
-  const _$PowerEntityImpl({required this.p, required this.o});
+class _$DeviceStatusEntityImpl implements _DeviceStatusEntity {
+  const _$DeviceStatusEntityImpl({required this.p, required this.o});
 
-  factory _$PowerEntityImpl.fromJson(Map<String, dynamic> json) =>
-      _$$PowerEntityImplFromJson(json);
+  factory _$DeviceStatusEntityImpl.fromJson(Map<String, dynamic> json) =>
+      _$$DeviceStatusEntityImplFromJson(json);
 
   @override
   final String p;
@@ -128,14 +128,14 @@ class _$PowerEntityImpl implements _PowerEntity {
 
   @override
   String toString() {
-    return 'PowerEntity(p: $p, o: $o)';
+    return 'DeviceStatusEntity(p: $p, o: $o)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PowerEntityImpl &&
+            other is _$DeviceStatusEntityImpl &&
             (identical(other.p, p) || other.p == p) &&
             (identical(other.o, o) || other.o == o));
   }
@@ -144,38 +144,40 @@ class _$PowerEntityImpl implements _PowerEntity {
   @override
   int get hashCode => Object.hash(runtimeType, p, o);
 
-  /// Create a copy of PowerEntity
+  /// Create a copy of DeviceStatusEntity
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$PowerEntityImplCopyWith<_$PowerEntityImpl> get copyWith =>
-      __$$PowerEntityImplCopyWithImpl<_$PowerEntityImpl>(this, _$identity);
+  _$$DeviceStatusEntityImplCopyWith<_$DeviceStatusEntityImpl> get copyWith =>
+      __$$DeviceStatusEntityImplCopyWithImpl<_$DeviceStatusEntityImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$PowerEntityImplToJson(
+    return _$$DeviceStatusEntityImplToJson(
       this,
     );
   }
 }
 
-abstract class _PowerEntity implements PowerEntity {
-  const factory _PowerEntity(
-      {required final String p, required final String o}) = _$PowerEntityImpl;
+abstract class _DeviceStatusEntity implements DeviceStatusEntity {
+  const factory _DeviceStatusEntity(
+      {required final String p,
+      required final String o}) = _$DeviceStatusEntityImpl;
 
-  factory _PowerEntity.fromJson(Map<String, dynamic> json) =
-      _$PowerEntityImpl.fromJson;
+  factory _DeviceStatusEntity.fromJson(Map<String, dynamic> json) =
+      _$DeviceStatusEntityImpl.fromJson;
 
   @override
   String get p;
   @override
   String get o;
 
-  /// Create a copy of PowerEntity
+  /// Create a copy of DeviceStatusEntity
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$PowerEntityImplCopyWith<_$PowerEntityImpl> get copyWith =>
+  _$$DeviceStatusEntityImplCopyWith<_$DeviceStatusEntityImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -1,4 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:oflow/features/device/domain/entity/device_status_entity.dart';
+import 'package:oflow/features/device/domain/entity/pow_entity.dart';
+import 'package:oflow/features/device/domain/entity/vals_entity.dart';
 
 part 'generated/device_state.freezed.dart';
 
@@ -9,6 +12,11 @@ class DeviceState with _$DeviceState {
   const factory DeviceState({
     required DeviceStateStatus status,
     String? errorMessage,
+    @Default([]) List<int> deviceHistoryDatalist,
+    DeviceStatusEntity? deviceStatus,
+    PowEntity? devicePowerDetails,
+    ValsEntity? deviceValueDetails,
+    String? deviceMac,
   }) = _DeviceState;
 
   factory DeviceState.initial() {

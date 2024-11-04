@@ -1,6 +1,7 @@
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:oflow/features/device/presentation/bloc/device_bloc.dart';
 
 import '../../../../core/router/router.dart';
 import '../../../../core/service_locator.dart';
@@ -14,35 +15,32 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<DeviceBloc>(
+          lazy: false,
+          create: (_) => DeviceBloc(),
+        ),
         BlocProvider<AuthBloc>(
           create: (_) => AuthBloc(
             usecase: getIt<AuthUsecase>(),
             router: getIt<AppRouter>().router,
-          ) /* ..getAuthenticatedUser() */,
+          ),
         ),
       ],
       child: Authenticator(
         child: MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            routerConfig: getIt<AppRouter>().router,
-            title: 'Oflow application',
-            themeMode: ThemeMode.light,
-            theme: AppTheme.lightTheme,
-            builder: Authenticator.builder()
-            /* builder: (context, child) {
-            return _Unfocus(
-              child: SafeArea(
-                child: child!,
-              ),
-            );
-          }, */
-            ),
+          debugShowCheckedModeBanner: false,
+          routerConfig: getIt<AppRouter>().router,
+          title: 'Oflow application',
+          themeMode: ThemeMode.light,
+          theme: AppTheme.lightTheme,
+          builder: Authenticator.builder(),
+        ),
       ),
     );
   }
 }
 
-class _Unfocus extends StatelessWidget {
+/* class _Unfocus extends StatelessWidget {
   final Widget child;
 
   const _Unfocus({
@@ -57,4 +55,4 @@ class _Unfocus extends StatelessWidget {
       child: child,
     );
   }
-}
+} */

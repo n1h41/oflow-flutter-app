@@ -25,7 +25,6 @@ _configureAmplify() async {
     await Amplify.addPlugin(AmplifyAuthCognito());
     await Amplify.configure(amplifyConfig);
     safePrint('Amplify configured');
-    // await Amplify.configure('amplifyconfiguration.dart');
   } on Exception catch (e) {
     safePrint('Failed to configure Amplify: $e');
   }

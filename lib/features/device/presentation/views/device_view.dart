@@ -3,10 +3,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
-import 'package:oflow/features/device/domain/entity/power_entity.dart';
+import 'package:oflow/features/device/domain/entity/device_status_entity.dart';
+import 'package:oflow/features/device/presentation/bloc/device_bloc.dart';
+import 'package:oflow/features/device/presentation/bloc/device_state.dart';
 
 import '../../../../core/constants/assets.dart';
 import '../../../../core/constants/colors.dart';
@@ -31,21 +34,24 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
   late final ValueNotifier<bool> timerStatusNotifier;
 
   late final ValueNotifier<bool> isLoadingNotifier;
-  late final ValueNotifier<PowerEntity> statusDataNotifier;
 
   @override
   void initState() {
     super.initState();
     timerStatusNotifier = ValueNotifier<bool>(false);
     isLoadingNotifier = ValueNotifier<bool>(true);
-    statusDataNotifier =
-        ValueNotifier<PowerEntity>(const PowerEntity(p: "0", o: "0"));
-    _initMqtt();
-  }
-
-  _initMqtt() async {
-    await configureMqttClient();
-    _listenForMessages();
+    context.read<DeviceBloc>().subscribeToTopic(
+          'C4DEE2879A60/status',
+          MqttQos.atMostOnce,
+        );
+    context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/pow');
+    context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/vals');
+    context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/chats');
+    context.read<DeviceBloc>().publishToTopic(
+          'C4DEE2879A60/status',
+          jsonEncode(const DeviceStatusEntity(p: "0", o: "0").toJson()),
+          MqttQos.atMostOnce,
+        );
   }
 
   @override
@@ -156,14 +162,18 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
                               "Setted Time",
                               style: Theme.of(context).textTheme.labelSmall,
                             ),
-                            Text(
-                              "30 min",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                            BlocBuilder<DeviceBloc, DeviceState>(
+                              builder: (context, state) {
+                                return Text(
+                                  '${state.deviceValueDetails?.offTime ?? "00"} min',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -182,19 +192,24 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
                               "Status",
                               style: Theme.of(context).textTheme.labelSmall,
                             ),
-                            ValueListenableBuilder(
-                                valueListenable: statusDataNotifier,
-                                builder: (context, statusData, _) {
-                                  return Text(
-                                    statusData.o == "1" ? "Online" : "Offline",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall
-                                        ?.copyWith(
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                  );
-                                }),
+                            BlocBuilder<DeviceBloc, DeviceState>(
+                              builder: (context, state) {
+                                return Text(
+                                  DeviceStateStatus.loading ==
+                                          state.deviceStatus
+                                      ? "loading"
+                                      : state.deviceStatus?.o == "1"
+                                          ? "Online"
+                                          : "Offline",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                );
+                              },
+                            ),
                           ],
                         ),
                       ),
@@ -246,53 +261,48 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
                                 ),
                               ],
                             ),
-                            child: ValueListenableBuilder(
-                                valueListenable: statusDataNotifier,
-                                builder: (context, statusData, _) {
-                                  return Center(
-                                    child: InkWell(
-                                      onTap: () {
-                                        /* timerStatusNotifier.value =
-                                            !timerStatus; */
-                                      },
-                                      child: Container(
-                                        width: 190,
-                                        height: 190,
-                                        decoration: BoxDecoration(
-                                          color: statusData.p == "1"
-                                              ? KAppColors.accent
-                                              : KAppColors.containerBackground,
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                            color: KAppColors.borderPrimary,
-                                          ),
-                                        ),
-                                        child: Center(
-                                          child: SvgPicture.asset(
-                                            KAppAssets.power,
-                                            color: statusData.p == "1"
-                                                ? KAppColors.textWhite
-                                                : null,
-                                          ),
-                                        ),
+                            child: BlocBuilder<DeviceBloc, DeviceState>(
+                                builder: (context, state) {
+                              return Center(
+                                child: InkWell(
+                                  onTap: _handlerPowerButtonOnTap,
+                                  child: Container(
+                                    width: 190,
+                                    height: 190,
+                                    decoration: BoxDecoration(
+                                      color: state.deviceStatus?.p == "1"
+                                          ? KAppColors.accent
+                                          : KAppColors.containerBackground,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: KAppColors.borderPrimary,
                                       ),
                                     ),
-                                  );
-                                }),
+                                    child: Center(
+                                      child: SvgPicture.asset(
+                                        KAppAssets.power,
+                                        color: state.deviceStatus?.p == "1"
+                                            ? KAppColors.textWhite
+                                            : null,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
                           ),
                         ),
                       ),
                       Positioned(
                         bottom: 5,
-                        child: ValueListenableBuilder(
-                          valueListenable: timerStatusNotifier,
-                          builder: (context, timerStatus, _) {
+                        child: BlocBuilder<DeviceBloc, DeviceState>(
+                          builder: (context, state) {
                             return Container(
                               height: 10,
                               width: 10,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: timerStatus
+                                color: state.deviceStatus?.p == "1"
                                     ? KAppColors.accent.withOpacity(0.8)
                                     : KAppColors.containerBackgroundDark
                                         .withOpacity(0.2),
@@ -313,51 +323,33 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
         backgroundColor: KAppColors.accent,
         shape: const CircleBorder(),
         onPressed: () {
-          _checkIfDevicIsOnline();
+          context.read<DeviceBloc>().publishToTopic('C4DEE2879A60/status',
+              jsonEncode(const DeviceStatusEntity(p: "0", o: "0").toJson()));
         },
         child: SvgPicture.asset(KAppAssets.neArrow),
       ),
     );
   }
 
+  void _handlerPowerButtonOnTap() {
+    final isDeviceOnline =
+        context.read<DeviceBloc>().state.deviceStatus?.o == "1";
+    if (!isDeviceOnline) {
+      return;
+    }
+    final currentPowerStatus =
+        context.read<DeviceBloc>().state.deviceStatus?.p == "1";
+    if (currentPowerStatus) {
+      context.read<DeviceBloc>().publishToTopic('C4DEE2879A60/status',
+          jsonEncode(const DeviceStatusEntity(p: "0", o: "1").toJson()));
+    } else {
+      context.read<DeviceBloc>().publishToTopic('C4DEE2879A60/status',
+          jsonEncode(const DeviceStatusEntity(p: "1", o: "1").toJson()));
+    }
+  }
+
   @override
   void dispose() {
-    client.unsubscribeStringTopic("${widget.deviceMac}/status");
-    client.disconnect();
     super.dispose();
-  }
-
-  _listenForMessages() {
-    client.updates.listen(
-      (event) {
-        for (var message in event) {
-          isLoadingNotifier.value = true;
-          MqttPublishMessage msg = message.payload as MqttPublishMessage;
-          final pt = MqttUtilities.bytesToStringAsString(msg.payload.message!);
-          debugPrint("MQTT Message: $pt");
-          statusDataNotifier.value = PowerEntity.fromJson(jsonDecode(pt));
-          isLoadingNotifier.value = false;
-        }
-      },
-    );
-    // INFO: Subscribe to the topic
-    _subscribeToTopic();
-  }
-
-  _subscribeToTopic() {
-    client.subscribe("${widget.deviceMac}/status", MqttQos.atLeastOnce);
-  }
-
-  _checkIfDevicIsOnline() {
-    // INFO: Publish to the topic
-    // conevert json string to uint8buffer
-    final payload = MqttPayloadBuilder();
-    payload.addString(jsonEncode(const PowerEntity(p: "1", o: "1").toJson()));
-    final messageIdentifier = client.publishMessage(
-      "${widget.deviceMac}/status",
-      MqttQos.atLeastOnce,
-      payload.payload!,
-    );
-    debugPrint("Message Identifier: $messageIdentifier");
   }
 }

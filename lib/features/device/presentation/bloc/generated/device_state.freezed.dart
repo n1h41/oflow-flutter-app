@@ -18,6 +18,11 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$DeviceState {
   DeviceStateStatus get status => throw _privateConstructorUsedError;
   String? get errorMessage => throw _privateConstructorUsedError;
+  List<int> get deviceHistoryDatalist => throw _privateConstructorUsedError;
+  DeviceStatusEntity? get deviceStatus => throw _privateConstructorUsedError;
+  PowEntity? get devicePowerDetails => throw _privateConstructorUsedError;
+  ValsEntity? get deviceValueDetails => throw _privateConstructorUsedError;
+  String? get deviceMac => throw _privateConstructorUsedError;
 
   /// Create a copy of DeviceState
   /// with the given fields replaced by the non-null parameter values.
@@ -32,7 +37,18 @@ abstract class $DeviceStateCopyWith<$Res> {
           DeviceState value, $Res Function(DeviceState) then) =
       _$DeviceStateCopyWithImpl<$Res, DeviceState>;
   @useResult
-  $Res call({DeviceStateStatus status, String? errorMessage});
+  $Res call(
+      {DeviceStateStatus status,
+      String? errorMessage,
+      List<int> deviceHistoryDatalist,
+      DeviceStatusEntity? deviceStatus,
+      PowEntity? devicePowerDetails,
+      ValsEntity? deviceValueDetails,
+      String? deviceMac});
+
+  $DeviceStatusEntityCopyWith<$Res>? get deviceStatus;
+  $PowEntityCopyWith<$Res>? get devicePowerDetails;
+  $ValsEntityCopyWith<$Res>? get deviceValueDetails;
 }
 
 /// @nodoc
@@ -52,6 +68,11 @@ class _$DeviceStateCopyWithImpl<$Res, $Val extends DeviceState>
   $Res call({
     Object? status = null,
     Object? errorMessage = freezed,
+    Object? deviceHistoryDatalist = null,
+    Object? deviceStatus = freezed,
+    Object? devicePowerDetails = freezed,
+    Object? deviceValueDetails = freezed,
+    Object? deviceMac = freezed,
   }) {
     return _then(_value.copyWith(
       status: null == status
@@ -62,7 +83,69 @@ class _$DeviceStateCopyWithImpl<$Res, $Val extends DeviceState>
           ? _value.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable
               as String?,
+      deviceHistoryDatalist: null == deviceHistoryDatalist
+          ? _value.deviceHistoryDatalist
+          : deviceHistoryDatalist // ignore: cast_nullable_to_non_nullable
+              as List<int>,
+      deviceStatus: freezed == deviceStatus
+          ? _value.deviceStatus
+          : deviceStatus // ignore: cast_nullable_to_non_nullable
+              as DeviceStatusEntity?,
+      devicePowerDetails: freezed == devicePowerDetails
+          ? _value.devicePowerDetails
+          : devicePowerDetails // ignore: cast_nullable_to_non_nullable
+              as PowEntity?,
+      deviceValueDetails: freezed == deviceValueDetails
+          ? _value.deviceValueDetails
+          : deviceValueDetails // ignore: cast_nullable_to_non_nullable
+              as ValsEntity?,
+      deviceMac: freezed == deviceMac
+          ? _value.deviceMac
+          : deviceMac // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
+  }
+
+  /// Create a copy of DeviceState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $DeviceStatusEntityCopyWith<$Res>? get deviceStatus {
+    if (_value.deviceStatus == null) {
+      return null;
+    }
+
+    return $DeviceStatusEntityCopyWith<$Res>(_value.deviceStatus!, (value) {
+      return _then(_value.copyWith(deviceStatus: value) as $Val);
+    });
+  }
+
+  /// Create a copy of DeviceState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $PowEntityCopyWith<$Res>? get devicePowerDetails {
+    if (_value.devicePowerDetails == null) {
+      return null;
+    }
+
+    return $PowEntityCopyWith<$Res>(_value.devicePowerDetails!, (value) {
+      return _then(_value.copyWith(devicePowerDetails: value) as $Val);
+    });
+  }
+
+  /// Create a copy of DeviceState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ValsEntityCopyWith<$Res>? get deviceValueDetails {
+    if (_value.deviceValueDetails == null) {
+      return null;
+    }
+
+    return $ValsEntityCopyWith<$Res>(_value.deviceValueDetails!, (value) {
+      return _then(_value.copyWith(deviceValueDetails: value) as $Val);
+    });
   }
 }
 
@@ -74,7 +157,21 @@ abstract class _$$DeviceStateImplCopyWith<$Res>
       __$$DeviceStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({DeviceStateStatus status, String? errorMessage});
+  $Res call(
+      {DeviceStateStatus status,
+      String? errorMessage,
+      List<int> deviceHistoryDatalist,
+      DeviceStatusEntity? deviceStatus,
+      PowEntity? devicePowerDetails,
+      ValsEntity? deviceValueDetails,
+      String? deviceMac});
+
+  @override
+  $DeviceStatusEntityCopyWith<$Res>? get deviceStatus;
+  @override
+  $PowEntityCopyWith<$Res>? get devicePowerDetails;
+  @override
+  $ValsEntityCopyWith<$Res>? get deviceValueDetails;
 }
 
 /// @nodoc
@@ -92,6 +189,11 @@ class __$$DeviceStateImplCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
     Object? errorMessage = freezed,
+    Object? deviceHistoryDatalist = null,
+    Object? deviceStatus = freezed,
+    Object? devicePowerDetails = freezed,
+    Object? deviceValueDetails = freezed,
+    Object? deviceMac = freezed,
   }) {
     return _then(_$DeviceStateImpl(
       status: null == status
@@ -102,6 +204,26 @@ class __$$DeviceStateImplCopyWithImpl<$Res>
           ? _value.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable
               as String?,
+      deviceHistoryDatalist: null == deviceHistoryDatalist
+          ? _value._deviceHistoryDatalist
+          : deviceHistoryDatalist // ignore: cast_nullable_to_non_nullable
+              as List<int>,
+      deviceStatus: freezed == deviceStatus
+          ? _value.deviceStatus
+          : deviceStatus // ignore: cast_nullable_to_non_nullable
+              as DeviceStatusEntity?,
+      devicePowerDetails: freezed == devicePowerDetails
+          ? _value.devicePowerDetails
+          : devicePowerDetails // ignore: cast_nullable_to_non_nullable
+              as PowEntity?,
+      deviceValueDetails: freezed == deviceValueDetails
+          ? _value.deviceValueDetails
+          : deviceValueDetails // ignore: cast_nullable_to_non_nullable
+              as ValsEntity?,
+      deviceMac: freezed == deviceMac
+          ? _value.deviceMac
+          : deviceMac // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -109,16 +231,42 @@ class __$$DeviceStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$DeviceStateImpl implements _DeviceState {
-  const _$DeviceStateImpl({required this.status, this.errorMessage});
+  const _$DeviceStateImpl(
+      {required this.status,
+      this.errorMessage,
+      final List<int> deviceHistoryDatalist = const [],
+      this.deviceStatus,
+      this.devicePowerDetails,
+      this.deviceValueDetails,
+      this.deviceMac})
+      : _deviceHistoryDatalist = deviceHistoryDatalist;
 
   @override
   final DeviceStateStatus status;
   @override
   final String? errorMessage;
+  final List<int> _deviceHistoryDatalist;
+  @override
+  @JsonKey()
+  List<int> get deviceHistoryDatalist {
+    if (_deviceHistoryDatalist is EqualUnmodifiableListView)
+      return _deviceHistoryDatalist;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_deviceHistoryDatalist);
+  }
+
+  @override
+  final DeviceStatusEntity? deviceStatus;
+  @override
+  final PowEntity? devicePowerDetails;
+  @override
+  final ValsEntity? deviceValueDetails;
+  @override
+  final String? deviceMac;
 
   @override
   String toString() {
-    return 'DeviceState(status: $status, errorMessage: $errorMessage)';
+    return 'DeviceState(status: $status, errorMessage: $errorMessage, deviceHistoryDatalist: $deviceHistoryDatalist, deviceStatus: $deviceStatus, devicePowerDetails: $devicePowerDetails, deviceValueDetails: $deviceValueDetails, deviceMac: $deviceMac)';
   }
 
   @override
@@ -128,11 +276,29 @@ class _$DeviceStateImpl implements _DeviceState {
             other is _$DeviceStateImpl &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.errorMessage, errorMessage) ||
-                other.errorMessage == errorMessage));
+                other.errorMessage == errorMessage) &&
+            const DeepCollectionEquality()
+                .equals(other._deviceHistoryDatalist, _deviceHistoryDatalist) &&
+            (identical(other.deviceStatus, deviceStatus) ||
+                other.deviceStatus == deviceStatus) &&
+            (identical(other.devicePowerDetails, devicePowerDetails) ||
+                other.devicePowerDetails == devicePowerDetails) &&
+            (identical(other.deviceValueDetails, deviceValueDetails) ||
+                other.deviceValueDetails == deviceValueDetails) &&
+            (identical(other.deviceMac, deviceMac) ||
+                other.deviceMac == deviceMac));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, status, errorMessage);
+  int get hashCode => Object.hash(
+      runtimeType,
+      status,
+      errorMessage,
+      const DeepCollectionEquality().hash(_deviceHistoryDatalist),
+      deviceStatus,
+      devicePowerDetails,
+      deviceValueDetails,
+      deviceMac);
 
   /// Create a copy of DeviceState
   /// with the given fields replaced by the non-null parameter values.
@@ -146,12 +312,27 @@ class _$DeviceStateImpl implements _DeviceState {
 abstract class _DeviceState implements DeviceState {
   const factory _DeviceState(
       {required final DeviceStateStatus status,
-      final String? errorMessage}) = _$DeviceStateImpl;
+      final String? errorMessage,
+      final List<int> deviceHistoryDatalist,
+      final DeviceStatusEntity? deviceStatus,
+      final PowEntity? devicePowerDetails,
+      final ValsEntity? deviceValueDetails,
+      final String? deviceMac}) = _$DeviceStateImpl;
 
   @override
   DeviceStateStatus get status;
   @override
   String? get errorMessage;
+  @override
+  List<int> get deviceHistoryDatalist;
+  @override
+  DeviceStatusEntity? get deviceStatus;
+  @override
+  PowEntity? get devicePowerDetails;
+  @override
+  ValsEntity? get deviceValueDetails;
+  @override
+  String? get deviceMac;
 
   /// Create a copy of DeviceState
   /// with the given fields replaced by the non-null parameter values.

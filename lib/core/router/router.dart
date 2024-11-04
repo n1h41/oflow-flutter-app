@@ -9,14 +9,6 @@ class AppRouter {
   final _router = GoRouter(
     initialLocation: '/',
     routes: [
-      /* GoRoute(
-        path: '/auth/sign-up',
-        builder: (context, state) => const SignUpView(),
-      ),
-      GoRoute(
-        path: '/auth/sign-in',
-        builder: (context, state) => const SignInView(),
-      ), */
       GoRoute(
         path: '/',
         builder: (context, state) => const HomeView(),

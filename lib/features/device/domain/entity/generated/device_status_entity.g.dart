@@ -1,18 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of '../power_entity.dart';
+part of '../device_status_entity.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$PowerEntityImpl _$$PowerEntityImplFromJson(Map<String, dynamic> json) =>
-    _$PowerEntityImpl(
+_$DeviceStatusEntityImpl _$$DeviceStatusEntityImplFromJson(
+        Map<String, dynamic> json) =>
+    _$DeviceStatusEntityImpl(
       p: json['p'] as String,
       o: json['o'] as String,
     );
 
-Map<String, dynamic> _$$PowerEntityImplToJson(_$PowerEntityImpl instance) =>
+Map<String, dynamic> _$$DeviceStatusEntityImplToJson(
+        _$DeviceStatusEntityImpl instance) =>
     <String, dynamic>{
       'p': instance.p,
       'o': instance.o,
