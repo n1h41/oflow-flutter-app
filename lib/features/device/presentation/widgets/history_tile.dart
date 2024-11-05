@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class HistoryTile extends StatelessWidget {
   final int statusCode;
@@ -24,19 +25,20 @@ class HistoryTile extends StatelessWidget {
           ),
           const Spacer(),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 // show date from epoch
-                DateTime.fromMillisecondsSinceEpoch(epoch * 1000)
-                    .toString()
-                    .substring(0, 10),
+                DateFormat('dd-MM-yyyy').format(
+                  DateTime.fromMillisecondsSinceEpoch(epoch * 1000),
+                ),
                 style: Theme.of(context).textTheme.labelSmall,
               ),
               Text(
-                // show time from epoch
-                DateTime.fromMillisecondsSinceEpoch(epoch * 1000)
-                    .toString()
-                    .substring(11, 16),
+                DateFormat('jm').format(
+                  DateTime.fromMillisecondsSinceEpoch(epoch * 1000),
+                ),
+                // DateTime.fromMillisecondsSinceEpoch(epoch * 1000),
                 style: Theme.of(context).textTheme.labelSmall,
               ),
             ],
