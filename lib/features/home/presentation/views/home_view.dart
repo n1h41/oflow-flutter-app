@@ -17,15 +17,34 @@ class HomeView extends StatelessWidget {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            RichText(
-              text: TextSpan(
-                style: Theme.of(context).textTheme.titleLarge,
-                children: const [
-                  TextSpan(text: "Hello! "),
-                  TextSpan(text: "Davis"),
-                ],
-              ),
-            ),
+            FutureBuilder(
+                future: Amplify.Auth.fetchUserAttributes(),
+                builder: (context, snapshot) {
+                  String? firstName;
+                  if (snapshot.hasData) {
+                    snapshot.data?.forEach((element) {
+                      if (element.userAttributeKey.key == "custom:first_name") {
+                        firstName = element.value;
+                      }
+                    });
+                  }
+                  return RichText(
+                    text: TextSpan(
+                      style: Theme.of(context).textTheme.titleLarge,
+                      children: [
+                        const TextSpan(text: "Hello! "),
+                        if (snapshot.connectionState == ConnectionState.waiting)
+                          TextSpan(
+                            style: TextStyle(
+                              color: KAppColors.textPrimary.withOpacity(0.4),
+                            ),
+                            text: "Loading...",
+                          ),
+                        if (snapshot.hasData) TextSpan(text: firstName ?? ""),
+                      ],
+                    ),
+                  );
+                }),
             Text(
               DateFormat.yMMMd().format(DateTime.now()),
               style: Theme.of(context).textTheme.labelMedium,
@@ -146,17 +165,93 @@ class HomeView extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: KAppColors.accent,
         shape: const CircleBorder(),
-        onPressed: () {
-          // Get the user's id token
-          Amplify.Auth.fetchAuthSession().then((session) {
-            print(session.toJson());
-            /* final AWSCredentials credentials =
-                session.toJson()["credentials"] as AWSCredentials; */
-          });
+        onPressed: () => _openAddDevicePopup(context),
+        child: const Icon(Icons.add, color: KAppColors.textWhite),
+      ),
+    );
+  }
 
-          // print(context.read<AuthBloc>().state.authenticationResult!.idToken!);
-        },
-        child: const Icon(Icons.add),
+  _openAddDevicePopup(BuildContext context) {
+    // Open the add device popup
+    showDialog(
+      context: context,
+      builder: (_) => const AddDevicePopup(),
+    );
+  }
+}
+
+class AddDevicePopup extends StatefulWidget {
+  const AddDevicePopup({super.key});
+
+  @override
+  State<AddDevicePopup> createState() => _AddDevicePopupState();
+}
+
+class _AddDevicePopupState extends State<AddDevicePopup> {
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Container(
+        width: 300,
+        height: 300,
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {},
+              child: Text(
+                "Scan QR Code",
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: KAppColors.textWhite,
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Divider(),
+            const Text("OR"),
+            const SizedBox(height: 10),
+            Text(
+              "Enter Device MAC Address",
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
+            const SizedBox(height: 10),
+            // create textformfiled with height of 50
+            Container(
+              height: 50,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: KAppColors.borderPrimary,
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: TextFormField(
+                // controller: _minCurrentController,
+                decoration: InputDecoration(
+                  hintText: "MAC Address",
+                  hintStyle: Theme.of(context).textTheme.labelSmall,
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {},
+                child: Text(
+                  "Add +",
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: KAppColors.textWhite,
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
