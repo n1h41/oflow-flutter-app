@@ -1,3 +1,4 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<DeviceBloc>(
-          lazy: false,
+          // lazy: false,
           create: (_) => DeviceBloc(),
         ),
         BlocProvider<AuthBloc>(
@@ -27,6 +28,23 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: Authenticator(
+        signUpForm: SignUpForm.custom(
+          fields: [
+            SignUpFormField.username(),
+            SignUpFormField.password(),
+            SignUpFormField.passwordConfirmation(),
+            SignUpFormField.custom(
+              title: "First Name",
+              attributeKey: const CognitoUserAttributeKey.custom("first_name"),
+              required: true,
+            ),
+            SignUpFormField.custom(
+              title: "Last Name",
+              attributeKey: const CognitoUserAttributeKey.custom("last_name"),
+              required: true,
+            ),
+          ],
+        ),
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
           routerConfig: getIt<AppRouter>().router,

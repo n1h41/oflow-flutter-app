@@ -1,14 +1,27 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:oflow/core/constants/colors.dart';
+import 'package:oflow/features/device/presentation/bloc/device_bloc.dart';
 
 import '../../../../core/constants/assets.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<DeviceBloc>().initMqttClient();
+  }
 
   @override
   Widget build(BuildContext context) {

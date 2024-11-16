@@ -6,17 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
 import 'package:mqtt5_client/mqtt5_server_client.dart';
-import 'package:oflow/features/device/domain/entity/pow_entity.dart';
-import 'package:oflow/features/device/domain/entity/vals_entity.dart';
 
 import '../../../../core/utils/helpers/aws_helpers.dart';
 import '../../domain/entity/device_status_entity.dart';
+import '../../domain/entity/pow_entity.dart';
+import '../../domain/entity/vals_entity.dart';
 import 'device_state.dart';
 
 class DeviceBloc extends Cubit<DeviceState> {
-  DeviceBloc() : super(DeviceState.initial()) {
-    initMqttClient();
-  }
+  DeviceBloc() : super(DeviceState.initial());
 
   late final MqttServerClient _mqttClient;
 
@@ -151,8 +149,11 @@ class DeviceBloc extends Cubit<DeviceState> {
     _mqttClient.subscribe(topic, qosLevel);
   }
 
-  void publishToTopic(String topic, String message,
-      [MqttQos qosLevel = MqttQos.atMostOnce]) {
+  void publishToTopic(
+    String topic,
+    String message, [
+    MqttQos qosLevel = MqttQos.atMostOnce,
+  ]) {
     final builder = MqttPayloadBuilder();
     builder.addString(message);
     final msgIdentifier =
