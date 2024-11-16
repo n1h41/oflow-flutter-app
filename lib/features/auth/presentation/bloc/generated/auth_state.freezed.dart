@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AuthState {
   AuthStatus get status => throw _privateConstructorUsedError;
   String? get errorMessage => throw _privateConstructorUsedError;
+  AuthenticationResultEntity? get authenticationResult =>
+      throw _privateConstructorUsedError;
 
   /// Create a copy of AuthState
   /// with the given fields replaced by the non-null parameter values.
@@ -31,7 +33,12 @@ abstract class $AuthStateCopyWith<$Res> {
   factory $AuthStateCopyWith(AuthState value, $Res Function(AuthState) then) =
       _$AuthStateCopyWithImpl<$Res, AuthState>;
   @useResult
-  $Res call({AuthStatus status, String? errorMessage});
+  $Res call(
+      {AuthStatus status,
+      String? errorMessage,
+      AuthenticationResultEntity? authenticationResult});
+
+  $AuthenticationResultEntityCopyWith<$Res>? get authenticationResult;
 }
 
 /// @nodoc
@@ -51,6 +58,7 @@ class _$AuthStateCopyWithImpl<$Res, $Val extends AuthState>
   $Res call({
     Object? status = null,
     Object? errorMessage = freezed,
+    Object? authenticationResult = freezed,
   }) {
     return _then(_value.copyWith(
       status: null == status
@@ -61,7 +69,26 @@ class _$AuthStateCopyWithImpl<$Res, $Val extends AuthState>
           ? _value.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable
               as String?,
+      authenticationResult: freezed == authenticationResult
+          ? _value.authenticationResult
+          : authenticationResult // ignore: cast_nullable_to_non_nullable
+              as AuthenticationResultEntity?,
     ) as $Val);
+  }
+
+  /// Create a copy of AuthState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AuthenticationResultEntityCopyWith<$Res>? get authenticationResult {
+    if (_value.authenticationResult == null) {
+      return null;
+    }
+
+    return $AuthenticationResultEntityCopyWith<$Res>(
+        _value.authenticationResult!, (value) {
+      return _then(_value.copyWith(authenticationResult: value) as $Val);
+    });
   }
 }
 
@@ -73,7 +100,13 @@ abstract class _$$AuthStateImplCopyWith<$Res>
       __$$AuthStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({AuthStatus status, String? errorMessage});
+  $Res call(
+      {AuthStatus status,
+      String? errorMessage,
+      AuthenticationResultEntity? authenticationResult});
+
+  @override
+  $AuthenticationResultEntityCopyWith<$Res>? get authenticationResult;
 }
 
 /// @nodoc
@@ -91,6 +124,7 @@ class __$$AuthStateImplCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
     Object? errorMessage = freezed,
+    Object? authenticationResult = freezed,
   }) {
     return _then(_$AuthStateImpl(
       status: null == status
@@ -101,6 +135,10 @@ class __$$AuthStateImplCopyWithImpl<$Res>
           ? _value.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable
               as String?,
+      authenticationResult: freezed == authenticationResult
+          ? _value.authenticationResult
+          : authenticationResult // ignore: cast_nullable_to_non_nullable
+              as AuthenticationResultEntity?,
     ));
   }
 }
@@ -108,16 +146,19 @@ class __$$AuthStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$AuthStateImpl implements _AuthState {
-  const _$AuthStateImpl({required this.status, required this.errorMessage});
+  const _$AuthStateImpl(
+      {required this.status, this.errorMessage, this.authenticationResult});
 
   @override
   final AuthStatus status;
   @override
   final String? errorMessage;
+  @override
+  final AuthenticationResultEntity? authenticationResult;
 
   @override
   String toString() {
-    return 'AuthState(status: $status, errorMessage: $errorMessage)';
+    return 'AuthState(status: $status, errorMessage: $errorMessage, authenticationResult: $authenticationResult)';
   }
 
   @override
@@ -127,11 +168,14 @@ class _$AuthStateImpl implements _AuthState {
             other is _$AuthStateImpl &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.errorMessage, errorMessage) ||
-                other.errorMessage == errorMessage));
+                other.errorMessage == errorMessage) &&
+            (identical(other.authenticationResult, authenticationResult) ||
+                other.authenticationResult == authenticationResult));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, status, errorMessage);
+  int get hashCode =>
+      Object.hash(runtimeType, status, errorMessage, authenticationResult);
 
   /// Create a copy of AuthState
   /// with the given fields replaced by the non-null parameter values.
@@ -144,13 +188,17 @@ class _$AuthStateImpl implements _AuthState {
 
 abstract class _AuthState implements AuthState {
   const factory _AuthState(
-      {required final AuthStatus status,
-      required final String? errorMessage}) = _$AuthStateImpl;
+          {required final AuthStatus status,
+          final String? errorMessage,
+          final AuthenticationResultEntity? authenticationResult}) =
+      _$AuthStateImpl;
 
   @override
   AuthStatus get status;
   @override
   String? get errorMessage;
+  @override
+  AuthenticationResultEntity? get authenticationResult;
 
   /// Create a copy of AuthState
   /// with the given fields replaced by the non-null parameter values.

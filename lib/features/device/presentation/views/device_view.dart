@@ -1,27 +1,57 @@
+// ignore_for_file: deprecated_member_use
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:oflow/core/constants/assets.dart';
-import 'package:oflow/core/constants/colors.dart';
-import 'package:oflow/features/device/presentation/widgets/power_setting_bottom_sheet.dart';
+import 'package:mqtt5_client/mqtt5_client.dart';
+import 'package:oflow/features/device/domain/entity/device_status_entity.dart';
+import 'package:oflow/features/device/presentation/bloc/device_bloc.dart';
+import 'package:oflow/features/device/presentation/bloc/device_state.dart';
 
+import '../../../../core/constants/assets.dart';
+import '../../../../core/constants/colors.dart';
+import '../mixins/mqtt_mixin.dart';
 import '../widgets/device_tile.dart';
+import '../widgets/power_setting_bottom_sheet.dart';
 import '../widgets/timer_bottom_sheet.dart';
 
 class DeviceView extends StatefulWidget {
-  const DeviceView({super.key});
+  final String deviceMac;
+
+  const DeviceView({
+    super.key,
+    required this.deviceMac,
+  });
 
   @override
   State<DeviceView> createState() => _DeviceViewState();
 }
 
-class _DeviceViewState extends State<DeviceView> {
+class _DeviceViewState extends State<DeviceView> with MqttMixin {
   late final ValueNotifier<bool> timerStatusNotifier;
+
+  late final ValueNotifier<bool> isLoadingNotifier;
 
   @override
   void initState() {
     super.initState();
     timerStatusNotifier = ValueNotifier<bool>(false);
+    isLoadingNotifier = ValueNotifier<bool>(true);
+    context.read<DeviceBloc>().subscribeToTopic(
+          'C4DEE2879A60/status',
+          MqttQos.atMostOnce,
+        );
+    context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/pow');
+    context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/vals');
+    context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/chats');
+    context.read<DeviceBloc>().publishToTopic(
+          'C4DEE2879A60/status',
+          jsonEncode(const DeviceStatusEntity(p: "0", o: "0").toJson()),
+          MqttQos.atMostOnce,
+        );
   }
 
   @override
@@ -76,14 +106,14 @@ class _DeviceViewState extends State<DeviceView> {
                   title: "Schedule",
                   icon: KAppAssets.schedule,
                   onTap: () {
-                    context.go('/device/schedule');
+                    context.go('/device/${widget.deviceMac}/schedule');
                   },
                 ),
                 DeviceTile(
                   title: "History",
                   icon: KAppAssets.history,
                   onTap: () {
-                    context.go('/device/history');
+                    context.go('/device/${widget.deviceMac}/history');
                   },
                 ),
                 DeviceTile(
@@ -132,14 +162,18 @@ class _DeviceViewState extends State<DeviceView> {
                               "Setted Time",
                               style: Theme.of(context).textTheme.labelSmall,
                             ),
-                            Text(
-                              "30 min",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                            BlocBuilder<DeviceBloc, DeviceState>(
+                              builder: (context, state) {
+                                return Text(
+                                  '${state.deviceValueDetails?.offTime ?? "00"} min',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -158,14 +192,23 @@ class _DeviceViewState extends State<DeviceView> {
                               "Status",
                               style: Theme.of(context).textTheme.labelSmall,
                             ),
-                            Text(
-                              "Offline",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                            BlocBuilder<DeviceBloc, DeviceState>(
+                              builder: (context, state) {
+                                return Text(
+                                  DeviceStateStatus.loading ==
+                                          state.deviceStatus
+                                      ? "loading"
+                                      : state.deviceStatus?.o == "1"
+                                          ? "Online"
+                                          : "Offline",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -218,53 +261,48 @@ class _DeviceViewState extends State<DeviceView> {
                                 ),
                               ],
                             ),
-                            child: ValueListenableBuilder(
-                                valueListenable: timerStatusNotifier,
-                                builder: (context, timerStatus, _) {
-                                  return Center(
-                                    child: InkWell(
-                                      onTap: () {
-                                        timerStatusNotifier.value =
-                                            !timerStatus;
-                                      },
-                                      child: Container(
-                                        width: 190,
-                                        height: 190,
-                                        decoration: BoxDecoration(
-                                          color: timerStatus
-                                              ? KAppColors.accent
-                                              : KAppColors.containerBackground,
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                            color: KAppColors.borderPrimary,
-                                          ),
-                                        ),
-                                        child: Center(
-                                          child: SvgPicture.asset(
-                                            KAppAssets.power,
-                                            color: timerStatus
-                                                ? KAppColors.textWhite
-                                                : null,
-                                          ),
-                                        ),
+                            child: BlocBuilder<DeviceBloc, DeviceState>(
+                                builder: (context, state) {
+                              return Center(
+                                child: InkWell(
+                                  onTap: _handlerPowerButtonOnTap,
+                                  child: Container(
+                                    width: 190,
+                                    height: 190,
+                                    decoration: BoxDecoration(
+                                      color: state.deviceStatus?.p == "1"
+                                          ? KAppColors.accent
+                                          : KAppColors.containerBackground,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: KAppColors.borderPrimary,
                                       ),
                                     ),
-                                  );
-                                }),
+                                    child: Center(
+                                      child: SvgPicture.asset(
+                                        KAppAssets.power,
+                                        color: state.deviceStatus?.p == "1"
+                                            ? KAppColors.textWhite
+                                            : null,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
                           ),
                         ),
                       ),
                       Positioned(
                         bottom: 5,
-                        child: ValueListenableBuilder(
-                          valueListenable: timerStatusNotifier,
-                          builder: (context, timerStatus, _) {
+                        child: BlocBuilder<DeviceBloc, DeviceState>(
+                          builder: (context, state) {
                             return Container(
                               height: 10,
                               width: 10,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: timerStatus
+                                color: state.deviceStatus?.p == "1"
                                     ? KAppColors.accent.withOpacity(0.8)
                                     : KAppColors.containerBackgroundDark
                                         .withOpacity(0.2),
@@ -281,6 +319,37 @@ class _DeviceViewState extends State<DeviceView> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: KAppColors.accent,
+        shape: const CircleBorder(),
+        onPressed: () {
+          context.read<DeviceBloc>().publishToTopic('C4DEE2879A60/status',
+              jsonEncode(const DeviceStatusEntity(p: "0", o: "0").toJson()));
+        },
+        child: SvgPicture.asset(KAppAssets.neArrow),
+      ),
     );
+  }
+
+  void _handlerPowerButtonOnTap() {
+    final isDeviceOnline =
+        context.read<DeviceBloc>().state.deviceStatus?.o == "1";
+    if (!isDeviceOnline) {
+      return;
+    }
+    final currentPowerStatus =
+        context.read<DeviceBloc>().state.deviceStatus?.p == "1";
+    if (currentPowerStatus) {
+      context.read<DeviceBloc>().publishToTopic('C4DEE2879A60/status',
+          jsonEncode(const DeviceStatusEntity(p: "0", o: "1").toJson()));
+    } else {
+      context.read<DeviceBloc>().publishToTopic('C4DEE2879A60/status',
+          jsonEncode(const DeviceStatusEntity(p: "1", o: "1").toJson()));
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

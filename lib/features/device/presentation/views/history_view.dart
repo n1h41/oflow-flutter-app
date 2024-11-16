@@ -1,41 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:mqtt5_client/mqtt5_client.dart';
-import 'package:mqtt5_client/mqtt5_server_client.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:oflow/features/device/presentation/bloc/device_bloc.dart';
+import 'package:oflow/features/device/presentation/bloc/device_state.dart';
+import 'package:oflow/features/device/presentation/mixins/mqtt_mixin.dart';
 
 import '../../../../core/constants/colors.dart';
+import '../widgets/history_tile.dart';
 
 class HistoryView extends StatefulWidget {
-  const HistoryView({super.key});
+  final String deviceMac;
+
+  const HistoryView({super.key, required this.deviceMac});
 
   @override
   State<HistoryView> createState() => _HistoryViewState();
 }
 
-class _HistoryViewState extends State<HistoryView> {
-  late final MqttServerClient client;
+class _HistoryViewState extends State<HistoryView> with MqttMixin {
+  late final ValueNotifier<bool> isLoadingNotifier;
+  late final ValueNotifier<List<int>> historyDataListNotifier;
 
   @override
   void initState() {
     super.initState();
-    /* client = MqttServerClient.withPort(
-      'broker.emqx.io',
-      'flutter_client',
-      443,
-      maxConnectionAttempts: 2,
-    ); */
-  }
-
-  _configureMqttClient() {
-    client.logging(on: false);
-    client.useWebSocket = true;
-    client.secure = false;
-    client.autoReconnect = true;
-    client.disconnectOnNoResponsePeriod = 90;
-    client.keepAlivePeriod = 30;
-  }
-
-  _subscribeToTopic() {
-    client.subscribe("C4DEE2879A60/status", MqttQos.atLeastOnce);
+    historyDataListNotifier = ValueNotifier<List<int>>([]);
   }
 
   @override
@@ -83,34 +71,27 @@ class _HistoryViewState extends State<HistoryView> {
         ),
         child: Column(
           children: [
-            /* Expanded(
-              child: ListView.separated(
-                shrinkWrap: true,
-                itemCount: 4,
-                separatorBuilder: (context, _) => const Divider(),
-                itemBuilder: (context, _) => const HistoryTile(
-                  text: "Pump running",
-                  date: "23 Sep, 2024",
-                  time: "12:00",
-                ),
-              ),
+            BlocBuilder<DeviceBloc, DeviceState>(
+              builder: (context, state) {
+                return Expanded(
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: state.deviceHistoryDatalist.length,
+                    separatorBuilder: (context, _) => const Divider(),
+                    itemBuilder: (context, index) {
+                      // get last number of int
+                      int statusCode =
+                          state.deviceHistoryDatalist[index].remainder(10);
+                      int epoch = state.deviceHistoryDatalist[index] ~/ 10;
+                      return HistoryTile(
+                        statusCode: statusCode,
+                        epoch: epoch,
+                      );
+                    },
+                  ),
+                );
+              },
             ),
-            const Divider(), */
-            Expanded(
-              child: StreamBuilder(
-                stream: client.updates,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView(
-                      shrinkWrap: true,
-                      children: const [],
-                    );
-                  }
-                  return const SizedBox.shrink();
-                },
-              ),
-            ),
-            const Divider()
           ],
         ),
       ),
@@ -118,8 +99,7 @@ class _HistoryViewState extends State<HistoryView> {
   }
 
   @override
-    void dispose() {
-      client.disconnect();
-      super.dispose();
-    }
+  void dispose() {
+    super.dispose();
+  }
 }

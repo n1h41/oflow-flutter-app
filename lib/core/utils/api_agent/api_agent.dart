@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:oflow/features/auth/data/datasource/datasource.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../../config/config.dart';
@@ -30,6 +31,17 @@ class ApiAgent {
         error: true,
         compact: true,
       ),
+    );
+
+    // TODO:
+    dio.interceptors.add(
+      InterceptorsWrapper(onError: (DioException e, handler) {
+        if (e.response?.statusCode == 401) {
+          final authDatasource = AuthDatasourceImpl();
+          // authDatasource.refreshToken();
+        }
+        handler.next(e);
+      }),
     );
   }
 }

@@ -13,6 +13,11 @@ class AuthParams with _$AuthParams {
     required String password,
   }) = SignUpParams;
 
+  const factory AuthParams.signIn({
+    required String email,
+    required String password,
+  }) = SignInParams;
+
   factory AuthParams.fromJson(Map<String, dynamic> json) =>
       _$AuthParamsFromJson(json);
 }
