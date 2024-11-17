@@ -7,12 +7,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
-import 'package:oflow/features/device/domain/entity/device_status_entity.dart';
-import 'package:oflow/features/device/presentation/bloc/device_bloc.dart';
-import 'package:oflow/features/device/presentation/bloc/device_state.dart';
+
 
 import '../../../../core/constants/assets.dart';
 import '../../../../core/constants/colors.dart';
+import '../../domain/entity/device_status_entity.dart';
+import '../bloc/device_bloc.dart';
+import '../bloc/device_state.dart';
 import '../mixins/mqtt_mixin.dart';
 import '../widgets/device_tile.dart';
 import '../widgets/power_setting_bottom_sheet.dart';
@@ -40,10 +41,7 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
     super.initState();
     timerStatusNotifier = ValueNotifier<bool>(false);
     isLoadingNotifier = ValueNotifier<bool>(true);
-    context.read<DeviceBloc>().subscribeToTopic(
-          'C4DEE2879A60/status',
-          MqttQos.atMostOnce,
-        );
+    context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/status');
     context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/pow');
     context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/vals');
     context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/chats');
@@ -195,8 +193,7 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
                             BlocBuilder<DeviceBloc, DeviceState>(
                               builder: (context, state) {
                                 return Text(
-                                  DeviceStateStatus.loading ==
-                                          state.deviceStatus
+                                  DeviceStateStatus.loading == state.status
                                       ? "loading"
                                       : state.deviceStatus?.o == "1"
                                           ? "Online"

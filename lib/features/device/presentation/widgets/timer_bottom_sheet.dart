@@ -1,5 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:oflow/core/constants/colors.dart';
+import 'package:oflow/features/device/presentation/bloc/device_bloc.dart';
+import 'package:oflow/features/device/presentation/bloc/device_state.dart';
 import 'package:wheel_picker/wheel_picker.dart';
 
 class TimerBottomSheet extends StatefulWidget {
@@ -145,15 +151,29 @@ class _TimerBottomSheetState extends State<TimerBottomSheet> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                selectedDurationNotifier.value =
-                    "${selectedHour.toString().padLeft(2, "0")}:${selectedMinute.toString().padLeft(2, "0")}";
-              },
+              onPressed: _handleUpdateTimerValue,
               child: const Text("Save"),
             ),
           ),
         ],
       ),
     );
+  }
+
+  void _handleUpdateTimerValue() {
+    selectedDurationNotifier.value =
+        "${selectedHour.toString().padLeft(2, "0")}:${selectedMinute.toString().padLeft(2, "0")}";
+    // convert to minutes
+    final durationInMins = (selectedHour * 60) + selectedMinute;
+    final DeviceState state = context.read<DeviceBloc>().state;
+    context.read<DeviceBloc>().publishToTopic(
+          "C4DEE2879A60/vals",
+          jsonEncode(
+            state.deviceValueDetails?.copyWith(
+              offTime: durationInMins.toString(),
+            ),
+          ),
+        );
+    context.pop();
   }
 }
