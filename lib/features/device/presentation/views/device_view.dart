@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
-
+// import 'package:mqtt5_client/mqtt5_client.dart';
 
 import '../../../../core/constants/assets.dart';
 import '../../../../core/constants/colors.dart';
@@ -45,285 +45,302 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
     context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/pow');
     context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/vals');
     context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/chats');
-    context.read<DeviceBloc>().publishToTopic(
+    /* context.read<DeviceBloc>().publishToTopic(
           'C4DEE2879A60/status',
           jsonEncode(const DeviceStatusEntity(p: "0", o: "0").toJson()),
           MqttQos.atMostOnce,
-        );
+        ); */
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: Row(
+    return BlocListener<DeviceBloc, DeviceState>(
+      listenWhen: (previous, current) =>
+          previous.isInitialDeviceStatus != current.isInitialDeviceStatus,
+      listener: (context, state) {
+        context.read<DeviceBloc>().publishToTopic(
+              'C4DEE2879A60/status',
+              jsonEncode(const DeviceStatusEntity(p: "0", o: "0").toJson()),
+              MqttQos.atMostOnce,
+            );
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(left: 16),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: KAppColors.containerBackground,
+                    boxShadow: [
+                      BoxShadow(
+                        color: KAppColors.shadowColor.withOpacity(0.1),
+                        blurRadius: 14,
+                        spreadRadius: 0,
+                        offset: const Offset(0, 0),
+                      ),
+                    ],
+                  ),
+                  child: const CircleAvatar(
+                    backgroundColor: KAppColors.containerBackground,
+                    radius: 20,
+                    child: Icon(Icons.arrow_back),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          title: Text(
+            "Motor",
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+        ),
+        body: Column(
           children: [
-            InkWell(
-              onTap: () {
-                Navigator.of(context).pop();
-              },
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 24,
+                horizontal: 16,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  DeviceTile(
+                    title: "Schedule",
+                    icon: KAppAssets.schedule,
+                    onTap: () {
+                      // context.go('/device/${widget.deviceMac}/schedule');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Feature coming soon"),
+                          showCloseIcon: true,
+                        ),
+                      );
+                    },
+                  ),
+                  DeviceTile(
+                    title: "History",
+                    icon: KAppAssets.history,
+                    onTap: () {
+                      context.go('/device/${widget.deviceMac}/history');
+                    },
+                  ),
+                  DeviceTile(
+                    title: "On/Off Timer",
+                    icon: KAppAssets.circledPower,
+                    onTap: () => showModalBottomSheet<void>(
+                      context: context,
+                      builder: (context) => const TimerBottomSheet(),
+                    ),
+                  ),
+                  DeviceTile(
+                    title: "Power Settings",
+                    icon: KAppAssets.settings,
+                    onTap: () => showModalBottomSheet<void>(
+                      context: context,
+                      builder: (context) => const PowerSettingBottomSheet(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Expanded(
               child: Container(
-                margin: const EdgeInsets.only(left: 16),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20,
+                  horizontal: 66,
+                ),
+                decoration: const BoxDecoration(
                   color: KAppColors.containerBackground,
-                  boxShadow: [
-                    BoxShadow(
-                      color: KAppColors.shadowColor.withOpacity(0.1),
-                      blurRadius: 14,
-                      spreadRadius: 0,
-                      offset: const Offset(0, 0),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text(
+                                "Setted Time",
+                                style: Theme.of(context).textTheme.labelSmall,
+                              ),
+                              BlocBuilder<DeviceBloc, DeviceState>(
+                                builder: (context, state) {
+                                  return Text(
+                                    '${state.deviceValueDetails?.offTime ?? "00"} min',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        VerticalDivider(
+                          width: 20,
+                          thickness: 1,
+                          indent: 20,
+                          endIndent: 0,
+                          color: KAppColors.borderPrimary,
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text(
+                                "Status",
+                                style: Theme.of(context).textTheme.labelSmall,
+                              ),
+                              BlocBuilder<DeviceBloc, DeviceState>(
+                                builder: (context, state) {
+                                  return Text(
+                                    DeviceStateStatus.loading == state.status
+                                        ? "loading"
+                                        : state.deviceStatus?.o == "1"
+                                            ? "Online"
+                                            : "Offline",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 75,
+                    ),
+                    /* Column(
+                      children: [
+                        Text(
+                          "Time",
+                          style: Theme.of(context).textTheme.labelSmall,
+                        ),
+                        Text(
+                          "00 : 00",
+                          style: Theme.of(context).textTheme.headlineLarge,
+                        ),
+                      ],
+                    ), */
+                    const SizedBox(
+                      height: 75,
+                    ),
+                    Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: [
+                        Container(
+                          width: 300,
+                          height: 300,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: KAppColors.borderPrimary,
+                            ),
+                          ),
+                          child: Center(
+                            child: Container(
+                              width: 218,
+                              height: 218,
+                              decoration: BoxDecoration(
+                                color: KAppColors.textWhite,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: KAppColors.accent.withOpacity(0.1),
+                                    blurRadius: 16,
+                                    spreadRadius: 0,
+                                    offset: const Offset(0, 9),
+                                  ),
+                                ],
+                              ),
+                              child: BlocBuilder<DeviceBloc, DeviceState>(
+                                  builder: (context, state) {
+                                return Center(
+                                  child: InkWell(
+                                    onTap: _handlerPowerButtonOnTap,
+                                    child: Container(
+                                      width: 190,
+                                      height: 190,
+                                      decoration: BoxDecoration(
+                                        color: state.deviceStatus?.p == "1"
+                                            ? KAppColors.accent
+                                            : KAppColors.containerBackground,
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: KAppColors.borderPrimary,
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: SvgPicture.asset(
+                                          KAppAssets.power,
+                                          color: state.deviceStatus?.p == "1"
+                                              ? KAppColors.textWhite
+                                              : null,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 5,
+                          child: BlocBuilder<DeviceBloc, DeviceState>(
+                            builder: (context, state) {
+                              return Container(
+                                height: 10,
+                                width: 10,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: state.deviceStatus?.p == "1"
+                                      ? KAppColors.accent.withOpacity(0.8)
+                                      : KAppColors.containerBackgroundDark
+                                          .withOpacity(0.2),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ],
-                ),
-                child: const CircleAvatar(
-                  backgroundColor: KAppColors.containerBackground,
-                  radius: 20,
-                  child: Icon(Icons.arrow_back),
                 ),
               ),
             ),
           ],
         ),
-        title: Text(
-          "Motor",
-          style: Theme.of(context).textTheme.bodyLarge,
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: KAppColors.accent,
+          shape: const CircleBorder(),
+          onPressed: () {
+            context.read<DeviceBloc>().publishToTopic('C4DEE2879A60/status',
+                jsonEncode(const DeviceStatusEntity(p: "0", o: "0").toJson()));
+          },
+          child: SvgPicture.asset(KAppAssets.neArrow),
         ),
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 24,
-              horizontal: 16,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                DeviceTile(
-                  title: "Schedule",
-                  icon: KAppAssets.schedule,
-                  onTap: () {
-                    context.go('/device/${widget.deviceMac}/schedule');
-                  },
-                ),
-                DeviceTile(
-                  title: "History",
-                  icon: KAppAssets.history,
-                  onTap: () {
-                    context.go('/device/${widget.deviceMac}/history');
-                  },
-                ),
-                DeviceTile(
-                  title: "On/Off Timer",
-                  icon: KAppAssets.circledPower,
-                  onTap: () => showModalBottomSheet<void>(
-                    context: context,
-                    builder: (context) => const TimerBottomSheet(),
-                  ),
-                ),
-                DeviceTile(
-                  title: "Power Settings",
-                  icon: KAppAssets.settings,
-                  onTap: () => showModalBottomSheet<void>(
-                    context: context,
-                    builder: (context) => const PowerSettingBottomSheet(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 20,
-                horizontal: 66,
-              ),
-              decoration: const BoxDecoration(
-                color: KAppColors.containerBackground,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Text(
-                              "Setted Time",
-                              style: Theme.of(context).textTheme.labelSmall,
-                            ),
-                            BlocBuilder<DeviceBloc, DeviceState>(
-                              builder: (context, state) {
-                                return Text(
-                                  '${state.deviceValueDetails?.offTime ?? "00"} min',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineSmall
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      VerticalDivider(
-                        width: 20,
-                        thickness: 1,
-                        indent: 20,
-                        endIndent: 0,
-                        color: KAppColors.borderPrimary,
-                      ),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Text(
-                              "Status",
-                              style: Theme.of(context).textTheme.labelSmall,
-                            ),
-                            BlocBuilder<DeviceBloc, DeviceState>(
-                              builder: (context, state) {
-                                return Text(
-                                  DeviceStateStatus.loading == state.status
-                                      ? "loading"
-                                      : state.deviceStatus?.o == "1"
-                                          ? "Online"
-                                          : "Offline",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineSmall
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 75,
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        "Time",
-                        style: Theme.of(context).textTheme.labelSmall,
-                      ),
-                      Text(
-                        "00 : 00",
-                        style: Theme.of(context).textTheme.headlineLarge,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 75,
-                  ),
-                  Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      Container(
-                        width: 300,
-                        height: 300,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: KAppColors.borderPrimary,
-                          ),
-                        ),
-                        child: Center(
-                          child: Container(
-                            width: 218,
-                            height: 218,
-                            decoration: BoxDecoration(
-                              color: KAppColors.textWhite,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: KAppColors.accent.withOpacity(0.1),
-                                  blurRadius: 16,
-                                  spreadRadius: 0,
-                                  offset: const Offset(0, 9),
-                                ),
-                              ],
-                            ),
-                            child: BlocBuilder<DeviceBloc, DeviceState>(
-                                builder: (context, state) {
-                              return Center(
-                                child: InkWell(
-                                  onTap: _handlerPowerButtonOnTap,
-                                  child: Container(
-                                    width: 190,
-                                    height: 190,
-                                    decoration: BoxDecoration(
-                                      color: state.deviceStatus?.p == "1"
-                                          ? KAppColors.accent
-                                          : KAppColors.containerBackground,
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: KAppColors.borderPrimary,
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: SvgPicture.asset(
-                                        KAppAssets.power,
-                                        color: state.deviceStatus?.p == "1"
-                                            ? KAppColors.textWhite
-                                            : null,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 5,
-                        child: BlocBuilder<DeviceBloc, DeviceState>(
-                          builder: (context, state) {
-                            return Container(
-                              height: 10,
-                              width: 10,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: state.deviceStatus?.p == "1"
-                                    ? KAppColors.accent.withOpacity(0.8)
-                                    : KAppColors.containerBackgroundDark
-                                        .withOpacity(0.2),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: KAppColors.accent,
-        shape: const CircleBorder(),
-        onPressed: () {
-          context.read<DeviceBloc>().publishToTopic('C4DEE2879A60/status',
-              jsonEncode(const DeviceStatusEntity(p: "0", o: "0").toJson()));
-        },
-        child: SvgPicture.asset(KAppAssets.neArrow),
       ),
     );
   }

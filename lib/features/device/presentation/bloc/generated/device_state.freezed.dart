@@ -23,6 +23,7 @@ mixin _$DeviceState {
   PowEntity? get devicePowerDetails => throw _privateConstructorUsedError;
   ValsEntity? get deviceValueDetails => throw _privateConstructorUsedError;
   String? get deviceMac => throw _privateConstructorUsedError;
+  dynamic get isInitialDeviceStatus => throw _privateConstructorUsedError;
 
   /// Create a copy of DeviceState
   /// with the given fields replaced by the non-null parameter values.
@@ -44,7 +45,8 @@ abstract class $DeviceStateCopyWith<$Res> {
       DeviceStatusEntity? deviceStatus,
       PowEntity? devicePowerDetails,
       ValsEntity? deviceValueDetails,
-      String? deviceMac});
+      String? deviceMac,
+      dynamic isInitialDeviceStatus});
 
   $DeviceStatusEntityCopyWith<$Res>? get deviceStatus;
   $PowEntityCopyWith<$Res>? get devicePowerDetails;
@@ -73,6 +75,7 @@ class _$DeviceStateCopyWithImpl<$Res, $Val extends DeviceState>
     Object? devicePowerDetails = freezed,
     Object? deviceValueDetails = freezed,
     Object? deviceMac = freezed,
+    Object? isInitialDeviceStatus = freezed,
   }) {
     return _then(_value.copyWith(
       status: null == status
@@ -103,6 +106,10 @@ class _$DeviceStateCopyWithImpl<$Res, $Val extends DeviceState>
           ? _value.deviceMac
           : deviceMac // ignore: cast_nullable_to_non_nullable
               as String?,
+      isInitialDeviceStatus: freezed == isInitialDeviceStatus
+          ? _value.isInitialDeviceStatus
+          : isInitialDeviceStatus // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ) as $Val);
   }
 
@@ -164,7 +171,8 @@ abstract class _$$DeviceStateImplCopyWith<$Res>
       DeviceStatusEntity? deviceStatus,
       PowEntity? devicePowerDetails,
       ValsEntity? deviceValueDetails,
-      String? deviceMac});
+      String? deviceMac,
+      dynamic isInitialDeviceStatus});
 
   @override
   $DeviceStatusEntityCopyWith<$Res>? get deviceStatus;
@@ -194,6 +202,7 @@ class __$$DeviceStateImplCopyWithImpl<$Res>
     Object? devicePowerDetails = freezed,
     Object? deviceValueDetails = freezed,
     Object? deviceMac = freezed,
+    Object? isInitialDeviceStatus = freezed,
   }) {
     return _then(_$DeviceStateImpl(
       status: null == status
@@ -224,6 +233,9 @@ class __$$DeviceStateImplCopyWithImpl<$Res>
           ? _value.deviceMac
           : deviceMac // ignore: cast_nullable_to_non_nullable
               as String?,
+      isInitialDeviceStatus: freezed == isInitialDeviceStatus
+          ? _value.isInitialDeviceStatus!
+          : isInitialDeviceStatus,
     ));
   }
 }
@@ -238,7 +250,8 @@ class _$DeviceStateImpl implements _DeviceState {
       this.deviceStatus,
       this.devicePowerDetails,
       this.deviceValueDetails,
-      this.deviceMac})
+      this.deviceMac,
+      this.isInitialDeviceStatus = true})
       : _deviceHistoryDatalist = deviceHistoryDatalist;
 
   @override
@@ -263,10 +276,13 @@ class _$DeviceStateImpl implements _DeviceState {
   final ValsEntity? deviceValueDetails;
   @override
   final String? deviceMac;
+  @override
+  @JsonKey()
+  final dynamic isInitialDeviceStatus;
 
   @override
   String toString() {
-    return 'DeviceState(status: $status, errorMessage: $errorMessage, deviceHistoryDatalist: $deviceHistoryDatalist, deviceStatus: $deviceStatus, devicePowerDetails: $devicePowerDetails, deviceValueDetails: $deviceValueDetails, deviceMac: $deviceMac)';
+    return 'DeviceState(status: $status, errorMessage: $errorMessage, deviceHistoryDatalist: $deviceHistoryDatalist, deviceStatus: $deviceStatus, devicePowerDetails: $devicePowerDetails, deviceValueDetails: $deviceValueDetails, deviceMac: $deviceMac, isInitialDeviceStatus: $isInitialDeviceStatus)';
   }
 
   @override
@@ -286,7 +302,9 @@ class _$DeviceStateImpl implements _DeviceState {
             (identical(other.deviceValueDetails, deviceValueDetails) ||
                 other.deviceValueDetails == deviceValueDetails) &&
             (identical(other.deviceMac, deviceMac) ||
-                other.deviceMac == deviceMac));
+                other.deviceMac == deviceMac) &&
+            const DeepCollectionEquality()
+                .equals(other.isInitialDeviceStatus, isInitialDeviceStatus));
   }
 
   @override
@@ -298,7 +316,8 @@ class _$DeviceStateImpl implements _DeviceState {
       deviceStatus,
       devicePowerDetails,
       deviceValueDetails,
-      deviceMac);
+      deviceMac,
+      const DeepCollectionEquality().hash(isInitialDeviceStatus));
 
   /// Create a copy of DeviceState
   /// with the given fields replaced by the non-null parameter values.
@@ -317,7 +336,8 @@ abstract class _DeviceState implements DeviceState {
       final DeviceStatusEntity? deviceStatus,
       final PowEntity? devicePowerDetails,
       final ValsEntity? deviceValueDetails,
-      final String? deviceMac}) = _$DeviceStateImpl;
+      final String? deviceMac,
+      final dynamic isInitialDeviceStatus}) = _$DeviceStateImpl;
 
   @override
   DeviceStateStatus get status;
@@ -333,6 +353,8 @@ abstract class _DeviceState implements DeviceState {
   ValsEntity? get deviceValueDetails;
   @override
   String? get deviceMac;
+  @override
+  dynamic get isInitialDeviceStatus;
 
   /// Create a copy of DeviceState
   /// with the given fields replaced by the non-null parameter values.

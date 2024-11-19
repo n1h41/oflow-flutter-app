@@ -71,7 +71,6 @@ class DeviceBloc extends Cubit<DeviceState> {
 
   Future<void> _connectToBroker() async {
     try {
-      // TODO:
       final status = await _mqttClient.connect();
       debugPrint("MQTT Connection Status: $status");
       _listenForMessages();
@@ -92,6 +91,7 @@ class DeviceBloc extends Cubit<DeviceState> {
               emit(
                 state.copyWith(
                   status: DeviceStateStatus.data,
+                  isInitialDeviceStatus: false,
                   deviceStatus: DeviceStatusEntity.fromJson(
                     _convertMessageToMap(message),
                   ),

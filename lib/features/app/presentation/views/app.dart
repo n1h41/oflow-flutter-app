@@ -3,6 +3,7 @@ import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oflow/features/device/presentation/bloc/device_bloc.dart';
+import 'package:oflow/features/home/presentation/bloc/home_bloc.dart';
 
 import '../../../../core/router/router.dart';
 import '../../../../core/service_locator.dart';
@@ -19,6 +20,10 @@ class MyApp extends StatelessWidget {
         BlocProvider<DeviceBloc>(
           // lazy: false,
           create: (_) => DeviceBloc(),
+        ),
+        BlocProvider<HomeBloc>(
+          // lazy: false,
+          create: (_) => HomeBloc(),
         ),
         BlocProvider<AuthBloc>(
           create: (_) => AuthBloc(

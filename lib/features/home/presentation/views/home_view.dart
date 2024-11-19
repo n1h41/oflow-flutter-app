@@ -4,10 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:oflow/core/constants/colors.dart';
-import 'package:oflow/features/device/presentation/bloc/device_bloc.dart';
 
 import '../../../../core/constants/assets.dart';
+import '../../../../core/constants/colors.dart';
+import '../../../../core/utils/local_storage/local_storage.dart';
+import '../../../device/presentation/bloc/device_bloc.dart';
+import '../../../device/presentation/bloc/device_state.dart';
+import '../bloc/home_bloc.dart';
+import '../bloc/home_state.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -17,10 +21,13 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  List<String> deviceList = [];
+
   @override
   void initState() {
     super.initState();
     context.read<DeviceBloc>().initMqttClient();
+    _loadDeviceList();
   }
 
   @override
@@ -46,7 +53,9 @@ class _HomeViewState extends State<HomeView> {
                       style: Theme.of(context).textTheme.titleLarge,
                       children: [
                         const TextSpan(text: "Hello! "),
-                        if (snapshot.connectionState == ConnectionState.waiting)
+                        if (snapshot.connectionState ==
+                                ConnectionState.waiting &&
+                            !snapshot.hasData)
                           TextSpan(
                             style: TextStyle(
                               color: KAppColors.textPrimary.withOpacity(0.4),
@@ -93,84 +102,357 @@ class _HomeViewState extends State<HomeView> {
               height: 20,
             ),
             Expanded(
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      context.go("/device/C4DEE2879A60");
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 0,
-                            blurRadius: 11,
-                            offset: const Offset(
-                              0,
-                              0,
-                            ), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 70,
-                            height: 70,
-                            decoration: BoxDecoration(
-                              color: KAppColors.accent,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Cropton Motor',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .copyWith(
-                                        color: KAppColors.textPrimary
-                                            .withOpacity(0.4),
-                                      ),
-                                  children: [
-                                    const TextSpan(
-                                      text: "Last Used: ",
-                                    ),
-                                    TextSpan(
-                                      text: DateFormat.yMMMd()
-                                          .format(DateTime.now()),
-                                    ),
-                                  ],
+              child: BlocBuilder<HomeBloc, HomeState>(
+                  builder: (context, state) => switch (state.status) {
+                        HomeStateStatus.data || HomeStateStatus.initial => state
+                                .deviceList.isEmpty
+                            ? Center(
+                                child: Text(
+                                  "No devices found. Add a device to get started",
+                                  style: TextStyle(
+                                    color:
+                                        KAppColors.textPrimary.withOpacity(0.4),
+                                  ),
                                 ),
+                              )
+                            : ListView.separated(
+                                shrinkWrap: true,
+                                itemCount: state.deviceList.length,
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(
+                                  height: 20,
+                                ),
+                                itemBuilder: (context, index) => InkWell(
+                                  onTap: () {
+                                    final deviceBlocStateStatus =
+                                        context.read<DeviceBloc>().state.status;
+                                    if (deviceBlocStateStatus ==
+                                        DeviceStateStatus.loading) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            "Please wait for the device to load",
+                                          ),
+                                          showCloseIcon: true,
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                    context.go(
+                                        "/device/${state.deviceList[index]}");
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(20),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.1),
+                                          spreadRadius: 0,
+                                          blurRadius: 11,
+                                          offset: const Offset(
+                                            0,
+                                            0,
+                                          ), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: 70,
+                                          height: 70,
+                                          decoration: BoxDecoration(
+                                            color: KAppColors.accent,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 16,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Cropton Motor',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium,
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium!
+                                                    .copyWith(
+                                                      color: KAppColors
+                                                          .textPrimary
+                                                          .withOpacity(0.4),
+                                                    ),
+                                                children: [
+                                                  const TextSpan(
+                                                    text: "Last Used: ",
+                                                  ),
+                                                  TextSpan(
+                                                    text: DateFormat.yMMMd()
+                                                        .format(DateTime.now()),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const Spacer(),
+                                        CircleAvatar(
+                                          radius: 20,
+                                          backgroundColor: KAppColors.accent,
+                                          child: SvgPicture.asset(
+                                              KAppAssets.neArrow),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                /* children: [
+                      InkWell(
+                        onTap: () {
+                          context.go("/device/C4DEE2879A60");
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                spreadRadius: 0,
+                                blurRadius: 11,
+                                offset: const Offset(
+                                  0,
+                                  0,
+                                ), // changes position of shadow
                               ),
                             ],
                           ),
-                          const Spacer(),
-                          CircleAvatar(
-                            radius: 20,
-                            backgroundColor: KAppColors.accent,
-                            child: SvgPicture.asset(KAppAssets.neArrow),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 70,
+                                height: 70,
+                                decoration: BoxDecoration(
+                                  color: KAppColors.accent,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Cropton Motor',
+                                    style: Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                            color: KAppColors.textPrimary
+                                                .withOpacity(0.4),
+                                          ),
+                                      children: [
+                                        const TextSpan(
+                                          text: "Last Used: ",
+                                        ),
+                                        TextSpan(
+                                          text: DateFormat.yMMMd()
+                                              .format(DateTime.now()),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Spacer(),
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundColor: KAppColors.accent,
+                                child: SvgPicture.asset(KAppAssets.neArrow),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
+                      ),
+                    ], */
+                              ),
+                        _ => const SizedBox.shrink(),
+                      } /* {
+                  return ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: deviceList.length,
+                    separatorBuilder: (context, index) => const SizedBox(
+                      height: 20,
+                    ),
+                    itemBuilder: (context, index) => InkWell(
+                      onTap: () {
+                        context.go("/device/${deviceList[index]}");
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.1),
+                              spreadRadius: 0,
+                              blurRadius: 11,
+                              offset: const Offset(
+                                0,
+                                0,
+                              ), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 70,
+                              height: 70,
+                              decoration: BoxDecoration(
+                                color: KAppColors.accent,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Cropton Motor',
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          color: KAppColors.textPrimary
+                                              .withOpacity(0.4),
+                                        ),
+                                    children: [
+                                      const TextSpan(
+                                        text: "Last Used: ",
+                                      ),
+                                      TextSpan(
+                                        text: DateFormat.yMMMd()
+                                            .format(DateTime.now()),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                            CircleAvatar(
+                              radius: 20,
+                              backgroundColor: KAppColors.accent,
+                              child: SvgPicture.asset(KAppAssets.neArrow),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
+                    /* children: [
+                      InkWell(
+                        onTap: () {
+                          context.go("/device/C4DEE2879A60");
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                spreadRadius: 0,
+                                blurRadius: 11,
+                                offset: const Offset(
+                                  0,
+                                  0,
+                                ), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 70,
+                                height: 70,
+                                decoration: BoxDecoration(
+                                  color: KAppColors.accent,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Cropton Motor',
+                                    style: Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                            color: KAppColors.textPrimary
+                                                .withOpacity(0.4),
+                                          ),
+                                      children: [
+                                        const TextSpan(
+                                          text: "Last Used: ",
+                                        ),
+                                        TextSpan(
+                                          text: DateFormat.yMMMd()
+                                              .format(DateTime.now()),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Spacer(),
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundColor: KAppColors.accent,
+                                child: SvgPicture.asset(KAppAssets.neArrow),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ], */
+                  );
+                }, */
                   ),
-                ],
-              ),
             ),
           ],
         ),
@@ -191,6 +473,10 @@ class _HomeViewState extends State<HomeView> {
       builder: (_) => const AddDevicePopup(),
     );
   }
+
+  void _loadDeviceList() {
+    context.read<HomeBloc>().loadDevices();
+  }
 }
 
 class AddDevicePopup extends StatefulWidget {
@@ -201,6 +487,10 @@ class AddDevicePopup extends StatefulWidget {
 }
 
 class _AddDevicePopupState extends State<AddDevicePopup> {
+  final ValueNotifier<bool> _isLoadingNotifier = ValueNotifier(false);
+
+  final TextEditingController _macAddressController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -208,64 +498,106 @@ class _AddDevicePopupState extends State<AddDevicePopup> {
         width: 300,
         height: 300,
         padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {},
-              child: Text(
-                "Scan QR Code",
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: KAppColors.textWhite,
-                      fontWeight: FontWeight.w600,
+        child: ValueListenableBuilder(
+          valueListenable: _isLoadingNotifier,
+          builder: (context, isLoading, _) {
+            if (isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text(
+                    "Scan QR Code",
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: KAppColors.textWhite,
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Divider(),
+                const Text("OR"),
+                const SizedBox(height: 10),
+                Text(
+                  "Enter Device MAC Address",
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+                const SizedBox(height: 10),
+                // create textformfiled with height of 50
+                Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: KAppColors.borderPrimary,
                     ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Divider(),
-            const Text("OR"),
-            const SizedBox(height: 10),
-            Text(
-              "Enter Device MAC Address",
-              style: Theme.of(context).textTheme.labelSmall,
-            ),
-            const SizedBox(height: 10),
-            // create textformfiled with height of 50
-            Container(
-              height: 50,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: KAppColors.borderPrimary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: TextFormField(
+                    controller: _macAddressController,
+                    decoration: InputDecoration(
+                      hintText: "MAC Address",
+                      hintStyle: Theme.of(context).textTheme.labelSmall,
+                      border: InputBorder.none,
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 10),
+                    ),
+                  ),
                 ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: TextFormField(
-                // controller: _minCurrentController,
-                decoration: InputDecoration(
-                  hintText: "MAC Address",
-                  hintStyle: Theme.of(context).textTheme.labelSmall,
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
-                child: Text(
-                  "Add +",
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: KAppColors.textWhite,
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
-              ),
-            )
-          ],
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _handleAddDevice,
+                    child: Text(
+                      "Add +",
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: KAppColors.textWhite,
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                  ),
+                )
+              ],
+            );
+          },
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _isLoadingNotifier.dispose();
+    super.dispose();
+  }
+
+  void _handleAddDevice() async {
+    final deviceMac = _macAddressController.text;
+    RegExp macAddressRegex = RegExp(r'^[A-z0-9]{12}$');
+    if (!macAddressRegex.hasMatch(deviceMac)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please enter a valid MAC Address"),
+          showCloseIcon: true,
+        ),
+      );
+      return;
+    }
+    _isLoadingNotifier.value = true;
+    // Add device mac to shared preferences
+    await Future.delayed(const Duration(seconds: 2));
+    final currentDeviceList = LocalStorage.instance.getStringList("devices") ??
+        <String>[]; // get the current device list
+    currentDeviceList.add(deviceMac); // add the new device mac
+    await LocalStorage.instance.saveStringList("devices", currentDeviceList);
+    _isLoadingNotifier.value = false;
+    if (mounted) {
+      context.pop();
+    }
   }
 }

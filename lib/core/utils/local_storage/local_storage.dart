@@ -23,6 +23,14 @@ class LocalStorage {
     await _prefs.setString(key, value);
   }
 
+  Future<void> saveStringList(String key, List<String> value) async {
+    await _prefs.setStringList(key, value);
+  }
+
+  List<String>? getStringList(String key) {
+    return _prefs.getStringList(key);
+  }
+
   String? getString(String key) {
     return _prefs.getString(key);
   }
