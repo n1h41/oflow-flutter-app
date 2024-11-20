@@ -332,7 +332,7 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
+        /* floatingActionButton: FloatingActionButton(
           backgroundColor: KAppColors.accent,
           shape: const CircleBorder(),
           onPressed: () {
@@ -340,7 +340,7 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
                 jsonEncode(const DeviceStatusEntity(p: "0", o: "0").toJson()));
           },
           child: SvgPicture.asset(KAppAssets.neArrow),
-        ),
+        ), */
       ),
     );
   }

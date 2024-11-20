@@ -1,4 +1,3 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +32,69 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: Authenticator(
-        signUpForm: SignUpForm.custom(
+        /* authenticatorBuilder: (context, state) {
+          switch (state.currentStep) {
+            case AuthenticatorStep.signIn:
+              return Scaffold(
+                appBar: AppBar(title: const Text('Oflow App')),
+                body: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      SignInForm(),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text('Create an account'),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            case AuthenticatorStep.signUp:
+              return Scaffold(
+                appBar: AppBar(title: const Text('Oflow App')),
+                body: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      SignUpForm.custom(
+                        fields: [
+                          SignUpFormField.username(),
+                          SignUpFormField.password(),
+                          SignUpFormField.passwordConfirmation(),
+                          SignUpFormField.custom(
+                            title: "First Name",
+                            attributeKey: const CognitoUserAttributeKey.custom(
+                                "first_name"),
+                            required: true,
+                          ),
+                          SignUpFormField.custom(
+                            title: "Last Name",
+                            attributeKey: const CognitoUserAttributeKey.custom(
+                                "last_name"),
+                            required: true,
+                          ),
+                          if (state.usernameSelection ==
+                              UsernameSelection.email)
+                            SignUpFormField.email(),
+                          if (state.usernameSelection ==
+                              UsernameSelection.phoneNumber)
+                            SignUpFormField.phoneNumber(),
+                        ],
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text('Already have an account? Sign in'),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            default:
+              return null;
+          }
+        }, */
+        /* signUpForm: SignUpForm.custom(
           fields: [
             SignUpFormField.username(),
             SignUpFormField.password(),
@@ -49,7 +110,7 @@ class MyApp extends StatelessWidget {
               required: true,
             ),
           ],
-        ),
+        ), */
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
           routerConfig: getIt<AppRouter>().router,

@@ -1,3 +1,4 @@
+import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/device/presentation/views/device_view.dart';
@@ -11,7 +12,7 @@ class AppRouter {
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => const HomeView(),
+        builder: (context, state) => const AuthenticatedView(child: HomeView()),
         routes: [
           GoRoute(
             path: '/device/:deviceMac',
