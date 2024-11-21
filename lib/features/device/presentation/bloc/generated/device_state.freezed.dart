@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$DeviceState {
   DeviceStateStatus get status => throw _privateConstructorUsedError;
   String? get errorMessage => throw _privateConstructorUsedError;
+  Failure? get error => throw _privateConstructorUsedError;
   List<int> get deviceHistoryDatalist => throw _privateConstructorUsedError;
   DeviceStatusEntity? get deviceStatus => throw _privateConstructorUsedError;
   PowEntity? get devicePowerDetails => throw _privateConstructorUsedError;
@@ -41,6 +42,7 @@ abstract class $DeviceStateCopyWith<$Res> {
   $Res call(
       {DeviceStateStatus status,
       String? errorMessage,
+      Failure? error,
       List<int> deviceHistoryDatalist,
       DeviceStatusEntity? deviceStatus,
       PowEntity? devicePowerDetails,
@@ -70,6 +72,7 @@ class _$DeviceStateCopyWithImpl<$Res, $Val extends DeviceState>
   $Res call({
     Object? status = null,
     Object? errorMessage = freezed,
+    Object? error = freezed,
     Object? deviceHistoryDatalist = null,
     Object? deviceStatus = freezed,
     Object? devicePowerDetails = freezed,
@@ -86,6 +89,10 @@ class _$DeviceStateCopyWithImpl<$Res, $Val extends DeviceState>
           ? _value.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable
               as String?,
+      error: freezed == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as Failure?,
       deviceHistoryDatalist: null == deviceHistoryDatalist
           ? _value.deviceHistoryDatalist
           : deviceHistoryDatalist // ignore: cast_nullable_to_non_nullable
@@ -167,6 +174,7 @@ abstract class _$$DeviceStateImplCopyWith<$Res>
   $Res call(
       {DeviceStateStatus status,
       String? errorMessage,
+      Failure? error,
       List<int> deviceHistoryDatalist,
       DeviceStatusEntity? deviceStatus,
       PowEntity? devicePowerDetails,
@@ -197,6 +205,7 @@ class __$$DeviceStateImplCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
     Object? errorMessage = freezed,
+    Object? error = freezed,
     Object? deviceHistoryDatalist = null,
     Object? deviceStatus = freezed,
     Object? devicePowerDetails = freezed,
@@ -213,6 +222,10 @@ class __$$DeviceStateImplCopyWithImpl<$Res>
           ? _value.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable
               as String?,
+      error: freezed == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as Failure?,
       deviceHistoryDatalist: null == deviceHistoryDatalist
           ? _value._deviceHistoryDatalist
           : deviceHistoryDatalist // ignore: cast_nullable_to_non_nullable
@@ -246,6 +259,7 @@ class _$DeviceStateImpl implements _DeviceState {
   const _$DeviceStateImpl(
       {required this.status,
       this.errorMessage,
+      this.error,
       final List<int> deviceHistoryDatalist = const [],
       this.deviceStatus,
       this.devicePowerDetails,
@@ -258,6 +272,8 @@ class _$DeviceStateImpl implements _DeviceState {
   final DeviceStateStatus status;
   @override
   final String? errorMessage;
+  @override
+  final Failure? error;
   final List<int> _deviceHistoryDatalist;
   @override
   @JsonKey()
@@ -282,7 +298,7 @@ class _$DeviceStateImpl implements _DeviceState {
 
   @override
   String toString() {
-    return 'DeviceState(status: $status, errorMessage: $errorMessage, deviceHistoryDatalist: $deviceHistoryDatalist, deviceStatus: $deviceStatus, devicePowerDetails: $devicePowerDetails, deviceValueDetails: $deviceValueDetails, deviceMac: $deviceMac, isInitialDeviceStatus: $isInitialDeviceStatus)';
+    return 'DeviceState(status: $status, errorMessage: $errorMessage, error: $error, deviceHistoryDatalist: $deviceHistoryDatalist, deviceStatus: $deviceStatus, devicePowerDetails: $devicePowerDetails, deviceValueDetails: $deviceValueDetails, deviceMac: $deviceMac, isInitialDeviceStatus: $isInitialDeviceStatus)';
   }
 
   @override
@@ -293,6 +309,7 @@ class _$DeviceStateImpl implements _DeviceState {
             (identical(other.status, status) || other.status == status) &&
             (identical(other.errorMessage, errorMessage) ||
                 other.errorMessage == errorMessage) &&
+            (identical(other.error, error) || other.error == error) &&
             const DeepCollectionEquality()
                 .equals(other._deviceHistoryDatalist, _deviceHistoryDatalist) &&
             (identical(other.deviceStatus, deviceStatus) ||
@@ -312,6 +329,7 @@ class _$DeviceStateImpl implements _DeviceState {
       runtimeType,
       status,
       errorMessage,
+      error,
       const DeepCollectionEquality().hash(_deviceHistoryDatalist),
       deviceStatus,
       devicePowerDetails,
@@ -332,6 +350,7 @@ abstract class _DeviceState implements DeviceState {
   const factory _DeviceState(
       {required final DeviceStateStatus status,
       final String? errorMessage,
+      final Failure? error,
       final List<int> deviceHistoryDatalist,
       final DeviceStatusEntity? deviceStatus,
       final PowEntity? devicePowerDetails,
@@ -343,6 +362,8 @@ abstract class _DeviceState implements DeviceState {
   DeviceStateStatus get status;
   @override
   String? get errorMessage;
+  @override
+  Failure? get error;
   @override
   List<int> get deviceHistoryDatalist;
   @override

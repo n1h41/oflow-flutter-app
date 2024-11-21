@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
 import 'package:mqtt5_client/mqtt5_server_client.dart';
+import 'package:oflow/core/constants/exceptions/failure.dart';
 
 import '../../../../core/utils/helpers/aws_helpers.dart';
 import '../../domain/entity/device_status_entity.dart';
@@ -18,11 +19,13 @@ class DeviceBloc extends Cubit<DeviceState> {
 
   late final MqttServerClient _mqttClient;
 
+  MqttConnectionState get mqttConnectionStatus =>
+      _mqttClient.connectionStatus?.state ?? MqttConnectionState.disconnected;
+
   void initMqttClient() async {
     log('Initializing MQTT client');
-    emit(DeviceState.loading());
+    emit(state.copyWith(status: DeviceStateStatus.loading));
     await configureMqttClient();
-    emit(const DeviceState(status: DeviceStateStatus.data));
   }
 
   Future<void> configureMqttClient() async {
@@ -73,10 +76,22 @@ class DeviceBloc extends Cubit<DeviceState> {
     try {
       final status = await _mqttClient.connect();
       debugPrint("MQTT Connection Status: $status");
+      emit(
+        state.copyWith(
+          status: DeviceStateStatus.data,
+        ),
+      );
       _listenForMessages();
-    } on Exception catch (e) {
+    } on MqttNoConnectionException catch (e) {
       debugPrint('MQTT client exception - $e');
       _mqttClient.disconnect();
+      emit(
+        state.copyWith(
+          status: DeviceStateStatus.error,
+          errorMessage: 'MQTT client exception - $e',
+          error: ServerFailure(message: "MQTT server error: $e"),
+        ),
+      );
     }
   }
 

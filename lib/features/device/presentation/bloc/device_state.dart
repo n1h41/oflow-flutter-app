@@ -1,7 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:oflow/features/device/domain/entity/device_status_entity.dart';
-import 'package:oflow/features/device/domain/entity/pow_entity.dart';
-import 'package:oflow/features/device/domain/entity/vals_entity.dart';
+
+import '../../../../core/constants/exceptions/failure.dart';
+import '../../domain/entity/device_status_entity.dart';
+import '../../domain/entity/pow_entity.dart';
+import '../../domain/entity/vals_entity.dart';
 
 part 'generated/device_state.freezed.dart';
 
@@ -12,6 +14,7 @@ class DeviceState with _$DeviceState {
   const factory DeviceState({
     required DeviceStateStatus status,
     String? errorMessage,
+    Failure? error,
     @Default([]) List<int> deviceHistoryDatalist,
     DeviceStatusEntity? deviceStatus,
     PowEntity? devicePowerDetails,

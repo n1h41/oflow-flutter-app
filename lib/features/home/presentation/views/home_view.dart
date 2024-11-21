@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:mqtt5_client/mqtt5_client.dart';
 
 import '../../../../core/constants/assets.dart';
 import '../../../../core/constants/colors.dart';
@@ -123,26 +124,12 @@ class _HomeViewState extends State<HomeView> {
                                   height: 20,
                                 ),
                                 itemBuilder: (context, index) => InkWell(
-                                  onTap: () {
-                                    final deviceBlocStateStatus =
-                                        context.read<DeviceBloc>().state.status;
-                                    if (deviceBlocStateStatus ==
-                                        DeviceStateStatus.loading) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            "Please wait for the device to load",
-                                          ),
-                                          showCloseIcon: true,
-                                        ),
-                                      );
-                                      return;
-                                    }
-                                    context.go(
-                                        "/device/${state.deviceList[index]}");
-                                  },
+                                  highlightColor: KAppColors.accent.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(20),
+                                  onTap: () =>
+                                      handleDeviceListItemTap(state, index),
                                   child: Container(
+                                    margin: const EdgeInsets.all(4),
                                     padding: const EdgeInsets.all(16),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
@@ -211,248 +198,16 @@ class _HomeViewState extends State<HomeView> {
                                           radius: 20,
                                           backgroundColor: KAppColors.accent,
                                           child: SvgPicture.asset(
-                                              KAppAssets.neArrow),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                /* children: [
-                      InkWell(
-                        onTap: () {
-                          context.go("/device/C4DEE2879A60");
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.1),
-                                spreadRadius: 0,
-                                blurRadius: 11,
-                                offset: const Offset(
-                                  0,
-                                  0,
-                                ), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 70,
-                                height: 70,
-                                decoration: BoxDecoration(
-                                  color: KAppColors.accent,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 16,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Cropton Motor',
-                                    style: Theme.of(context).textTheme.titleMedium,
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                            color: KAppColors.textPrimary
-                                                .withOpacity(0.4),
+                                            KAppAssets.neArrow,
                                           ),
-                                      children: [
-                                        const TextSpan(
-                                          text: "Last Used: ",
-                                        ),
-                                        TextSpan(
-                                          text: DateFormat.yMMMd()
-                                              .format(DateTime.now()),
                                         ),
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
-                              const Spacer(),
-                              CircleAvatar(
-                                radius: 20,
-                                backgroundColor: KAppColors.accent,
-                                child: SvgPicture.asset(KAppAssets.neArrow),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ], */
+                                ),
                               ),
                         _ => const SizedBox.shrink(),
-                      } /* {
-                  return ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: deviceList.length,
-                    separatorBuilder: (context, index) => const SizedBox(
-                      height: 20,
-                    ),
-                    itemBuilder: (context, index) => InkWell(
-                      onTap: () {
-                        context.go("/device/${deviceList[index]}");
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
-                              spreadRadius: 0,
-                              blurRadius: 11,
-                              offset: const Offset(
-                                0,
-                                0,
-                              ), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 70,
-                              height: 70,
-                              decoration: BoxDecoration(
-                                color: KAppColors.accent,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 16,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Cropton Motor',
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
-                                ),
-                                RichText(
-                                  text: TextSpan(
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(
-                                          color: KAppColors.textPrimary
-                                              .withOpacity(0.4),
-                                        ),
-                                    children: [
-                                      const TextSpan(
-                                        text: "Last Used: ",
-                                      ),
-                                      TextSpan(
-                                        text: DateFormat.yMMMd()
-                                            .format(DateTime.now()),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Spacer(),
-                            CircleAvatar(
-                              radius: 20,
-                              backgroundColor: KAppColors.accent,
-                              child: SvgPicture.asset(KAppAssets.neArrow),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    /* children: [
-                      InkWell(
-                        onTap: () {
-                          context.go("/device/C4DEE2879A60");
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.1),
-                                spreadRadius: 0,
-                                blurRadius: 11,
-                                offset: const Offset(
-                                  0,
-                                  0,
-                                ), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 70,
-                                height: 70,
-                                decoration: BoxDecoration(
-                                  color: KAppColors.accent,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 16,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Cropton Motor',
-                                    style: Theme.of(context).textTheme.titleMedium,
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                            color: KAppColors.textPrimary
-                                                .withOpacity(0.4),
-                                          ),
-                                      children: [
-                                        const TextSpan(
-                                          text: "Last Used: ",
-                                        ),
-                                        TextSpan(
-                                          text: DateFormat.yMMMd()
-                                              .format(DateTime.now()),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const Spacer(),
-                              CircleAvatar(
-                                radius: 20,
-                                backgroundColor: KAppColors.accent,
-                                child: SvgPicture.asset(KAppAssets.neArrow),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ], */
-                  );
-                }, */
-                  ),
+                      }),
             ),
           ],
         ),
@@ -476,6 +231,38 @@ class _HomeViewState extends State<HomeView> {
 
   void _loadDeviceList() {
     context.read<HomeBloc>().loadDevices();
+  }
+
+  void handleDeviceListItemTap(HomeState state, int index) {
+    final deviceBloc = context.read<DeviceBloc>();
+    final deviceBlocStateStatus = deviceBloc.state.status;
+    if (deviceBlocStateStatus == DeviceStateStatus.loading &&
+        deviceBloc.mqttConnectionStatus == MqttConnectionState.connecting) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Please wait for the device to load",
+          ),
+          showCloseIcon: true,
+        ),
+      );
+      return;
+    }
+    if (deviceBloc.mqttConnectionStatus == MqttConnectionState.disconnected) {
+      final text = deviceBloc.state.status == DeviceStateStatus.error
+          ? deviceBloc.state.errorMessage ?? "An error occurred"
+          : "Please wait for the device to connect";
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            text,
+          ),
+          showCloseIcon: true,
+        ),
+      );
+      return;
+    }
+    context.go("/device/${state.deviceList[index]}");
   }
 }
 
@@ -597,6 +384,7 @@ class _AddDevicePopupState extends State<AddDevicePopup> {
     await LocalStorage.instance.saveStringList("devices", currentDeviceList);
     _isLoadingNotifier.value = false;
     if (mounted) {
+      context.read<HomeBloc>().loadDevices();
       context.pop();
     }
   }
