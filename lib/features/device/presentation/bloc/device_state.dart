@@ -20,7 +20,6 @@ class DeviceState with _$DeviceState {
     PowEntity? devicePowerDetails,
     ValsEntity? deviceValueDetails,
     String? deviceMac,
-    @Default(true) isInitialDeviceStatus,
   }) = _DeviceState;
 
   factory DeviceState.initial() {

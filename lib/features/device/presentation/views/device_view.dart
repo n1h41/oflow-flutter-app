@@ -45,22 +45,17 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
     context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/pow');
     context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/vals');
     context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/chats');
-    /* context.read<DeviceBloc>().publishToTopic(
-          'C4DEE2879A60/status',
-          jsonEncode(const DeviceStatusEntity(p: "0", o: "0").toJson()),
-          MqttQos.atMostOnce,
-        ); */
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<DeviceBloc, DeviceState>(
       listenWhen: (previous, current) =>
-          previous.isInitialDeviceStatus != current.isInitialDeviceStatus,
+          previous.deviceStatus == null && current.deviceStatus != null,
       listener: (context, state) {
         context.read<DeviceBloc>().publishToTopic(
               'C4DEE2879A60/status',
-              jsonEncode(const DeviceStatusEntity(p: "0", o: "0").toJson()),
+              jsonEncode(state.deviceStatus!.copyWith(o: '0').toJson()),
               MqttQos.atMostOnce,
             );
       },
