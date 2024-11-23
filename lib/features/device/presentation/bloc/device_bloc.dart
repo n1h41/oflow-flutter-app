@@ -166,13 +166,17 @@ class DeviceBloc extends Cubit<DeviceState> {
 
   void publishToTopic(
     String topic,
-    String message, [
+    String message, {
     MqttQos qosLevel = MqttQos.atMostOnce,
-  ]) {
+  }) {
     final builder = MqttPayloadBuilder();
     builder.addString(message);
-    final msgIdentifier =
-        _mqttClient.publishMessage(topic, qosLevel, builder.payload!);
+    final msgIdentifier = _mqttClient.publishMessage(
+      topic,
+      qosLevel,
+      builder.payload!,
+      retain: true,
+    );
     debugPrint('Publishing message to $topic: $message with id $msgIdentifier');
   }
 

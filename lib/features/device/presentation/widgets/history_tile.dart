@@ -59,7 +59,7 @@ class HistoryTile extends StatelessWidget {
       case 4:
         return 'Dry run';
       case 5:
-        return 'Vaultage fault';
+        return 'Voltage fault';
       default:
         return 'Unknown';
     }

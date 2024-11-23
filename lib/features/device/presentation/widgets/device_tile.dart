@@ -18,6 +18,7 @@ class DeviceTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         InkWell(
           highlightColor: KAppColors.accent.withOpacity(0.2),
@@ -49,6 +50,8 @@ class DeviceTile extends StatelessWidget {
         Text(
           title,
           style: Theme.of(context).textTheme.labelSmall,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
         ),
       ],
     );
