@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
-// import 'package:mqtt5_client/mqtt5_client.dart';
 
 import '../../../../core/constants/assets.dart';
 import '../../../../core/constants/colors.dart';
@@ -45,23 +44,18 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
     context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/pow');
     context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/vals');
     context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/chats');
-    /* context.read<DeviceBloc>().publishToTopic(
-          'C4DEE2879A60/status',
-          jsonEncode(const DeviceStatusEntity(p: "0", o: "0").toJson()),
-          MqttQos.atMostOnce,
-        ); */
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<DeviceBloc, DeviceState>(
       listenWhen: (previous, current) =>
-          previous.isInitialDeviceStatus != current.isInitialDeviceStatus,
+          previous.deviceStatus == null && current.deviceStatus != null,
       listener: (context, state) {
         context.read<DeviceBloc>().publishToTopic(
               'C4DEE2879A60/status',
-              jsonEncode(const DeviceStatusEntity(p: "0", o: "0").toJson()),
-              MqttQos.atMostOnce,
+              jsonEncode(state.deviceStatus!.copyWith(o: '0').toJson()),
+              qosLevel: MqttQos.atMostOnce,
             );
       },
       child: Scaffold(
@@ -110,40 +104,47 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  DeviceTile(
-                    title: "Schedule",
-                    icon: KAppAssets.schedule,
-                    onTap: () {
-                      // context.go('/device/${widget.deviceMac}/schedule');
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Feature coming soon"),
-                          showCloseIcon: true,
-                        ),
-                      );
-                    },
-                  ),
-                  DeviceTile(
-                    title: "History",
-                    icon: KAppAssets.history,
-                    onTap: () {
-                      context.go('/device/${widget.deviceMac}/history');
-                    },
-                  ),
-                  DeviceTile(
-                    title: "On/Off Timer",
-                    icon: KAppAssets.circledPower,
-                    onTap: () => showModalBottomSheet<void>(
-                      context: context,
-                      builder: (context) => const TimerBottomSheet(),
+                  Expanded(
+                    child: DeviceTile(
+                      title: "Schedule",
+                      icon: KAppAssets.schedule,
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Feature coming soon"),
+                            showCloseIcon: true,
+                          ),
+                        );
+                      },
                     ),
                   ),
-                  DeviceTile(
-                    title: "Power Settings",
-                    icon: KAppAssets.settings,
-                    onTap: () => showModalBottomSheet<void>(
-                      context: context,
-                      builder: (context) => const PowerSettingBottomSheet(),
+                  Expanded(
+                    child: DeviceTile(
+                      title: "History",
+                      icon: KAppAssets.history,
+                      onTap: () {
+                        context.go('/device/${widget.deviceMac}/history');
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: DeviceTile(
+                      title: "Timer",
+                      icon: KAppAssets.circledPower,
+                      onTap: () => showModalBottomSheet<void>(
+                        context: context,
+                        builder: (context) => const TimerBottomSheet(),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: DeviceTile(
+                      title: "Power Settings",
+                      icon: KAppAssets.settings,
+                      onTap: () => showModalBottomSheet<void>(
+                        context: context,
+                        builder: (context) => const PowerSettingBottomSheet(),
+                      ),
                     ),
                   ),
                 ],
@@ -179,7 +180,7 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
                               BlocBuilder<DeviceBloc, DeviceState>(
                                 builder: (context, state) {
                                   return Text(
-                                    '${state.deviceValueDetails?.offTime ?? "00"} min',
+                                    getDeviceTimerValue(state),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineSmall
@@ -229,22 +230,101 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
                       ],
                     ),
                     const SizedBox(
-                      height: 75,
+                      height: 30,
                     ),
-                    /* Column(
+                    Row(
                       children: [
-                        Text(
-                          "Time",
-                          style: Theme.of(context).textTheme.labelSmall,
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text(
+                                "Voltage",
+                                style: Theme.of(context).textTheme.labelSmall,
+                              ),
+                              BlocBuilder<DeviceBloc, DeviceState>(
+                                builder: (context, state) {
+                                  return RichText(
+                                    text: TextSpan(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                      children: [
+                                        TextSpan(
+                                          text: state.devicePowerDetails?.v
+                                              .toString(),
+                                        ),
+                                        TextSpan(
+                                          text: " V",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headlineSmall
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 18,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                        Text(
-                          "00 : 00",
-                          style: Theme.of(context).textTheme.headlineLarge,
+                        VerticalDivider(
+                          width: 20,
+                          thickness: 1,
+                          indent: 20,
+                          endIndent: 0,
+                          color: KAppColors.borderPrimary,
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text(
+                                "Amperage",
+                                style: Theme.of(context).textTheme.labelSmall,
+                              ),
+                              BlocBuilder<DeviceBloc, DeviceState>(
+                                builder: (context, state) {
+                                  return RichText(
+                                    text: TextSpan(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                      children: [
+                                        TextSpan(
+                                          text: state.devicePowerDetails?.a
+                                              .toString(),
+                                        ),
+                                        TextSpan(
+                                          text: " A",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headlineSmall
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 18,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ],
-                    ), */
+                    ),
                     const SizedBox(
-                      height: 75,
+                      height: 30,
                     ),
                     Stack(
                       alignment: Alignment.bottomCenter,
@@ -332,17 +412,24 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: KAppColors.accent,
-          shape: const CircleBorder(),
-          onPressed: () {
-            context.read<DeviceBloc>().publishToTopic('C4DEE2879A60/status',
-                jsonEncode(const DeviceStatusEntity(p: "0", o: "0").toJson()));
-          },
-          child: SvgPicture.asset(KAppAssets.neArrow),
-        ),
       ),
     );
+  }
+
+  String getDeviceTimerValue(DeviceState state) {
+    if (state.deviceValueDetails == null) {
+      return '00 min';
+    }
+    final timerValueInMins = int.tryParse(state.deviceValueDetails!.offTime);
+    if (timerValueInMins == null) {
+      return '00 min';
+    }
+    if (timerValueInMins < 60) {
+      return '${timerValueInMins.toString().padLeft(2, "0")} min';
+    }
+    final hours = timerValueInMins ~/ 60;
+    final minutes = timerValueInMins % 60;
+    return '${hours.toString().padLeft(2, "0")} : ${minutes.toString().padLeft(2, "0")}';
   }
 
   void _handlerPowerButtonOnTap() {

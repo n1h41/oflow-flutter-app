@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:oflow/core/constants/colors.dart';
-import 'package:oflow/features/device/presentation/bloc/device_bloc.dart';
-import 'package:oflow/features/device/presentation/bloc/device_state.dart';
 import 'package:wheel_picker/wheel_picker.dart';
+
+import '../../../../core/constants/colors.dart';
+import '../../domain/entity/vals_entity.dart';
+import '../bloc/device_bloc.dart';
+import '../bloc/device_state.dart';
 
 class TimerBottomSheet extends StatefulWidget {
   const TimerBottomSheet({
@@ -20,9 +22,6 @@ class TimerBottomSheet extends StatefulWidget {
 class _TimerBottomSheetState extends State<TimerBottomSheet> {
   late final WheelPickerController hourWheelController;
   late final WheelPickerController minuteWheelController;
-
-  final ValueNotifier<String> selectedDurationNotifier =
-      ValueNotifier<String>("30Min");
 
   int selectedHour = 0;
   int selectedMinute = 0;
@@ -52,16 +51,17 @@ class _TimerBottomSheetState extends State<TimerBottomSheet> {
           ),
           const SizedBox(height: 20),
           const Divider(),
-          ValueListenableBuilder(
-              valueListenable: selectedDurationNotifier,
-              builder: (context, selectedDuration, _) {
-                return Text(
-                  "You currently have the running time set to $selectedDuration. To adjust the running time, please enter the desired new duration in minutes. Tap 'Save' to apply the changes.",
+          BlocBuilder<DeviceBloc, DeviceState>(
+            builder: (context, state) => switch (state.status) {
+              DeviceStateStatus.data => Text(
+                  "You currently have the running time set to ${getDeviceTimerValue(state.deviceValueDetails)}. To adjust the running time, please enter the desired new duration in minutes. Tap 'Save' to apply the changes.",
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         color: KAppColors.textPrimary,
                       ),
-                );
-              }),
+                ),
+              _ => const SizedBox.shrink(),
+            },
+          ),
           SizedBox(
             height: 200,
             child: Row(
@@ -160,9 +160,25 @@ class _TimerBottomSheetState extends State<TimerBottomSheet> {
     );
   }
 
+  String getDeviceTimerValue(ValsEntity? vals) {
+    if (vals == null) {
+      return '00 min';
+    }
+    final timerValueInMins = int.tryParse(vals.offTime);
+    if (timerValueInMins == null) {
+      return '00 min';
+    }
+    if (timerValueInMins < 60) {
+      return '${timerValueInMins.toString().padLeft(2, "0")} min';
+    }
+    final hours = timerValueInMins ~/ 60;
+    final minutes = timerValueInMins % 60;
+    return '${hours.toString().padLeft(2, "0")} : ${minutes.toString().padLeft(2, "0")}';
+  }
+
   void _handleUpdateTimerValue() {
-    selectedDurationNotifier.value =
-        "${selectedHour.toString().padLeft(2, "0")}:${selectedMinute.toString().padLeft(2, "0")}";
+    /* selectedDurationNotifier.value =
+        "${selectedHour.toString().padLeft(2, "0")}:${selectedMinute.toString().padLeft(2, "0")}"; */
     // convert to minutes
     final durationInMins = (selectedHour * 60) + selectedMinute;
     final DeviceState state = context.read<DeviceBloc>().state;

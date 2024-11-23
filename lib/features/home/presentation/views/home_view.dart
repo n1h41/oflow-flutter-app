@@ -124,7 +124,8 @@ class _HomeViewState extends State<HomeView> {
                                   height: 20,
                                 ),
                                 itemBuilder: (context, index) => InkWell(
-                                  highlightColor: KAppColors.accent.withOpacity(0.2),
+                                  highlightColor:
+                                      KAppColors.accent.withOpacity(0.2),
                                   borderRadius: BorderRadius.circular(20),
                                   onTap: () =>
                                       handleDeviceListItemTap(state, index),

@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/colors.dart';
+import '../../domain/entity/vals_entity.dart';
+import '../bloc/device_bloc.dart';
 
 class PowerSettingBottomSheet extends StatefulWidget {
   const PowerSettingBottomSheet({super.key});
@@ -23,6 +29,7 @@ class _PowerSettingBottomSheetState extends State<PowerSettingBottomSheet> {
     _minVoltageController = TextEditingController();
     _minCurrentController = TextEditingController();
     _maxCurrentController = TextEditingController();
+    _preloadValues();
   }
 
   @override
@@ -68,6 +75,7 @@ class _PowerSettingBottomSheetState extends State<PowerSettingBottomSheet> {
                       ),
                       child: TextFormField(
                         controller: _minVoltageController,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           hintText: "Enter min voltage",
                           hintStyle: Theme.of(context).textTheme.labelSmall,
@@ -94,6 +102,7 @@ class _PowerSettingBottomSheetState extends State<PowerSettingBottomSheet> {
                       ),
                       child: TextFormField(
                         controller: _minCurrentController,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           hintText: "Enter min current",
                           hintStyle: Theme.of(context).textTheme.labelSmall,
@@ -120,6 +129,7 @@ class _PowerSettingBottomSheetState extends State<PowerSettingBottomSheet> {
                       ),
                       child: TextFormField(
                         controller: _maxCurrentController,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           hintText: "Enter max current",
                           hintStyle: Theme.of(context).textTheme.labelSmall,
@@ -147,8 +157,39 @@ class _PowerSettingBottomSheetState extends State<PowerSettingBottomSheet> {
   }
 
   void _handlerUpdatePowerSettings() {
+    ValsEntity? currentPowerState =
+        context.read<DeviceBloc>().state.deviceValueDetails;
+    if (currentPowerState == null) {
+      return;
+    }
+    final minVoltage = _minVoltageController.text;
+    final minCurrent = _minCurrentController.text;
+    final maxCurrent = _maxCurrentController.text;
     if (_formKey.currentState!.validate()) {
-      // call the api to update power settings
+      if (minVoltage.isNotEmpty) {
+        currentPowerState = currentPowerState.copyWith(minVolt: minVoltage);
+      }
+      if (minCurrent.isNotEmpty) {
+        currentPowerState = currentPowerState.copyWith(minCurrent: minCurrent);
+      }
+      if (maxCurrent.isNotEmpty) {
+        currentPowerState = currentPowerState.copyWith(maxCurrent: maxCurrent);
+      }
+      context.read<DeviceBloc>().publishToTopic(
+            "C4DEE2879A60/vals",
+            jsonEncode(currentPowerState.toJson()),
+          );
+    }
+    context.pop();
+  }
+
+  void _preloadValues() {
+    final ValsEntity? currentPowerState =
+        context.read<DeviceBloc>().state.deviceValueDetails;
+    if (currentPowerState != null) {
+      _minVoltageController.text = currentPowerState.minVolt;
+      _minCurrentController.text = currentPowerState.minCurrent;
+      _maxCurrentController.text = currentPowerState.maxCurrent;
     }
   }
 }
