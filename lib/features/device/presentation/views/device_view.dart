@@ -105,40 +105,48 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  DeviceTile(
-                    title: "Schedule",
-                    icon: KAppAssets.schedule,
-                    onTap: () {
-                      // context.go('/device/${widget.deviceMac}/schedule');
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Feature coming soon"),
-                          showCloseIcon: true,
-                        ),
-                      );
-                    },
-                  ),
-                  DeviceTile(
-                    title: "History",
-                    icon: KAppAssets.history,
-                    onTap: () {
-                      context.go('/device/${widget.deviceMac}/history');
-                    },
-                  ),
-                  DeviceTile(
-                    title: "On/Off Timer",
-                    icon: KAppAssets.circledPower,
-                    onTap: () => showModalBottomSheet<void>(
-                      context: context,
-                      builder: (context) => const TimerBottomSheet(),
+                  Expanded(
+                    child: DeviceTile(
+                      title: "Schedule",
+                      icon: KAppAssets.schedule,
+                      onTap: () {
+                        // context.go('/device/${widget.deviceMac}/schedule');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Feature coming soon"),
+                            showCloseIcon: true,
+                          ),
+                        );
+                      },
                     ),
                   ),
-                  DeviceTile(
-                    title: "Power Settings",
-                    icon: KAppAssets.settings,
-                    onTap: () => showModalBottomSheet<void>(
-                      context: context,
-                      builder: (context) => const PowerSettingBottomSheet(),
+                  Expanded(
+                    child: DeviceTile(
+                      title: "History",
+                      icon: KAppAssets.history,
+                      onTap: () {
+                        context.go('/device/${widget.deviceMac}/history');
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: DeviceTile(
+                      title: "On/Off Timer",
+                      icon: KAppAssets.circledPower,
+                      onTap: () => showModalBottomSheet<void>(
+                        context: context,
+                        builder: (context) => const TimerBottomSheet(),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: DeviceTile(
+                      title: "Power Settings",
+                      icon: KAppAssets.settings,
+                      onTap: () => showModalBottomSheet<void>(
+                        context: context,
+                        builder: (context) => const PowerSettingBottomSheet(),
+                      ),
                     ),
                   ),
                 ],
@@ -327,7 +335,7 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
+        /* floatingActionButton: FloatingActionButton(
           backgroundColor: KAppColors.accent,
           shape: const CircleBorder(),
           onPressed: () {
@@ -335,7 +343,7 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
                 jsonEncode(const DeviceStatusEntity(p: "0", o: "0").toJson()));
           },
           child: SvgPicture.asset(KAppAssets.neArrow),
-        ),
+        ), */
       ),
     );
   }
