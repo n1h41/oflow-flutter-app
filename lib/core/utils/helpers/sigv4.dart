@@ -58,10 +58,10 @@ class Sigv4 {
     sortedQuery.sort();
 
     final canonicalQueryStrings = [];
-    sortedQuery.forEach((key) {
+    for (var key in sortedQuery) {
       canonicalQueryStrings
           .add('$key=${Uri.encodeComponent(query[key].toString())}');
-    });
+    }
 
     return canonicalQueryStrings.join('&');
   }
@@ -74,10 +74,10 @@ class Sigv4 {
     var canonicalHeaders = '';
     sortedKeys.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
 
-    sortedKeys.forEach((property) {
+    for (var property in sortedKeys) {
       canonicalHeaders +=
           '${property.toLowerCase().trim()}:${headers[property].toString().trim()}\n';
-    });
+    }
 
     return canonicalHeaders;
   }
@@ -134,15 +134,7 @@ class Sigv4 {
     Map<String, dynamic> headers,
     String signature,
   ) {
-    return awsSHA256 +
-        ' Credential=' +
-        accessKey +
-        '/' +
-        credentialScope +
-        ', SignedHeaders=' +
-        buildCanonicalSignedHeaders(headers) +
-        ', Signature=' +
-        signature;
+    return '$awsSHA256 Credential=$accessKey/$credentialScope, SignedHeaders=${buildCanonicalSignedHeaders(headers)}, Signature=$signature';
   }
 
   /// Builds the key to use for signing

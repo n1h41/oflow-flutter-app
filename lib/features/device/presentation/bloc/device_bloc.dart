@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mqtt5_client/mqtt5_browser_client.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
 import 'package:mqtt5_client/mqtt5_server_client.dart';
 import 'package:oflow/core/constants/exceptions/failure.dart';
@@ -17,18 +18,111 @@ import 'device_state.dart';
 class DeviceBloc extends Cubit<DeviceState> {
   DeviceBloc() : super(DeviceState.initial());
 
+  late final MqttClient _mqttClient2;
   late final MqttServerClient _mqttClient;
+  late final MqttBrowserClient _mqttBrowserClient;
 
-  MqttConnectionState get mqttConnectionStatus =>
-      _mqttClient.connectionStatus?.state ?? MqttConnectionState.disconnected;
+  MqttConnectionState get mqttConnectionStatus => kIsWeb
+      ? _mqttBrowserClient.connectionStatus?.state ??
+          MqttConnectionState.disconnected
+      : _mqttClient.connectionStatus?.state ?? MqttConnectionState.disconnected;
 
   void initMqttClient() async {
     log('Initializing MQTT client');
     emit(state.copyWith(status: DeviceStateStatus.loading));
-    await configureMqttClient();
+    if (kIsWeb) {
+      await configureMqttBrowserClient();
+    } else {
+      await configureMqttMobileClient();
+    }
+    // await configureMqttMobileClient();
   }
 
-  Future<void> configureMqttClient() async {
+  /* Future<void> configureMqttBrowserClient() async {
+    var identityId = '';
+    var signedUrl = '';
+    const port = 443;
+    const region = 'us-east-1';
+    // Your AWS IoT Core endpoint url
+    const baseUrl = 'a82k06ko9a2kk-ats.iot.$region.amazonaws.com';
+    const scheme = 'wss://';
+    const urlPath = '/mqtt';
+    // AWS IoT MQTT default port for websockets
+
+    final AuthSession authSession = await Amplify.Auth.fetchAuthSession();
+    final AWSCredentials credentials =
+        authSession.toJson()["credentials"] as AWSCredentials;
+
+    identityId = authSession.toJson()["identityId"] as String;
+
+    signedUrl = getWebSocketURL(
+      accessKey: credentials.accessKeyId,
+      secretKey: credentials.secretAccessKey,
+      sessionToken: credentials.sessionToken!,
+      region: region,
+      scheme: scheme,
+      endpoint: baseUrl,
+      urlPath: urlPath,
+    );
+    _mqttBrowserClient = MqttBrowserClient.withPort(
+      signedUrl,
+      identityId,
+      port,
+      maxConnectionAttempts: 2,
+    );
+    _mqttBrowserClient.logging(on: false);
+    _mqttBrowserClient.autoReconnect = true;
+    _mqttBrowserClient.disconnectOnNoResponsePeriod = 90;
+    _mqttBrowserClient.keepAlivePeriod = 30;
+    final MqttConnectMessage connMess =
+        MqttConnectMessage().withClientIdentifier(identityId);
+    _mqttBrowserClient.connectionMessage = connMess;
+    await _connectToBroker(_mqttBrowserClient);
+  } */
+
+  Future<void> configureMqttBrowserClient() async {
+    var identityId = '';
+    var signedUrl = '';
+    const port = 443;
+    const region = 'us-east-1';
+    // Your AWS IoT Core endpoint url
+    const baseUrl = 'a82k06ko9a2kk-ats.iot.$region.amazonaws.com';
+    const scheme = 'wss://';
+    const urlPath = '/mqtt';
+    // AWS IoT MQTT default port for websockets
+
+    final AuthSession authSession = await Amplify.Auth.fetchAuthSession();
+    final AWSCredentials credentials =
+        authSession.toJson()["credentials"] as AWSCredentials;
+
+    identityId = authSession.toJson()["identityId"] as String;
+
+    signedUrl = getWebSocketURL(
+      accessKey: credentials.accessKeyId,
+      secretKey: credentials.secretAccessKey,
+      sessionToken: credentials.sessionToken!,
+      region: region,
+      scheme: scheme,
+      endpoint: baseUrl,
+      urlPath: urlPath,
+    );
+    _mqttBrowserClient = MqttBrowserClient.withPort(
+      signedUrl,
+      identityId,
+      port,
+      maxConnectionAttempts: 2,
+    );
+    _mqttBrowserClient.logging(on: false);
+    _mqttBrowserClient.autoReconnect = true;
+    _mqttBrowserClient.disconnectOnNoResponsePeriod = 90;
+    _mqttBrowserClient.keepAlivePeriod = 30;
+    final MqttConnectMessage connMess =
+        MqttConnectMessage().withClientIdentifier(identityId);
+    _mqttBrowserClient.connectionMessage = connMess;
+    await _connectToBroker(_mqttBrowserClient);
+  }
+
+  Future<void> configureMqttMobileClient() async {
     var identityId = '';
     var signedUrl = '';
     const port = 443;
@@ -69,22 +163,22 @@ class DeviceBloc extends Cubit<DeviceState> {
     final MqttConnectMessage connMess =
         MqttConnectMessage().withClientIdentifier(identityId);
     _mqttClient.connectionMessage = connMess;
-    await _connectToBroker();
+    await _connectToBroker(_mqttClient);
   }
 
-  Future<void> _connectToBroker() async {
+  Future<void> _connectToBroker(MqttClient client) async {
     try {
-      final status = await _mqttClient.connect();
+      final status = await client.connect();
       debugPrint("MQTT Connection Status: $status");
       emit(
         state.copyWith(
           status: DeviceStateStatus.data,
         ),
       );
-      _listenForMessages();
+      _listenForMessages(client);
     } on MqttNoConnectionException catch (e) {
       debugPrint('MQTT client exception - $e');
-      _mqttClient.disconnect();
+      client.disconnect();
       emit(
         state.copyWith(
           status: DeviceStateStatus.error,
@@ -95,8 +189,8 @@ class DeviceBloc extends Cubit<DeviceState> {
     }
   }
 
-  _listenForMessages() {
-    _mqttClient.updates.listen(
+  _listenForMessages(MqttClient client) {
+    client.updates.listen(
       (event) {
         for (MqttReceivedMessage message in event) {
           final topic = message.topic!.split('/').last;
@@ -161,7 +255,11 @@ class DeviceBloc extends Cubit<DeviceState> {
   }
 
   void subscribeToTopic(String topic, [MqttQos qosLevel = MqttQos.atMostOnce]) {
-    _mqttClient.subscribe(topic, qosLevel);
+    if (kIsWeb) {
+      _mqttBrowserClient.subscribe(topic, qosLevel);
+    } else {
+      _mqttClient.subscribe(topic, qosLevel);
+    }
   }
 
   void publishToTopic(
@@ -171,12 +269,29 @@ class DeviceBloc extends Cubit<DeviceState> {
   }) {
     final builder = MqttPayloadBuilder();
     builder.addString(message);
-    final msgIdentifier = _mqttClient.publishMessage(
+
+    int msgIdentifier;
+    if (kIsWeb) {
+      msgIdentifier = _mqttBrowserClient.publishMessage(
+        topic,
+        qosLevel,
+        builder.payload!,
+        retain: true,
+      );
+    } else {
+      msgIdentifier = _mqttClient.publishMessage(
+        topic,
+        qosLevel,
+        builder.payload!,
+        retain: true,
+      );
+    }
+    /* final msgIdentifier = _mqttClient.publishMessage(
       topic,
       qosLevel,
       builder.payload!,
       retain: true,
-    );
+    ); */
     debugPrint('Publishing message to $topic: $message with id $msgIdentifier');
   }
 
@@ -188,7 +303,11 @@ class DeviceBloc extends Cubit<DeviceState> {
 
   @override
   Future<void> close() {
-    _mqttClient.disconnect();
+    if (kIsWeb) {
+      _mqttBrowserClient.disconnect();
+    } else {
+      _mqttClient.disconnect();
+    }
     return super.close();
   }
 }

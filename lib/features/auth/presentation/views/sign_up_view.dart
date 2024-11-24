@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oflow/core/utils/validators/validation.dart';
-import 'package:oflow/features/auth/domain/usecase/params/params.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
@@ -123,12 +122,12 @@ class _SignUpViewState extends State<SignUpView> {
   }
 
   void _handleSignUp() {
-    final params = SignUpParams(
-      email: _emailController.text,
-      firstName: _firstNameController.text,
-      lastName: _lastNameController.text,
-      phoneNumber: _phoneNumberController.text,
-      password: _passwordController.text,
-    );
+    // final params = SignUpParams(
+    //   email: _emailController.text,
+    //   firstName: _firstNameController.text,
+    //   lastName: _lastNameController.text,
+    //   phoneNumber: _phoneNumberController.text,
+    //   password: _passwordController.text,
+    // );
   }
 }
