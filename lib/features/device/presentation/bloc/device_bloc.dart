@@ -18,27 +18,18 @@ import 'device_state.dart';
 class DeviceBloc extends Cubit<DeviceState> {
   DeviceBloc() : super(DeviceState.initial());
 
-  late final MqttClient _mqttClient2;
-  late final MqttServerClient _mqttClient;
-  late final MqttBrowserClient _mqttBrowserClient;
+  MqttClient? _mqttClient2;
 
-  MqttConnectionState get mqttConnectionStatus => kIsWeb
-      ? _mqttBrowserClient.connectionStatus?.state ??
-          MqttConnectionState.disconnected
-      : _mqttClient.connectionStatus?.state ?? MqttConnectionState.disconnected;
+  MqttConnectionState get mqttConnectionStatus =>
+      _mqttClient2?.connectionStatus?.state ?? MqttConnectionState.disconnected;
 
   void initMqttClient() async {
     log('Initializing MQTT client');
     emit(state.copyWith(status: DeviceStateStatus.loading));
-    if (kIsWeb) {
-      await configureMqttBrowserClient();
-    } else {
-      await configureMqttMobileClient();
-    }
-    // await configureMqttMobileClient();
+    await configMqttClient();
   }
 
-  /* Future<void> configureMqttBrowserClient() async {
+  Future<void> configMqttClient() async {
     var identityId = '';
     var signedUrl = '';
     const port = 443;
@@ -64,23 +55,34 @@ class DeviceBloc extends Cubit<DeviceState> {
       endpoint: baseUrl,
       urlPath: urlPath,
     );
-    _mqttBrowserClient = MqttBrowserClient.withPort(
-      signedUrl,
-      identityId,
-      port,
-      maxConnectionAttempts: 2,
-    );
-    _mqttBrowserClient.logging(on: false);
-    _mqttBrowserClient.autoReconnect = true;
-    _mqttBrowserClient.disconnectOnNoResponsePeriod = 90;
-    _mqttBrowserClient.keepAlivePeriod = 30;
+    if (kIsWeb) {
+      _mqttClient2 = MqttBrowserClient.withPort(
+        signedUrl,
+        identityId,
+        port,
+        maxConnectionAttempts: 2,
+      );
+    } else {
+      _mqttClient2 = MqttServerClient.withPort(
+        signedUrl,
+        identityId,
+        port,
+        maxConnectionAttempts: 2,
+      );
+      (_mqttClient2! as MqttServerClient).useWebSocket = true;
+      (_mqttClient2! as MqttServerClient).secure = false;
+    }
+    _mqttClient2!.logging(on: false);
+    _mqttClient2!.autoReconnect = true;
+    _mqttClient2!.disconnectOnNoResponsePeriod = 90;
+    _mqttClient2!.keepAlivePeriod = 30;
     final MqttConnectMessage connMess =
         MqttConnectMessage().withClientIdentifier(identityId);
-    _mqttBrowserClient.connectionMessage = connMess;
-    await _connectToBroker(_mqttBrowserClient);
-  } */
+    _mqttClient2!.connectionMessage = connMess;
+    await _connectToBroker(_mqttClient2!);
+  }
 
-  Future<void> configureMqttBrowserClient() async {
+  /* Future<void> configureMqttBrowserClient() async {
     var identityId = '';
     var signedUrl = '';
     const port = 443;
@@ -164,7 +166,7 @@ class DeviceBloc extends Cubit<DeviceState> {
         MqttConnectMessage().withClientIdentifier(identityId);
     _mqttClient.connectionMessage = connMess;
     await _connectToBroker(_mqttClient);
-  }
+  } */
 
   Future<void> _connectToBroker(MqttClient client) async {
     try {
@@ -255,11 +257,12 @@ class DeviceBloc extends Cubit<DeviceState> {
   }
 
   void subscribeToTopic(String topic, [MqttQos qosLevel = MqttQos.atMostOnce]) {
-    if (kIsWeb) {
+    _mqttClient2!.subscribe(topic, qosLevel);
+    /* if (kIsWeb) {
       _mqttBrowserClient.subscribe(topic, qosLevel);
     } else {
       _mqttClient.subscribe(topic, qosLevel);
-    }
+    } */
   }
 
   void publishToTopic(
@@ -270,8 +273,13 @@ class DeviceBloc extends Cubit<DeviceState> {
     final builder = MqttPayloadBuilder();
     builder.addString(message);
 
-    int msgIdentifier;
-    if (kIsWeb) {
+    final msgIdentifier = _mqttClient2!.publishMessage(
+      topic,
+      qosLevel,
+      builder.payload!,
+      retain: true,
+    );
+    /* if (kIsWeb) {
       msgIdentifier = _mqttBrowserClient.publishMessage(
         topic,
         qosLevel,
@@ -285,7 +293,7 @@ class DeviceBloc extends Cubit<DeviceState> {
         builder.payload!,
         retain: true,
       );
-    }
+    } */
     /* final msgIdentifier = _mqttClient.publishMessage(
       topic,
       qosLevel,
@@ -303,11 +311,12 @@ class DeviceBloc extends Cubit<DeviceState> {
 
   @override
   Future<void> close() {
-    if (kIsWeb) {
+    _mqttClient2?.disconnect();
+    /* if (kIsWeb) {
       _mqttBrowserClient.disconnect();
     } else {
       _mqttClient.disconnect();
-    }
+    } */
     return super.close();
   }
 }
