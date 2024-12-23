@@ -60,14 +60,19 @@ class MyApp extends StatelessWidget {
           title: 'Oflow application',
           themeMode: ThemeMode.light,
           theme: AppTheme.lightTheme,
-          builder: Authenticator.builder(),
+          builder: (context, child) => Authenticator.builder()(
+            context,
+            _Unfocus(
+              child: child!,
+            ),
+          ),
         ),
       ),
     );
   }
 }
 
-/* class _Unfocus extends StatelessWidget {
+class _Unfocus extends StatelessWidget {
   final Widget child;
 
   const _Unfocus({
@@ -82,4 +87,4 @@ class MyApp extends StatelessWidget {
       child: child,
     );
   }
-} */
+}

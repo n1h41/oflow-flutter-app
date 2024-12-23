@@ -5,11 +5,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
-import 'package:oflow/core/utils/popup/loaders.dart';
 
 import '../../../../core/constants/assets.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/local_storage/local_storage.dart';
+import '../../../../core/utils/popup/loaders.dart';
 import '../../../device/presentation/bloc/device_bloc.dart';
 import '../../../device/presentation/bloc/device_state.dart';
 import '../bloc/home_bloc.dart';
@@ -108,6 +108,58 @@ class _HomeViewState extends State<HomeView> {
             Expanded(
               child: BlocBuilder<HomeBloc, HomeState>(
                 builder: (context, state) => switch (state.status) {
+                  HomeStateStatus.error => Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                style: Theme.of(context).textTheme.bodyMedium,
+                                children: [
+                                  TextSpan(
+                                    text: "Error: ",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: KAppColors.textError
+                                              .withValues(alpha: 0.8),
+                                        ),
+                                  ),
+                                  TextSpan(
+                                    text: state.error.toString(),
+                                    style: const TextStyle(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            ElevatedButton(
+                              onPressed: _retryHandler,
+                              child: Text(
+                                "Retry",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: KAppColors.textWhite,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                              ),
+                            ),
+                            // const Text("Error:"),
+                            // Text(state.error.toString()),
+                          ],
+                        ),
+                      ),
+                    ),
                   HomeStateStatus.loading => const Center(
                       child: CircularProgressIndicator(),
                     ),
@@ -169,7 +221,7 @@ class _HomeViewState extends State<HomeView> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Cropton Motor',
+                                        'Pump',
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleMedium,
@@ -209,7 +261,6 @@ class _HomeViewState extends State<HomeView> {
                             ),
                           ),
                         ),
-                  _ => const SizedBox.shrink(),
                 },
               ),
             ),
@@ -226,11 +277,11 @@ class _HomeViewState extends State<HomeView> {
   }
 
   _openAddDevicePopup(BuildContext context) {
-    // Open the add device popup
-    showDialog(
-      context: context,
-      builder: (_) => const AddDevicePopup(),
-    );
+    // // Open the add device popup
+    // showDialog(
+    //   context: context,
+    //   builder: (_) => const AddDevicePopup(),
+    // );
   }
 
   void _loadDeviceList() {
@@ -276,7 +327,7 @@ class _HomeViewState extends State<HomeView> {
       if (mounted) {
         KLoaders.customToast(
           context,
-          message: "Could not get identityId",
+          message: "Could not get identityId! Contact support.",
         );
       }
       return;
@@ -287,6 +338,12 @@ class _HomeViewState extends State<HomeView> {
             policyName: "esp_p",
           );
     }
+  }
+
+  void _retryHandler() {
+    context.read<DeviceBloc>().initMqttClient();
+    _loadDeviceList();
+    _attachIotPolicy();
   }
 }
 

@@ -34,6 +34,13 @@ class HomeDatasourceImpl extends BaseDatasource implements HomeDatasource {
       return response.data!;
     } on TypeError catch (e) {
       throw DataParsingFailure(message: e.toString());
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionError) {
+        throw NoNetworkFailure();
+      }
+      throw ServerFailure(
+        message: e.response?.data ?? "Unknown server error",
+      );
     } catch (e) {
       throw UnknownFailure(e.toString());
     }

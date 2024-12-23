@@ -16,11 +16,11 @@ class HomeBloc extends Cubit<HomeState> {
   }) : super(HomeState.initial());
 
   void loadDevices() {
-    emit(HomeState.loading());
+    emit(state.copyWith(status: HomeStateStatus.loading));
     final deviceList =
         LocalStorage.instance.getStringList("devices") ?? <String>[];
     emit(
-      HomeState(
+      state.copyWith(
         status: HomeStateStatus.data,
         deviceList: deviceList,
       ),
@@ -28,16 +28,13 @@ class HomeBloc extends Cubit<HomeState> {
   }
 
   void deleteDevice(String device) {
-    emit(HomeState.loading());
+    emit(state.copyWith(status: HomeStateStatus.loading));
     final deviceList =
         LocalStorage.instance.getStringList("devices") ?? <String>[];
     deviceList.remove(device);
     LocalStorage.instance.saveStringList("devices", deviceList);
     emit(
-      HomeState(
-        status: HomeStateStatus.data,
-        deviceList: deviceList,
-      ),
+      state.copyWith(status: HomeStateStatus.data, deviceList: deviceList),
     );
   }
 
@@ -45,12 +42,17 @@ class HomeBloc extends Cubit<HomeState> {
     required String identityId,
     required String policyName,
   }) async {
-    emit(HomeState.loading());
+    final policyAttachStatus = LocalStorage.instance.getBool("policyAttached");
+    if (policyAttachStatus != null && policyAttachStatus) {
+      return;
+    }
+    emit(state.copyWith(status: HomeStateStatus.loading));
     final result =
         await repository.attachIotPolicyToIdentity(identityId, policyName);
     result.fold(
       (error) => emit(HomeState.error(error)),
       (data) {
+        LocalStorage.instance.saveBool("policyAttached", true);
         final context = router.routerDelegate.navigatorKey.currentContext;
         if (context != null) {
           KLoaders.customToast(
@@ -59,7 +61,7 @@ class HomeBloc extends Cubit<HomeState> {
           );
         }
         emit(
-          const HomeState(
+          state.copyWith(
             status: HomeStateStatus.data,
           ),
         );

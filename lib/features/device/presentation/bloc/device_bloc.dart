@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
+import 'dart:io';
 
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/foundation.dart';
@@ -7,9 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mqtt5_client/mqtt5_browser_client.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
 import 'package:mqtt5_client/mqtt5_server_client.dart';
-import 'package:oflow/core/constants/exceptions/failure.dart';
 
+import '../../../../core/constants/exceptions/failure.dart';
 import '../../../../core/utils/helpers/aws_helpers.dart';
+import '../../../../core/utils/helpers/logger.dart';
 import '../../domain/entity/device_status_entity.dart';
 import '../../domain/entity/pow_entity.dart';
 import '../../domain/entity/vals_entity.dart';
@@ -24,7 +25,7 @@ class DeviceBloc extends Cubit<DeviceState> {
       _mqttClient2?.connectionStatus?.state ?? MqttConnectionState.disconnected;
 
   void initMqttClient() async {
-    log('Initializing MQTT client');
+    appLogger.i('Initializing MQTT client');
     emit(state.copyWith(status: DeviceStateStatus.loading));
     await configMqttClient();
   }
@@ -79,108 +80,22 @@ class DeviceBloc extends Cubit<DeviceState> {
     final MqttConnectMessage connMess =
         MqttConnectMessage().withClientIdentifier(identityId);
     _mqttClient2!.connectionMessage = connMess;
-    await _connectToBroker(_mqttClient2!);
+    await _connectToBroker();
   }
 
-  /* Future<void> configureMqttBrowserClient() async {
-    var identityId = '';
-    var signedUrl = '';
-    const port = 443;
-    const region = 'us-east-1';
-    // Your AWS IoT Core endpoint url
-    const baseUrl = 'a82k06ko9a2kk-ats.iot.$region.amazonaws.com';
-    const scheme = 'wss://';
-    const urlPath = '/mqtt';
-    // AWS IoT MQTT default port for websockets
-
-    final AuthSession authSession = await Amplify.Auth.fetchAuthSession();
-    final AWSCredentials credentials =
-        authSession.toJson()["credentials"] as AWSCredentials;
-
-    identityId = authSession.toJson()["identityId"] as String;
-
-    signedUrl = getWebSocketURL(
-      accessKey: credentials.accessKeyId,
-      secretKey: credentials.secretAccessKey,
-      sessionToken: credentials.sessionToken!,
-      region: region,
-      scheme: scheme,
-      endpoint: baseUrl,
-      urlPath: urlPath,
-    );
-    _mqttBrowserClient = MqttBrowserClient.withPort(
-      signedUrl,
-      identityId,
-      port,
-      maxConnectionAttempts: 2,
-    );
-    _mqttBrowserClient.logging(on: false);
-    _mqttBrowserClient.autoReconnect = true;
-    _mqttBrowserClient.disconnectOnNoResponsePeriod = 90;
-    _mqttBrowserClient.keepAlivePeriod = 30;
-    final MqttConnectMessage connMess =
-        MqttConnectMessage().withClientIdentifier(identityId);
-    _mqttBrowserClient.connectionMessage = connMess;
-    await _connectToBroker(_mqttBrowserClient);
-  }
-
-  Future<void> configureMqttMobileClient() async {
-    var identityId = '';
-    var signedUrl = '';
-    const port = 443;
-    const region = 'us-east-1';
-    // Your AWS IoT Core endpoint url
-    const baseUrl = 'a82k06ko9a2kk-ats.iot.$region.amazonaws.com';
-    const scheme = 'wss://';
-    const urlPath = '/mqtt';
-    // AWS IoT MQTT default port for websockets
-
-    final AuthSession authSession = await Amplify.Auth.fetchAuthSession();
-    final AWSCredentials credentials =
-        authSession.toJson()["credentials"] as AWSCredentials;
-
-    identityId = authSession.toJson()["identityId"] as String;
-
-    signedUrl = getWebSocketURL(
-      accessKey: credentials.accessKeyId,
-      secretKey: credentials.secretAccessKey,
-      sessionToken: credentials.sessionToken!,
-      region: region,
-      scheme: scheme,
-      endpoint: baseUrl,
-      urlPath: urlPath,
-    );
-    _mqttClient = MqttServerClient.withPort(
-      signedUrl,
-      identityId,
-      port,
-      maxConnectionAttempts: 2,
-    );
-    _mqttClient.logging(on: false);
-    _mqttClient.useWebSocket = true;
-    _mqttClient.secure = false;
-    _mqttClient.autoReconnect = true;
-    _mqttClient.disconnectOnNoResponsePeriod = 90;
-    _mqttClient.keepAlivePeriod = 30;
-    final MqttConnectMessage connMess =
-        MqttConnectMessage().withClientIdentifier(identityId);
-    _mqttClient.connectionMessage = connMess;
-    await _connectToBroker(_mqttClient);
-  } */
-
-  Future<void> _connectToBroker(MqttClient client) async {
+  Future<void> _connectToBroker() async {
     try {
-      final status = await client.connect();
-      debugPrint("MQTT Connection Status: $status");
+      final status = await _mqttClient2?.connect();
+      appLogger.i("MQTT Connection Status: $status");
       emit(
         state.copyWith(
           status: DeviceStateStatus.data,
         ),
       );
-      _listenForMessages(client);
+      _listenForMessages();
     } on MqttNoConnectionException catch (e) {
-      debugPrint('MQTT client exception - $e');
-      client.disconnect();
+      appLogger.i('MQTT client exception - $e');
+      _mqttClient2?.disconnect();
       emit(
         state.copyWith(
           status: DeviceStateStatus.error,
@@ -188,17 +103,37 @@ class DeviceBloc extends Cubit<DeviceState> {
           error: ServerFailure(message: "MQTT server error: $e"),
         ),
       );
+    } on SocketException catch (e) {
+      appLogger.i('No internet available - $e');
+      _mqttClient2?.disconnect();
+      emit(
+        state.copyWith(
+          status: DeviceStateStatus.error,
+          errorMessage: 'Internet not available - $e',
+          error: NoNetworkFailure(),
+        ),
+      );
+    } catch (e) {
+      appLogger.i('Exception - $e');
+      _mqttClient2?.disconnect();
+      emit(
+        state.copyWith(
+          status: DeviceStateStatus.error,
+          errorMessage: 'Exception - $e',
+          error: ServerFailure(message: "Exception: $e"),
+        ),
+      );
     }
   }
 
-  _listenForMessages(MqttClient client) {
-    client.updates.listen(
+  _listenForMessages() {
+    _mqttClient2?.updates.listen(
       (event) {
         for (MqttReceivedMessage message in event) {
           final topic = message.topic!.split('/').last;
           switch (topic) {
             case "status":
-              debugPrint('Received message: ${_convertMessageToMap(message)}');
+              appLogger.i('Received message: ${_convertMessageToMap(message)}');
               emit(
                 state.copyWith(
                   status: DeviceStateStatus.data,
@@ -210,7 +145,7 @@ class DeviceBloc extends Cubit<DeviceState> {
               );
               break;
             case "pow":
-              debugPrint('Received message: ${_convertMessageToMap(message)}');
+              appLogger.i('Received message: ${_convertMessageToMap(message)}');
               emit(
                 state.copyWith(
                   status: DeviceStateStatus.data,
@@ -221,7 +156,7 @@ class DeviceBloc extends Cubit<DeviceState> {
               );
               break;
             case "vals":
-              debugPrint('Received message: ${_convertMessageToMap(message)}');
+              appLogger.i('Received message: ${_convertMessageToMap(message)}');
               emit(
                 state.copyWith(
                   status: DeviceStateStatus.data,
@@ -239,7 +174,7 @@ class DeviceBloc extends Cubit<DeviceState> {
               splittedValue
                   .removeLast(); // INFO: Removing the last empty string
               splittedValue = splittedValue.reversed.toList();
-              debugPrint('Received message: $splittedValue');
+              appLogger.i('Received message: $splittedValue');
               emit(
                 state.copyWith(
                   status: DeviceStateStatus.data,
@@ -257,12 +192,7 @@ class DeviceBloc extends Cubit<DeviceState> {
   }
 
   void subscribeToTopic(String topic, [MqttQos qosLevel = MqttQos.atMostOnce]) {
-    _mqttClient2!.subscribe(topic, qosLevel);
-    /* if (kIsWeb) {
-      _mqttBrowserClient.subscribe(topic, qosLevel);
-    } else {
-      _mqttClient.subscribe(topic, qosLevel);
-    } */
+    _mqttClient2?.subscribe(topic, qosLevel);
   }
 
   void publishToTopic(
@@ -279,28 +209,8 @@ class DeviceBloc extends Cubit<DeviceState> {
       builder.payload!,
       retain: true,
     );
-    /* if (kIsWeb) {
-      msgIdentifier = _mqttBrowserClient.publishMessage(
-        topic,
-        qosLevel,
-        builder.payload!,
-        retain: true,
-      );
-    } else {
-      msgIdentifier = _mqttClient.publishMessage(
-        topic,
-        qosLevel,
-        builder.payload!,
-        retain: true,
-      );
-    } */
-    /* final msgIdentifier = _mqttClient.publishMessage(
-      topic,
-      qosLevel,
-      builder.payload!,
-      retain: true,
-    ); */
-    debugPrint('Publishing message to $topic: $message with id $msgIdentifier');
+    appLogger
+        .i('Publishing message to $topic: $message with id $msgIdentifier');
   }
 
   _convertMessageToMap(MqttReceivedMessage message) {
@@ -312,11 +222,6 @@ class DeviceBloc extends Cubit<DeviceState> {
   @override
   Future<void> close() {
     _mqttClient2?.disconnect();
-    /* if (kIsWeb) {
-      _mqttBrowserClient.disconnect();
-    } else {
-      _mqttClient.disconnect();
-    } */
     return super.close();
   }
 }
