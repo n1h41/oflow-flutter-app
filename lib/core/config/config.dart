@@ -28,6 +28,8 @@ class EnvConfig {
 
   static String get signIn => "$baseUrl/auth/sign-in";
   static String get signUp => "$baseUrl/auth/sign-up";
+  static String get attachIotPolicy =>
+      "https://ex6nd6w4qc6d36zs2zjvrlfo3a0dzzme.lambda-url.us-east-1.on.aws/";
 }
 
 enum ApiEnv {

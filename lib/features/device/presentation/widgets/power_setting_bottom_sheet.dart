@@ -9,7 +9,9 @@ import '../../domain/entity/vals_entity.dart';
 import '../bloc/device_bloc.dart';
 
 class PowerSettingBottomSheet extends StatefulWidget {
-  const PowerSettingBottomSheet({super.key});
+  final String deviceMac;
+
+  const PowerSettingBottomSheet({super.key, required this.deviceMac});
 
   @override
   State<PowerSettingBottomSheet> createState() =>
@@ -176,7 +178,7 @@ class _PowerSettingBottomSheetState extends State<PowerSettingBottomSheet> {
         currentPowerState = currentPowerState.copyWith(maxCurrent: maxCurrent);
       }
       context.read<DeviceBloc>().publishToTopic(
-            "C4DEE2879A60/vals",
+            "${widget.deviceMac}/vals",
             jsonEncode(currentPowerState.toJson()),
           );
     }
