@@ -137,7 +137,6 @@ class DeviceBloc extends Cubit<DeviceState> {
               emit(
                 state.copyWith(
                   status: DeviceStateStatus.data,
-                  isInitialDeviceStatus: false,
                   deviceStatus: DeviceStatusEntity.fromJson(
                     _convertMessageToMap(message),
                   ),
@@ -192,7 +191,22 @@ class DeviceBloc extends Cubit<DeviceState> {
   }
 
   void subscribeToTopic(String topic, [MqttQos qosLevel = MqttQos.atMostOnce]) {
-    _mqttClient2?.subscribe(topic, qosLevel);
+    final subscription = _mqttClient2?.subscribe(topic, qosLevel);
+    if (subscription != null) {
+      appLogger.i('Subscribed to topic: $topic');
+      emit(
+        state.copyWith(
+          status: DeviceStateStatus.data,
+          subscriptions: [...state.subscriptions, subscription],
+        ),
+      );
+    }
+  }
+
+  void unsubscribeFromAllTopics() {
+    if (state.subscriptions.isEmpty) return;
+    appLogger.i('Unsubscribing from all topics');
+    _mqttClient2?.unsubscribeSubscriptionList(state.subscriptions);
   }
 
   void publishToTopic(

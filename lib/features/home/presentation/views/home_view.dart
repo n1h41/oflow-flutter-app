@@ -278,10 +278,10 @@ class _HomeViewState extends State<HomeView> {
 
   _openAddDevicePopup(BuildContext context) {
     // // Open the add device popup
-    // showDialog(
-    //   context: context,
-    //   builder: (_) => const AddDevicePopup(),
-    // );
+    showDialog(
+      context: context,
+      builder: (_) => const AddDevicePopup(),
+    );
   }
 
   void _loadDeviceList() {

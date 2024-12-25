@@ -11,8 +11,10 @@ import '../bloc/device_bloc.dart';
 import '../bloc/device_state.dart';
 
 class TimerBottomSheet extends StatefulWidget {
+  final String deviceMac;
+
   const TimerBottomSheet({
-    super.key,
+    super.key, required this.deviceMac,
   });
 
   @override
@@ -183,7 +185,7 @@ class _TimerBottomSheetState extends State<TimerBottomSheet> {
     final durationInMins = (selectedHour * 60) + selectedMinute;
     final DeviceState state = context.read<DeviceBloc>().state;
     context.read<DeviceBloc>().publishToTopic(
-          "C4DEE2879A60/vals",
+          "${widget.deviceMac}/vals",
           jsonEncode(
             state.deviceValueDetails?.copyWith(
               offTime: durationInMins.toString(),

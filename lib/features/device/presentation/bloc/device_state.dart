@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mqtt5_client/mqtt5_client.dart';
 
 import '../../../../core/constants/exceptions/failure.dart';
 import '../../domain/entity/device_status_entity.dart';
@@ -20,6 +21,7 @@ class DeviceState with _$DeviceState {
     PowEntity? devicePowerDetails,
     ValsEntity? deviceValueDetails,
     String? deviceMac,
+     List<MqttSubscription> subscriptions,
   }) = _DeviceState;
 
   factory DeviceState.initial() {
