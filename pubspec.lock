@@ -49,10 +49,9 @@ packages:
   amplify_authenticator:
     dependency: "direct main"
     description:
-      name: amplify_authenticator
-      sha256: "47a59a5e5c509827b54552032189d10b7e054b396d142ae3c51052b2e013be96"
-      url: "https://pub.dev"
-    source: hosted
+      path: "packages/amplify_authenticator"
+      relative: true
+    source: path
     version: "2.3.0"
   amplify_core:
     dependency: transitive

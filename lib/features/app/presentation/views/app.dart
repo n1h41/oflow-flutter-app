@@ -1,4 +1,3 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,7 +36,8 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: Authenticator(
-        signUpForm: SignUpForm.custom(
+        signUpForm: SignUpForm(),
+        /* signUpForm: SignUpForm.custom(
           fields: [
             SignUpFormField.username(),
             SignUpFormField.password(),
@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
               required: true,
             ),
           ],
-        ),
+        ), */
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
           routerConfig: getIt<AppRouter>().router,

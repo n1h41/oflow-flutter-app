@@ -24,13 +24,13 @@ class DeviceBloc extends Cubit<DeviceState> {
   MqttConnectionState get mqttConnectionStatus =>
       _mqttClient2?.connectionStatus?.state ?? MqttConnectionState.disconnected;
 
-  void initMqttClient() async {
+  Future<void> initMqttClient(AuthSession session) async {
     appLogger.i('Initializing MQTT client');
     emit(state.copyWith(status: DeviceStateStatus.loading));
-    await configMqttClient();
+    await configMqttClient(session);
   }
 
-  Future<void> configMqttClient() async {
+  Future<void> configMqttClient(AuthSession authSession) async {
     var identityId = '';
     var signedUrl = '';
     const port = 443;
@@ -41,7 +41,6 @@ class DeviceBloc extends Cubit<DeviceState> {
     const urlPath = '/mqtt';
     // AWS IoT MQTT default port for websockets
 
-    final AuthSession authSession = await Amplify.Auth.fetchAuthSession();
     final AWSCredentials credentials =
         authSession.toJson()["credentials"] as AWSCredentials;
 
@@ -85,7 +84,7 @@ class DeviceBloc extends Cubit<DeviceState> {
 
   Future<void> _connectToBroker() async {
     try {
-      final status = await _mqttClient2?.connect();
+      final status = await _mqttClient2!.connect();
       appLogger.i("MQTT Connection Status: $status");
       emit(
         state.copyWith(
@@ -126,7 +125,7 @@ class DeviceBloc extends Cubit<DeviceState> {
     }
   }
 
-  _listenForMessages() {
+  void _listenForMessages() {
     _mqttClient2?.updates.listen(
       (event) {
         for (MqttReceivedMessage message in event) {

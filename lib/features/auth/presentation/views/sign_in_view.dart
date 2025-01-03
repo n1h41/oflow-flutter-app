@@ -7,7 +7,6 @@ import '../../domain/usecase/params/params.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_state.dart';
 
-
 class SignInView extends StatefulWidget {
   const SignInView({super.key});
 

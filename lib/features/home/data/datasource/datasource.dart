@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:oflow/core/utils/helpers/logger.dart';
 
 import '../../../../core/constants/exceptions/failure.dart';
 import '../../../../core/data/datasource/base_datasource.dart';
@@ -35,6 +36,7 @@ class HomeDatasourceImpl extends BaseDatasource implements HomeDatasource {
     } on TypeError catch (e) {
       throw DataParsingFailure(message: e.toString());
     } on DioException catch (e) {
+      appLogger.e(e);
       if (e.type == DioExceptionType.connectionError) {
         throw NoNetworkFailure();
       }

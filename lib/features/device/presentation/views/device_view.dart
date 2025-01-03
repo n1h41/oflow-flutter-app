@@ -40,11 +40,7 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
     super.initState();
     timerStatusNotifier = ValueNotifier<bool>(false);
     isLoadingNotifier = ValueNotifier<bool>(true);
-    _unsubscribeFromAllTopics();
-    context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/status');
-    context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/pow');
-    context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/vals');
-    context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/chats');
+    _checkMqttConnection();
   }
 
   @override
@@ -421,6 +417,13 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
     );
   }
 
+  @override
+  void dispose() {
+    timerStatusNotifier.dispose();
+    isLoadingNotifier.dispose();
+    super.dispose();
+  }
+
   String getDeviceTimerValue(DeviceState state) {
     if (state.deviceValueDetails == null) {
       return '00 min';
@@ -454,17 +457,35 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
     }
   }
 
-  @override
-  void dispose() {
-    timerStatusNotifier.dispose();
-    isLoadingNotifier.dispose();
-    super.dispose();
-  }
-
   _unsubscribeFromAllTopics() {
     if (!mounted) {
       return;
     }
     context.read<DeviceBloc>().unsubscribeFromAllTopics();
+  }
+
+  void _subscribeToAllTopics() {
+    context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/status');
+    context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/pow');
+    context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/vals');
+    context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/chats');
+  }
+
+  /* Future<void> _initMqttClient() async {
+    final AuthSession authSession = await Amplify.Auth.fetchAuthSession();
+    if (!mounted) {
+      return;
+    }
+    await context.read<DeviceBloc>().initMqttClient(authSession);
+  } */
+
+  void _checkMqttConnection() async {
+    final deviceBloc = context.read<DeviceBloc>();
+    if (deviceBloc.mqttConnectionStatus != MqttConnectionState.connected) {
+      context.pop();
+      return;
+    }
+    _unsubscribeFromAllTopics();
+    _subscribeToAllTopics();
   }
 }

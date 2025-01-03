@@ -28,7 +28,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    context.read<DeviceBloc>().initMqttClient();
+    _initMqttClient();
     _loadDeviceList();
     _attachIotPolicy();
   }
@@ -340,10 +340,22 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
-  void _retryHandler() {
-    context.read<DeviceBloc>().initMqttClient();
+  void _retryHandler() async {
+    final AuthSession authSession = await Amplify.Auth.fetchAuthSession();
+    if (!mounted) {
+      return;
+    }
+    context.read<DeviceBloc>().initMqttClient(authSession);
     _loadDeviceList();
     _attachIotPolicy();
+  }
+
+  Future<void> _initMqttClient() async {
+    final AuthSession authSession = await Amplify.Auth.fetchAuthSession();
+    if (!mounted) {
+      return;
+    }
+    await context.read<DeviceBloc>().initMqttClient(authSession);
   }
 }
 
