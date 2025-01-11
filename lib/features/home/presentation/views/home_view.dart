@@ -9,6 +9,7 @@ import 'package:mqtt5_client/mqtt5_client.dart';
 import '../../../../core/constants/assets.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/local_storage/local_storage.dart';
+import '../../../../core/utils/popup/loaders.dart';
 import '../../../device/presentation/bloc/device_bloc.dart';
 import '../../../device/presentation/bloc/device_state.dart';
 import '../bloc/home_bloc.dart';
@@ -27,8 +28,9 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    context.read<DeviceBloc>().initMqttClient();
+    _initMqttClient();
     _loadDeviceList();
+    _attachIotPolicy();
   }
 
   @override
@@ -59,7 +61,8 @@ class _HomeViewState extends State<HomeView> {
                             !snapshot.hasData)
                           TextSpan(
                             style: TextStyle(
-                              color: KAppColors.textPrimary.withOpacity(0.4),
+                              color:
+                                  KAppColors.textPrimary.withValues(alpha: 0.4),
                             ),
                             text: "Loading...",
                           ),
@@ -104,111 +107,162 @@ class _HomeViewState extends State<HomeView> {
             ),
             Expanded(
               child: BlocBuilder<HomeBloc, HomeState>(
-                  builder: (context, state) => switch (state.status) {
-                        HomeStateStatus.data || HomeStateStatus.initial => state
-                                .deviceList.isEmpty
-                            ? Center(
-                                child: Text(
-                                  "No devices found. Add a device to get started",
-                                  style: TextStyle(
-                                    color:
-                                        KAppColors.textPrimary.withOpacity(0.4),
+                builder: (context, state) => switch (state.status) {
+                  HomeStateStatus.error => Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                style: Theme.of(context).textTheme.bodyMedium,
+                                children: [
+                                  TextSpan(
+                                    text: "Error: ",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: KAppColors.textError
+                                              .withValues(alpha: 0.8),
+                                        ),
                                   ),
-                                ),
-                              )
-                            : ListView.separated(
-                                shrinkWrap: true,
-                                itemCount: state.deviceList.length,
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(
-                                  height: 20,
-                                ),
-                                itemBuilder: (context, index) => InkWell(
-                                  highlightColor:
-                                      KAppColors.accent.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(20),
-                                  onTap: () =>
-                                      handleDeviceListItemTap(state, index),
-                                  child: Container(
-                                    margin: const EdgeInsets.all(4),
-                                    padding: const EdgeInsets.all(16),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(20),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.1),
-                                          spreadRadius: 0,
-                                          blurRadius: 11,
-                                          offset: const Offset(
-                                            0,
-                                            0,
-                                          ), // changes position of shadow
-                                        ),
-                                      ],
+                                  TextSpan(
+                                    text: state.error.toString(),
+                                    style: const TextStyle(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            ElevatedButton(
+                              onPressed: _retryHandler,
+                              child: Text(
+                                "Retry",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: KAppColors.textWhite,
+                                      fontWeight: FontWeight.w600,
                                     ),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          width: 70,
-                                          height: 70,
-                                          decoration: BoxDecoration(
-                                            color: KAppColors.accent,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 16,
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Cropton Motor',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleMedium,
-                                            ),
-                                            RichText(
-                                              text: TextSpan(
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium!
-                                                    .copyWith(
-                                                      color: KAppColors
-                                                          .textPrimary
-                                                          .withOpacity(0.4),
-                                                    ),
-                                                children: [
-                                                  const TextSpan(
-                                                    text: "Last Used: ",
-                                                  ),
-                                                  TextSpan(
-                                                    text: DateFormat.yMMMd()
-                                                        .format(DateTime.now()),
-                                                  ),
-                                                ],
+                              ),
+                            ),
+                            // const Text("Error:"),
+                            // Text(state.error.toString()),
+                          ],
+                        ),
+                      ),
+                    ),
+                  HomeStateStatus.loading => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  HomeStateStatus.data || HomeStateStatus.initial => state
+                          .deviceList.isEmpty
+                      ? Center(
+                          child: Text(
+                            "No devices found. Add a device to get started",
+                            style: TextStyle(
+                              color:
+                                  KAppColors.textPrimary.withValues(alpha: 0.4),
+                            ),
+                          ),
+                        )
+                      : ListView.separated(
+                          shrinkWrap: true,
+                          itemCount: state.deviceList.length,
+                          separatorBuilder: (context, index) => const SizedBox(
+                            height: 20,
+                          ),
+                          itemBuilder: (context, index) => InkWell(
+                            highlightColor:
+                                KAppColors.accent.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(20),
+                            onTap: () => handleDeviceListItemTap(state, index),
+                            child: Container(
+                              margin: const EdgeInsets.all(4),
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withValues(alpha: 0.1),
+                                    spreadRadius: 0,
+                                    blurRadius: 11,
+                                    offset: const Offset(
+                                      0,
+                                      0,
+                                    ), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 70,
+                                    height: 70,
+                                    decoration: BoxDecoration(
+                                      color: KAppColors.accent,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 16,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Pump',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium,
+                                      ),
+                                      RichText(
+                                        text: TextSpan(
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium!
+                                              .copyWith(
+                                                color: KAppColors.textPrimary
+                                                    .withValues(alpha: 0.4),
                                               ),
+                                          children: [
+                                            const TextSpan(
+                                              text: "Last Used: ",
+                                            ),
+                                            TextSpan(
+                                              text: DateFormat.yMMMd()
+                                                  .format(DateTime.now()),
                                             ),
                                           ],
                                         ),
-                                        const Spacer(),
-                                        CircleAvatar(
-                                          radius: 20,
-                                          backgroundColor: KAppColors.accent,
-                                          child: SvgPicture.asset(
-                                            KAppAssets.neArrow,
-                                          ),
-                                        ),
-                                      ],
+                                      ),
+                                    ],
+                                  ),
+                                  const Spacer(),
+                                  CircleAvatar(
+                                    radius: 20,
+                                    backgroundColor: KAppColors.accent,
+                                    child: SvgPicture.asset(
+                                      KAppAssets.neArrow,
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
-                        _ => const SizedBox.shrink(),
-                      }),
+                            ),
+                          ),
+                        ),
+                },
+              ),
             ),
           ],
         ),
@@ -223,7 +277,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   _openAddDevicePopup(BuildContext context) {
-    // Open the add device popup
+    // // Open the add device popup
     showDialog(
       context: context,
       builder: (_) => const AddDevicePopup(),
@@ -264,6 +318,44 @@ class _HomeViewState extends State<HomeView> {
       return;
     }
     context.go("/device/${state.deviceList[index]}");
+  }
+
+  void _attachIotPolicy() async {
+    final AuthSession authSession = await Amplify.Auth.fetchAuthSession();
+    final identityId = authSession.toJson()["identityId"];
+    if (identityId == null) {
+      if (mounted) {
+        KLoaders.customToast(
+          context,
+          message: "Could not get identityId! Contact support.",
+        );
+      }
+      return;
+    }
+    if (mounted) {
+      context.read<HomeBloc>().attachIotPolicyToIdentity(
+            identityId: identityId as String,
+            policyName: "esp_p",
+          );
+    }
+  }
+
+  void _retryHandler() async {
+    final AuthSession authSession = await Amplify.Auth.fetchAuthSession();
+    if (!mounted) {
+      return;
+    }
+    context.read<DeviceBloc>().initMqttClient(authSession);
+    _loadDeviceList();
+    _attachIotPolicy();
+  }
+
+  Future<void> _initMqttClient() async {
+    final AuthSession authSession = await Amplify.Auth.fetchAuthSession();
+    if (!mounted) {
+      return;
+    }
+    await context.read<DeviceBloc>().initMqttClient(authSession);
   }
 }
 

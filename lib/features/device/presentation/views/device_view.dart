@@ -40,10 +40,7 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
     super.initState();
     timerStatusNotifier = ValueNotifier<bool>(false);
     isLoadingNotifier = ValueNotifier<bool>(true);
-    context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/status');
-    context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/pow');
-    context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/vals');
-    context.read<DeviceBloc>().subscribeToTopic('C4DEE2879A60/chats');
+    _checkMqttConnection();
   }
 
   @override
@@ -53,7 +50,7 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
           previous.deviceStatus == null && current.deviceStatus != null,
       listener: (context, state) {
         context.read<DeviceBloc>().publishToTopic(
-              'C4DEE2879A60/status',
+              '${widget.deviceMac}/status',
               jsonEncode(state.deviceStatus!.copyWith(o: '0').toJson()),
               qosLevel: MqttQos.atMostOnce,
             );
@@ -133,7 +130,9 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
                       icon: KAppAssets.circledPower,
                       onTap: () => showModalBottomSheet<void>(
                         context: context,
-                        builder: (context) => const TimerBottomSheet(),
+                        builder: (context) => TimerBottomSheet(
+                          deviceMac: widget.deviceMac,
+                        ),
                       ),
                     ),
                   ),
@@ -143,7 +142,9 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
                       icon: KAppAssets.settings,
                       onTap: () => showModalBottomSheet<void>(
                         context: context,
-                        builder: (context) => const PowerSettingBottomSheet(),
+                        builder: (context) => PowerSettingBottomSheet(
+                          deviceMac: widget.deviceMac,
+                        ),
                       ),
                     ),
                   ),
@@ -416,6 +417,13 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
     );
   }
 
+  @override
+  void dispose() {
+    timerStatusNotifier.dispose();
+    isLoadingNotifier.dispose();
+    super.dispose();
+  }
+
   String getDeviceTimerValue(DeviceState state) {
     if (state.deviceValueDetails == null) {
       return '00 min';
@@ -441,16 +449,43 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
     final currentPowerStatus =
         context.read<DeviceBloc>().state.deviceStatus?.p == "1";
     if (currentPowerStatus) {
-      context.read<DeviceBloc>().publishToTopic('C4DEE2879A60/status',
+      context.read<DeviceBloc>().publishToTopic('${widget.deviceMac}/status',
           jsonEncode(const DeviceStatusEntity(p: "0", o: "1").toJson()));
     } else {
-      context.read<DeviceBloc>().publishToTopic('C4DEE2879A60/status',
+      context.read<DeviceBloc>().publishToTopic('${widget.deviceMac}/status',
           jsonEncode(const DeviceStatusEntity(p: "1", o: "1").toJson()));
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  _unsubscribeFromAllTopics() {
+    if (!mounted) {
+      return;
+    }
+    context.read<DeviceBloc>().unsubscribeFromAllTopics();
+  }
+
+  void _subscribeToAllTopics() {
+    context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/status');
+    context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/pow');
+    context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/vals');
+    context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/chats');
+  }
+
+  /* Future<void> _initMqttClient() async {
+    final AuthSession authSession = await Amplify.Auth.fetchAuthSession();
+    if (!mounted) {
+      return;
+    }
+    await context.read<DeviceBloc>().initMqttClient(authSession);
+  } */
+
+  void _checkMqttConnection() async {
+    final deviceBloc = context.read<DeviceBloc>();
+    if (deviceBloc.mqttConnectionStatus != MqttConnectionState.connected) {
+      context.pop();
+      return;
+    }
+    _unsubscribeFromAllTopics();
+    _subscribeToAllTopics();
   }
 }

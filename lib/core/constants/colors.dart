@@ -12,6 +12,7 @@ class KAppColors {
   static const Color textPrimary = Colors.black;
   static const Color textSecondary = Colors.black;
   static const Color textWhite = Colors.white;
+  static const Color textError = Colors.red;
 
   // Background Colors
   static const Color backgroundPrimary = Color(0XFFFAFAFA);
@@ -24,8 +25,8 @@ class KAppColors {
   static const Color circleBackground = Color(0X00000008);
 
   // Shadow Colors
-  static Color shadowColor = Colors.black.withOpacity(0.6);
+  static Color shadowColor = Colors.black.withValues(alpha: 0.6);
 
   // Border Colors
-  static Color borderPrimary = Colors.black.withOpacity(0.1);
+  static Color borderPrimary = Colors.black.withValues(alpha: 0.1);
 }

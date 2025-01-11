@@ -24,7 +24,8 @@ mixin _$DeviceState {
   PowEntity? get devicePowerDetails => throw _privateConstructorUsedError;
   ValsEntity? get deviceValueDetails => throw _privateConstructorUsedError;
   String? get deviceMac => throw _privateConstructorUsedError;
-  dynamic get isInitialDeviceStatus => throw _privateConstructorUsedError;
+  List<MqttSubscription> get subscriptions =>
+      throw _privateConstructorUsedError;
 
   /// Create a copy of DeviceState
   /// with the given fields replaced by the non-null parameter values.
@@ -48,7 +49,7 @@ abstract class $DeviceStateCopyWith<$Res> {
       PowEntity? devicePowerDetails,
       ValsEntity? deviceValueDetails,
       String? deviceMac,
-      dynamic isInitialDeviceStatus});
+      List<MqttSubscription> subscriptions});
 
   $DeviceStatusEntityCopyWith<$Res>? get deviceStatus;
   $PowEntityCopyWith<$Res>? get devicePowerDetails;
@@ -78,7 +79,7 @@ class _$DeviceStateCopyWithImpl<$Res, $Val extends DeviceState>
     Object? devicePowerDetails = freezed,
     Object? deviceValueDetails = freezed,
     Object? deviceMac = freezed,
-    Object? isInitialDeviceStatus = freezed,
+    Object? subscriptions = null,
   }) {
     return _then(_value.copyWith(
       status: null == status
@@ -113,10 +114,10 @@ class _$DeviceStateCopyWithImpl<$Res, $Val extends DeviceState>
           ? _value.deviceMac
           : deviceMac // ignore: cast_nullable_to_non_nullable
               as String?,
-      isInitialDeviceStatus: freezed == isInitialDeviceStatus
-          ? _value.isInitialDeviceStatus
-          : isInitialDeviceStatus // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+      subscriptions: null == subscriptions
+          ? _value.subscriptions
+          : subscriptions // ignore: cast_nullable_to_non_nullable
+              as List<MqttSubscription>,
     ) as $Val);
   }
 
@@ -180,7 +181,7 @@ abstract class _$$DeviceStateImplCopyWith<$Res>
       PowEntity? devicePowerDetails,
       ValsEntity? deviceValueDetails,
       String? deviceMac,
-      dynamic isInitialDeviceStatus});
+      List<MqttSubscription> subscriptions});
 
   @override
   $DeviceStatusEntityCopyWith<$Res>? get deviceStatus;
@@ -211,7 +212,7 @@ class __$$DeviceStateImplCopyWithImpl<$Res>
     Object? devicePowerDetails = freezed,
     Object? deviceValueDetails = freezed,
     Object? deviceMac = freezed,
-    Object? isInitialDeviceStatus = freezed,
+    Object? subscriptions = null,
   }) {
     return _then(_$DeviceStateImpl(
       status: null == status
@@ -246,9 +247,10 @@ class __$$DeviceStateImplCopyWithImpl<$Res>
           ? _value.deviceMac
           : deviceMac // ignore: cast_nullable_to_non_nullable
               as String?,
-      isInitialDeviceStatus: freezed == isInitialDeviceStatus
-          ? _value.isInitialDeviceStatus!
-          : isInitialDeviceStatus,
+      subscriptions: null == subscriptions
+          ? _value._subscriptions
+          : subscriptions // ignore: cast_nullable_to_non_nullable
+              as List<MqttSubscription>,
     ));
   }
 }
@@ -265,8 +267,9 @@ class _$DeviceStateImpl implements _DeviceState {
       this.devicePowerDetails,
       this.deviceValueDetails,
       this.deviceMac,
-      this.isInitialDeviceStatus = true})
-      : _deviceHistoryDatalist = deviceHistoryDatalist;
+      final List<MqttSubscription> subscriptions = const []})
+      : _deviceHistoryDatalist = deviceHistoryDatalist,
+        _subscriptions = subscriptions;
 
   @override
   final DeviceStateStatus status;
@@ -292,13 +295,18 @@ class _$DeviceStateImpl implements _DeviceState {
   final ValsEntity? deviceValueDetails;
   @override
   final String? deviceMac;
+  final List<MqttSubscription> _subscriptions;
   @override
   @JsonKey()
-  final dynamic isInitialDeviceStatus;
+  List<MqttSubscription> get subscriptions {
+    if (_subscriptions is EqualUnmodifiableListView) return _subscriptions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_subscriptions);
+  }
 
   @override
   String toString() {
-    return 'DeviceState(status: $status, errorMessage: $errorMessage, error: $error, deviceHistoryDatalist: $deviceHistoryDatalist, deviceStatus: $deviceStatus, devicePowerDetails: $devicePowerDetails, deviceValueDetails: $deviceValueDetails, deviceMac: $deviceMac, isInitialDeviceStatus: $isInitialDeviceStatus)';
+    return 'DeviceState(status: $status, errorMessage: $errorMessage, error: $error, deviceHistoryDatalist: $deviceHistoryDatalist, deviceStatus: $deviceStatus, devicePowerDetails: $devicePowerDetails, deviceValueDetails: $deviceValueDetails, deviceMac: $deviceMac, subscriptions: $subscriptions)';
   }
 
   @override
@@ -321,7 +329,7 @@ class _$DeviceStateImpl implements _DeviceState {
             (identical(other.deviceMac, deviceMac) ||
                 other.deviceMac == deviceMac) &&
             const DeepCollectionEquality()
-                .equals(other.isInitialDeviceStatus, isInitialDeviceStatus));
+                .equals(other._subscriptions, _subscriptions));
   }
 
   @override
@@ -335,7 +343,7 @@ class _$DeviceStateImpl implements _DeviceState {
       devicePowerDetails,
       deviceValueDetails,
       deviceMac,
-      const DeepCollectionEquality().hash(isInitialDeviceStatus));
+      const DeepCollectionEquality().hash(_subscriptions));
 
   /// Create a copy of DeviceState
   /// with the given fields replaced by the non-null parameter values.
@@ -356,7 +364,7 @@ abstract class _DeviceState implements DeviceState {
       final PowEntity? devicePowerDetails,
       final ValsEntity? deviceValueDetails,
       final String? deviceMac,
-      final dynamic isInitialDeviceStatus}) = _$DeviceStateImpl;
+      final List<MqttSubscription> subscriptions}) = _$DeviceStateImpl;
 
   @override
   DeviceStateStatus get status;
@@ -375,7 +383,7 @@ abstract class _DeviceState implements DeviceState {
   @override
   String? get deviceMac;
   @override
-  dynamic get isInitialDeviceStatus;
+  List<MqttSubscription> get subscriptions;
 
   /// Create a copy of DeviceState
   /// with the given fields replaced by the non-null parameter values.

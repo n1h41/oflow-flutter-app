@@ -1,4 +1,3 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +9,7 @@ import '../../../../core/service_locator.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../auth/domain/usecase/usecase.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../../../home/domain/repository/repository.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -23,7 +23,10 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<HomeBloc>(
           // lazy: false,
-          create: (_) => HomeBloc(),
+          create: (_) => HomeBloc(
+            router: getIt<AppRouter>().router,
+            repository: getIt<HomeRepository>(),
+          ),
         ),
         BlocProvider<AuthBloc>(
           create: (_) => AuthBloc(
@@ -33,7 +36,8 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: Authenticator(
-        signUpForm: SignUpForm.custom(
+        signUpForm: SignUpForm(),
+        /* signUpForm: SignUpForm.custom(
           fields: [
             SignUpFormField.username(),
             SignUpFormField.password(),
@@ -49,21 +53,26 @@ class MyApp extends StatelessWidget {
               required: true,
             ),
           ],
-        ),
+        ), */
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
           routerConfig: getIt<AppRouter>().router,
           title: 'Oflow application',
           themeMode: ThemeMode.light,
           theme: AppTheme.lightTheme,
-          builder: Authenticator.builder(),
+          builder: (context, child) => Authenticator.builder()(
+            context,
+            _Unfocus(
+              child: child!,
+            ),
+          ),
         ),
       ),
     );
   }
 }
 
-/* class _Unfocus extends StatelessWidget {
+class _Unfocus extends StatelessWidget {
   final Widget child;
 
   const _Unfocus({
@@ -78,4 +87,4 @@ class MyApp extends StatelessWidget {
       child: child,
     );
   }
-} */
+}
