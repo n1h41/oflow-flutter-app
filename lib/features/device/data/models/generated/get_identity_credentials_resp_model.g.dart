@@ -45,7 +45,7 @@ Map<String, dynamic> _$$CredentialsImplToJson(_$CredentialsImpl instance) =>
     };
 
 _$ResultMetadataImpl _$$ResultMetadataImplFromJson(Map<String, dynamic> json) =>
-    _$ResultMetadataImpl();
+    const _$ResultMetadataImpl();
 
 Map<String, dynamic> _$$ResultMetadataImplToJson(
         _$ResultMetadataImpl instance) =>

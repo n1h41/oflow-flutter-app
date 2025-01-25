@@ -21,7 +21,7 @@ class DeviceTile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         InkWell(
-          highlightColor: KAppColors.accent.withOpacity(0.2),
+          highlightColor: KAppColors.accent.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(36),
           onTap: onTap,
           child: Container(

@@ -101,7 +101,7 @@ class _TimerBottomSheetState extends State<TimerBottomSheet> {
                       Text(
                         "Hour",
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: KAppColors.textPrimary.withOpacity(0.4),
+                              color: KAppColors.textPrimary.withValues(alpha: 0.4),
                             ),
                       ),
                     ],
@@ -140,7 +140,7 @@ class _TimerBottomSheetState extends State<TimerBottomSheet> {
                       Text(
                         " Min",
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: KAppColors.textPrimary.withOpacity(0.4),
+                              color: KAppColors.textPrimary.withValues(alpha:  0.4),
                             ),
                       ),
                     ],
