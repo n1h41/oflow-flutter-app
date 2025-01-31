@@ -59,7 +59,7 @@ Map<String, dynamic> _$$AuthenticationResultImplToJson(
 
 _$ChallengeParametersImpl _$$ChallengeParametersImplFromJson(
         Map<String, dynamic> json) =>
-    _$ChallengeParametersImpl();
+    const _$ChallengeParametersImpl();
 
 Map<String, dynamic> _$$ChallengeParametersImplToJson(
         _$ChallengeParametersImpl instance) =>

@@ -31,6 +31,9 @@ dependencies:
   amplify_auth_cognito: ^2.5.0
   url_launcher: ^6.3.1
   logger: ^2.5.0
+  uuid: ^4.5.1
+  mobile_scanner: ^6.0.3
+  flutter_launcher_icons: ^0.14.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

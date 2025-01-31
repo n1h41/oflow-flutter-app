@@ -21,7 +21,7 @@ class DeviceState with _$DeviceState {
     PowEntity? devicePowerDetails,
     ValsEntity? deviceValueDetails,
     String? deviceMac,
-     List<MqttSubscription> subscriptions,
+    @Default([]) List<MqttSubscription> subscriptions,
   }) = _DeviceState;
 
   factory DeviceState.initial() {
