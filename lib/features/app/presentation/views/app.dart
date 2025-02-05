@@ -36,6 +36,9 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: Authenticator(
+        dialCodeOptions: const DialCodeOptions(
+          defaultDialCode: DialCode.in1,
+        ),
         signUpForm: SignUpForm(),
         /* signUpForm: SignUpForm.custom(
           fields: [
