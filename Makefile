@@ -6,3 +6,9 @@ gen:
 
 build-apk:
 	@flutter build apk --split-per-abi --release
+
+apk-zip:
+	@cd ./build/app/outputs/flutter-apk/ && zip -r ../../../../android-build.zip *-release.apk
+
+web-zip:
+	@cd ./build/web/ && zip -r ../../web-build.zip *
