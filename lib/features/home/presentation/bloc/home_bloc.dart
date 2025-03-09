@@ -119,4 +119,8 @@ class HomeBloc extends Cubit<HomeState> {
       },
     );
   }
+
+  Future<void> clearPolicyAttachedFlag() async {
+    await LocalStorage.instance.saveBool("policyAttached", false);
+  }
 }

@@ -29,9 +29,8 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    _initMqttClient();
-    _loadDeviceList();
     _attachIotPolicy();
+    _loadDeviceList();
   }
 
   @override
@@ -42,36 +41,36 @@ class _HomeViewState extends State<HomeView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             FutureBuilder(
-                future: Amplify.Auth.fetchUserAttributes(),
-                builder: (context, snapshot) {
-                  String? firstName;
-                  if (snapshot.hasData) {
-                    snapshot.data?.forEach((element) {
-                      if (element.userAttributeKey.key == "custom:first_name") {
-                        firstName = element.value;
-                      }
-                    });
-                  }
-                  return RichText(
-                    text: TextSpan(
-                      style: Theme.of(context).textTheme.titleLarge,
-                      children: [
-                        const TextSpan(text: "Hello! "),
-                        if (snapshot.connectionState ==
-                                ConnectionState.waiting &&
-                            !snapshot.hasData)
-                          TextSpan(
-                            style: TextStyle(
-                              color:
-                                  KAppColors.textPrimary.withValues(alpha: 0.4),
-                            ),
-                            text: "Loading...",
+              future: Amplify.Auth.fetchUserAttributes(),
+              builder: (context, snapshot) {
+                String? firstName;
+                if (snapshot.hasData) {
+                  snapshot.data?.forEach((element) {
+                    if (element.userAttributeKey.key == "custom:first_name") {
+                      firstName = element.value;
+                    }
+                  });
+                }
+                return RichText(
+                  text: TextSpan(
+                    style: Theme.of(context).textTheme.titleLarge,
+                    children: [
+                      const TextSpan(text: "Hello! "),
+                      if (snapshot.connectionState == ConnectionState.waiting &&
+                          !snapshot.hasData)
+                        TextSpan(
+                          style: TextStyle(
+                            color:
+                                KAppColors.textPrimary.withValues(alpha: 0.4),
                           ),
-                        if (snapshot.hasData) TextSpan(text: firstName ?? ""),
-                      ],
-                    ),
-                  );
-                }),
+                          text: "Loading...",
+                        ),
+                      if (snapshot.hasData) TextSpan(text: firstName ?? ""),
+                    ],
+                  ),
+                );
+              },
+            ),
             Text(
               DateFormat.yMMMd().format(DateTime.now()),
               style: Theme.of(context).textTheme.labelMedium,
@@ -80,9 +79,7 @@ class _HomeViewState extends State<HomeView> {
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              Amplify.Auth.signOut();
-            },
+            onPressed: _logoutHanlder,
             icon: const Icon(Icons.logout),
           ),
         ],
@@ -329,10 +326,12 @@ class _HomeViewState extends State<HomeView> {
       return;
     }
     if (mounted) {
-      context.read<HomeBloc>().attachIotPolicyToIdentity(
+      await context.read<HomeBloc>().attachIotPolicyToIdentity(
             identityId: identityId as String,
             policyName: "esp_p",
           );
+      // INFO: Init mqtt client only after attaching iot policy to user identity
+      _initMqttClient();
     }
   }
 
@@ -356,5 +355,10 @@ class _HomeViewState extends State<HomeView> {
 
   void _handlerCopyMacAddress(String macAddress) async {
     await Clipboard.setData(ClipboardData(text: macAddress));
+  }
+
+  void _logoutHanlder() async {
+    await context.read<HomeBloc>().clearPolicyAttachedFlag();
+    Amplify.Auth.signOut();
   }
 }
