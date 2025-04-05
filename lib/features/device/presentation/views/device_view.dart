@@ -106,12 +106,7 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
                       title: "Schedule",
                       icon: KAppAssets.schedule,
                       onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Feature coming soon"),
-                            showCloseIcon: true,
-                          ),
-                        );
+                        context.go('/device/${widget.deviceMac}/schedule');
                       },
                     ),
                   ),
@@ -469,15 +464,8 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
     context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/pow');
     context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/vals');
     context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/chats');
+    context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/schedule');
   }
-
-  /* Future<void> _initMqttClient() async {
-    final AuthSession authSession = await Amplify.Auth.fetchAuthSession();
-    if (!mounted) {
-      return;
-    }
-    await context.read<DeviceBloc>().initMqttClient(authSession);
-  } */
 
   void _checkMqttConnection() async {
     final deviceBloc = context.read<DeviceBloc>();

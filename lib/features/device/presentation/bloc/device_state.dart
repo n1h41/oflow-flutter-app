@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
+import 'package:oflow/features/device/domain/entity/schedule_entity.dart';
 
 import '../../../../core/constants/exceptions/failure.dart';
 import '../../domain/entity/device_status_entity.dart';
@@ -22,6 +23,7 @@ class DeviceState with _$DeviceState {
     ValsEntity? deviceValueDetails,
     String? deviceMac,
     @Default([]) List<MqttSubscription> subscriptions,
+    @Default([]) List<ScheduleEntity> schedules,
   }) = _DeviceState;
 
   factory DeviceState.initial() {

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:oflow/features/device/presentation/bloc/device_bloc.dart';
+import 'package:oflow/features/device/presentation/bloc/device_state.dart';
+import 'package:oflow/features/device/presentation/widgets/schedule_entry.dart';
 
 import '../../../../core/constants/colors.dart';
+import '../widgets/create_schedule_bottom_sheet.dart';
 
 class ScheduleView extends StatelessWidget {
   const ScheduleView({super.key});
@@ -44,7 +49,12 @@ class ScheduleView extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => showModalBottomSheet(
+              context: context,
+              builder: (context) => const CreateScheduleBottomSheet(
+                deviceMac: "deviceMac",
+              ),
+            ),
             icon: const Icon(
               Icons.add_circle,
               color: KAppColors.accent,
@@ -52,62 +62,43 @@ class ScheduleView extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(
-          vertical: 20,
-          horizontal: 16,
-        ),
-        children: [
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: KAppColors.containerBackground,
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: KAppColors.shadowColor.withValues(alpha: 0.1),
-                  blurRadius: 14,
-                  spreadRadius: 0,
-                  offset: const Offset(0, 0),
+      body: BlocBuilder<DeviceBloc, DeviceState>(
+        builder: (context, state) {
+          switch (state.status) {
+            case DeviceStateStatus.initial:
+              return const Center(
+                child: Text("Initial"),
+              );
+            case DeviceStateStatus.loading:
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            case DeviceStateStatus.error:
+              return Center(
+                child: Text(state.errorMessage ?? "An error occurred"),
+              );
+            case DeviceStateStatus.data:
+              if (state.schedules.isEmpty) {
+                return const Center(
+                  child: Text("No schedules available"),
+                );
+              }
+              return ListView.separated(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20,
+                  horizontal: 16,
                 ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Turn on",
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    Text(
-                      "07:30 AM",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineMedium
-                          ?.copyWith(fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      "Everyday",
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                  ],
-                ),
-                const Spacer(),
-                Switch(
-                  trackOutlineColor: WidgetStateProperty.all(
-                    KAppColors.textWhite,
-                  ),
-                  inactiveThumbColor: KAppColors.textWhite,
-                  inactiveTrackColor: KAppColors.accent.withValues(alpha: 0.1),
-                  value: false,
-                  onChanged: (value) {},
-                ),
-              ],
-            ),
-          ),
-        ],
+                itemCount: state.schedules.length,
+                separatorBuilder: (context, index) {
+                  return const SizedBox(height: 8);
+                },
+                itemBuilder: (context, index) {
+                  final schedule = state.schedules[index];
+                  return ScheduleEntry(schedule: schedule);
+                },
+              );
+          }
+        },
       ),
     );
   }

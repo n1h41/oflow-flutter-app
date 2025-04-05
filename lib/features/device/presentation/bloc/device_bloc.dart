@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mqtt5_client/mqtt5_browser_client.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
 import 'package:mqtt5_client/mqtt5_server_client.dart';
+import 'package:oflow/features/device/domain/entity/schedule_entity.dart';
 
 import '../../../../core/constants/exceptions/failure.dart';
 import '../../../../core/utils/helpers/aws_helpers.dart';
@@ -181,6 +182,18 @@ class DeviceBloc extends Cubit<DeviceState> {
                 ),
               );
               break;
+            case "schedule":
+              final Map<String, dynamic> data = _convertMessageToMap(message);
+              appLogger.i('Received message: $data');
+              emit(
+                state.copyWith(
+                  status: DeviceStateStatus.data,
+                  schedules: (data["schedule"] as List)
+                      .map((e) => ScheduleEntity.fromJson(e))
+                      .toList(),
+                ),
+              );
+              break;
             default:
               break;
           }
@@ -226,7 +239,7 @@ class DeviceBloc extends Cubit<DeviceState> {
         .i('Publishing message to $topic: $message with id $msgIdentifier');
   }
 
-  _convertMessageToMap(MqttReceivedMessage message) {
+  Map<String, dynamic> _convertMessageToMap(MqttReceivedMessage message) {
     MqttPublishMessage msg = message.payload as MqttPublishMessage;
     final msgString = MqttUtilities.bytesToStringAsString(msg.payload.message!);
     return jsonDecode(msgString);
