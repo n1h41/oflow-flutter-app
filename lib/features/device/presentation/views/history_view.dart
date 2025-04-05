@@ -43,7 +43,7 @@ class _HistoryViewState extends State<HistoryView> with MqttMixin {
                   color: KAppColors.containerBackground,
                   boxShadow: [
                     BoxShadow(
-                      color: KAppColors.shadowColor.withOpacity(0.1),
+                      color: KAppColors.shadowColor.withValues(alpha: 0.1),
                       blurRadius: 14,
                       spreadRadius: 0,
                       offset: const Offset(0, 0),

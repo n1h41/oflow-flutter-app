@@ -22,7 +22,7 @@ class ScheduleView extends StatelessWidget {
                   color: KAppColors.containerBackground,
                   boxShadow: [
                     BoxShadow(
-                      color: KAppColors.shadowColor.withOpacity(0.1),
+                      color: KAppColors.shadowColor.withValues(alpha: 0.1),
                       blurRadius: 14,
                       spreadRadius: 0,
                       offset: const Offset(0, 0),
@@ -65,7 +65,7 @@ class ScheduleView extends StatelessWidget {
               borderRadius: BorderRadius.circular(30),
               boxShadow: [
                 BoxShadow(
-                  color: KAppColors.shadowColor.withOpacity(0.1),
+                  color: KAppColors.shadowColor.withValues(alpha: 0.1),
                   blurRadius: 14,
                   spreadRadius: 0,
                   offset: const Offset(0, 0),
@@ -100,7 +100,7 @@ class ScheduleView extends StatelessWidget {
                     KAppColors.textWhite,
                   ),
                   inactiveThumbColor: KAppColors.textWhite,
-                  inactiveTrackColor: KAppColors.accent.withOpacity(0.1),
+                  inactiveTrackColor: KAppColors.accent.withValues(alpha: 0.1),
                   value: false,
                   onChanged: (value) {},
                 ),

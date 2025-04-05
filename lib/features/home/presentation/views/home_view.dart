@@ -1,19 +1,20 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
 
-import '../../../../core/constants/assets.dart';
 import '../../../../core/constants/colors.dart';
-import '../../../../core/utils/local_storage/local_storage.dart';
 import '../../../../core/utils/popup/loaders.dart';
+import '../../../device/domain/entity/device_entity.dart';
 import '../../../device/presentation/bloc/device_bloc.dart';
 import '../../../device/presentation/bloc/device_state.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_state.dart';
+import '../widgets/add_device_popup.dart';
+import '../widgets/home_device_tile.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -23,14 +24,13 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  List<String> deviceList = [];
+  List<DeviceEntity> deviceList = [];
 
   @override
   void initState() {
     super.initState();
-    _initMqttClient();
-    _loadDeviceList();
     _attachIotPolicy();
+    _loadDeviceList();
   }
 
   @override
@@ -41,36 +41,36 @@ class _HomeViewState extends State<HomeView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             FutureBuilder(
-                future: Amplify.Auth.fetchUserAttributes(),
-                builder: (context, snapshot) {
-                  String? firstName;
-                  if (snapshot.hasData) {
-                    snapshot.data?.forEach((element) {
-                      if (element.userAttributeKey.key == "custom:first_name") {
-                        firstName = element.value;
-                      }
-                    });
-                  }
-                  return RichText(
-                    text: TextSpan(
-                      style: Theme.of(context).textTheme.titleLarge,
-                      children: [
-                        const TextSpan(text: "Hello! "),
-                        if (snapshot.connectionState ==
-                                ConnectionState.waiting &&
-                            !snapshot.hasData)
-                          TextSpan(
-                            style: TextStyle(
-                              color:
-                                  KAppColors.textPrimary.withValues(alpha: 0.4),
-                            ),
-                            text: "Loading...",
+              future: Amplify.Auth.fetchUserAttributes(),
+              builder: (context, snapshot) {
+                String? firstName;
+                if (snapshot.hasData) {
+                  snapshot.data?.forEach((element) {
+                    if (element.userAttributeKey.key == "custom:first_name") {
+                      firstName = element.value;
+                    }
+                  });
+                }
+                return RichText(
+                  text: TextSpan(
+                    style: Theme.of(context).textTheme.titleLarge,
+                    children: [
+                      const TextSpan(text: "Hello! "),
+                      if (snapshot.connectionState == ConnectionState.waiting &&
+                          !snapshot.hasData)
+                        TextSpan(
+                          style: TextStyle(
+                            color:
+                                KAppColors.textPrimary.withValues(alpha: 0.4),
                           ),
-                        if (snapshot.hasData) TextSpan(text: firstName ?? ""),
-                      ],
-                    ),
-                  );
-                }),
+                          text: "Loading...",
+                        ),
+                      if (snapshot.hasData) TextSpan(text: firstName ?? ""),
+                    ],
+                  ),
+                );
+              },
+            ),
             Text(
               DateFormat.yMMMd().format(DateTime.now()),
               style: Theme.of(context).textTheme.labelMedium,
@@ -79,9 +79,7 @@ class _HomeViewState extends State<HomeView> {
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              Amplify.Auth.signOut();
-            },
+            onPressed: _logoutHanlder,
             icon: const Icon(Icons.logout),
           ),
         ],
@@ -154,8 +152,6 @@ class _HomeViewState extends State<HomeView> {
                                     ),
                               ),
                             ),
-                            // const Text("Error:"),
-                            // Text(state.error.toString()),
                           ],
                         ),
                       ),
@@ -180,86 +176,84 @@ class _HomeViewState extends State<HomeView> {
                           separatorBuilder: (context, index) => const SizedBox(
                             height: 20,
                           ),
-                          itemBuilder: (context, index) => InkWell(
-                            highlightColor:
-                                KAppColors.accent.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(20),
-                            onTap: () => handleDeviceListItemTap(state, index),
-                            child: Container(
-                              margin: const EdgeInsets.all(4),
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withValues(alpha: 0.1),
-                                    spreadRadius: 0,
-                                    blurRadius: 11,
-                                    offset: const Offset(
-                                      0,
-                                      0,
-                                    ), // changes position of shadow
+                          itemBuilder: (context, index) {
+                            final device = state.deviceList[index];
+                            return InkWell(
+                              highlightColor:
+                                  KAppColors.accent.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(20),
+                              onTap: () =>
+                                  handleDeviceListItemTap(state, index),
+                              onLongPress: () => showModalBottomSheet(
+                                context: context,
+                                builder: (_) => Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 20,
+                                    horizontal: 16,
                                   ),
-                                ],
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 70,
-                                    height: 70,
-                                    decoration: BoxDecoration(
-                                      color: KAppColors.accent,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 16,
-                                  ),
-                                  Column(
+                                  child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
-                                        'Pump',
+                                        "Device Options",
                                         style: Theme.of(context)
                                             .textTheme
-                                            .titleMedium,
+                                            .bodyLarge!
+                                            .copyWith(
+                                              fontWeight: FontWeight.w400,
+                                              color: KAppColors.textPrimary
+                                                  .withValues(alpha: 0.5),
+                                            ),
                                       ),
-                                      RichText(
-                                        text: TextSpan(
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      ListTile(
+                                        title: Text(
+                                          "Delete Device",
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodyMedium!
+                                              .bodySmall!
                                               .copyWith(
-                                                color: KAppColors.textPrimary
-                                                    .withValues(alpha: 0.4),
+                                                fontWeight: FontWeight.w400,
                                               ),
-                                          children: [
-                                            const TextSpan(
-                                              text: "Last Used: ",
-                                            ),
-                                            TextSpan(
-                                              text: DateFormat.yMMMd()
-                                                  .format(DateTime.now()),
-                                            ),
-                                          ],
                                         ),
+                                        onTap: () {
+                                          context
+                                              .read<HomeBloc>()
+                                              .deleteDevice(device.macAddress);
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      ListTile(
+                                        title: Text(
+                                          "Copy MAC Address",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall!
+                                              .copyWith(
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                        ),
+                                        onTap: () {
+                                          _handlerCopyMacAddress(
+                                            device.macAddress,
+                                          );
+                                          Navigator.pop(context);
+                                        },
                                       ),
                                     ],
                                   ),
-                                  const Spacer(),
-                                  CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: KAppColors.accent,
-                                    child: SvgPicture.asset(
-                                      KAppAssets.neArrow,
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
+                              child: HomeDeviceTile(device: device),
+                            );
+                          },
                         ),
                 },
               ),
@@ -277,7 +271,6 @@ class _HomeViewState extends State<HomeView> {
   }
 
   _openAddDevicePopup(BuildContext context) {
-    // // Open the add device popup
     showDialog(
       context: context,
       builder: (_) => const AddDevicePopup(),
@@ -317,7 +310,7 @@ class _HomeViewState extends State<HomeView> {
       );
       return;
     }
-    context.go("/device/${state.deviceList[index]}");
+    context.go("/device/${state.deviceList[index].macAddress}");
   }
 
   void _attachIotPolicy() async {
@@ -333,10 +326,12 @@ class _HomeViewState extends State<HomeView> {
       return;
     }
     if (mounted) {
-      context.read<HomeBloc>().attachIotPolicyToIdentity(
+      await context.read<HomeBloc>().attachIotPolicyToIdentity(
             identityId: identityId as String,
             policyName: "esp_p",
           );
+      // INFO: Init mqtt client only after attaching iot policy to user identity
+      _initMqttClient();
     }
   }
 
@@ -357,128 +352,13 @@ class _HomeViewState extends State<HomeView> {
     }
     await context.read<DeviceBloc>().initMqttClient(authSession);
   }
-}
 
-class AddDevicePopup extends StatefulWidget {
-  const AddDevicePopup({super.key});
-
-  @override
-  State<AddDevicePopup> createState() => _AddDevicePopupState();
-}
-
-class _AddDevicePopupState extends State<AddDevicePopup> {
-  final ValueNotifier<bool> _isLoadingNotifier = ValueNotifier(false);
-
-  final TextEditingController _macAddressController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      child: Container(
-        width: 300,
-        height: 300,
-        padding: const EdgeInsets.all(20),
-        child: ValueListenableBuilder(
-          valueListenable: _isLoadingNotifier,
-          builder: (context, isLoading, _) {
-            if (isLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Text(
-                    "Scan QR Code",
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: KAppColors.textWhite,
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Divider(),
-                const Text("OR"),
-                const SizedBox(height: 10),
-                Text(
-                  "Enter Device MAC Address",
-                  style: Theme.of(context).textTheme.labelSmall,
-                ),
-                const SizedBox(height: 10),
-                // create textformfiled with height of 50
-                Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: KAppColors.borderPrimary,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: TextFormField(
-                    controller: _macAddressController,
-                    decoration: InputDecoration(
-                      hintText: "MAC Address",
-                      hintStyle: Theme.of(context).textTheme.labelSmall,
-                      border: InputBorder.none,
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 10),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _handleAddDevice,
-                    child: Text(
-                      "Add +",
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: KAppColors.textWhite,
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                  ),
-                )
-              ],
-            );
-          },
-        ),
-      ),
-    );
+  void _handlerCopyMacAddress(String macAddress) async {
+    await Clipboard.setData(ClipboardData(text: macAddress));
   }
 
-  @override
-  void dispose() {
-    _isLoadingNotifier.dispose();
-    super.dispose();
-  }
-
-  void _handleAddDevice() async {
-    final deviceMac = _macAddressController.text;
-    RegExp macAddressRegex = RegExp(r'^[A-z0-9]{12}$');
-    if (!macAddressRegex.hasMatch(deviceMac)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please enter a valid MAC Address"),
-          showCloseIcon: true,
-        ),
-      );
-      return;
-    }
-    _isLoadingNotifier.value = true;
-    // Add device mac to shared preferences
-    await Future.delayed(const Duration(seconds: 2));
-    final currentDeviceList = LocalStorage.instance.getStringList("devices") ??
-        <String>[]; // get the current device list
-    currentDeviceList.add(deviceMac); // add the new device mac
-    await LocalStorage.instance.saveStringList("devices", currentDeviceList);
-    _isLoadingNotifier.value = false;
-    if (mounted) {
-      context.read<HomeBloc>().loadDevices();
-      context.pop();
-    }
+  void _logoutHanlder() async {
+    await context.read<HomeBloc>().clearPolicyAttachedFlag();
+    Amplify.Auth.signOut();
   }
 }

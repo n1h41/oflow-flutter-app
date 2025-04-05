@@ -36,24 +36,10 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: Authenticator(
+        dialCodeOptions: const DialCodeOptions(
+          defaultDialCode: DialCode.in1,
+        ),
         signUpForm: SignUpForm(),
-        /* signUpForm: SignUpForm.custom(
-          fields: [
-            SignUpFormField.username(),
-            SignUpFormField.password(),
-            SignUpFormField.passwordConfirmation(),
-            SignUpFormField.custom(
-              title: "First Name",
-              attributeKey: const CognitoUserAttributeKey.custom("first_name"),
-              required: true,
-            ),
-            SignUpFormField.custom(
-              title: "Last Name",
-              attributeKey: const CognitoUserAttributeKey.custom("last_name"),
-              required: true,
-            ),
-          ],
-        ), */
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
           routerConfig: getIt<AppRouter>().router,

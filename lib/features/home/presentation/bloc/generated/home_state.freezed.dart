@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$HomeState {
   HomeStateStatus get status => throw _privateConstructorUsedError;
   Failure? get error => throw _privateConstructorUsedError;
-  List<String> get deviceList => throw _privateConstructorUsedError;
+  List<DeviceEntity> get deviceList => throw _privateConstructorUsedError;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -32,7 +32,8 @@ abstract class $HomeStateCopyWith<$Res> {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) then) =
       _$HomeStateCopyWithImpl<$Res, HomeState>;
   @useResult
-  $Res call({HomeStateStatus status, Failure? error, List<String> deviceList});
+  $Res call(
+      {HomeStateStatus status, Failure? error, List<DeviceEntity> deviceList});
 }
 
 /// @nodoc
@@ -66,7 +67,7 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
       deviceList: null == deviceList
           ? _value.deviceList
           : deviceList // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<DeviceEntity>,
     ) as $Val);
   }
 }
@@ -79,7 +80,8 @@ abstract class _$$HomeStateImplCopyWith<$Res>
       __$$HomeStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({HomeStateStatus status, Failure? error, List<String> deviceList});
+  $Res call(
+      {HomeStateStatus status, Failure? error, List<DeviceEntity> deviceList});
 }
 
 /// @nodoc
@@ -111,7 +113,7 @@ class __$$HomeStateImplCopyWithImpl<$Res>
       deviceList: null == deviceList
           ? _value._deviceList
           : deviceList // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<DeviceEntity>,
     ));
   }
 }
@@ -122,17 +124,17 @@ class _$HomeStateImpl implements _HomeState {
   const _$HomeStateImpl(
       {required this.status,
       this.error,
-      final List<String> deviceList = const []})
+      final List<DeviceEntity> deviceList = const []})
       : _deviceList = deviceList;
 
   @override
   final HomeStateStatus status;
   @override
   final Failure? error;
-  final List<String> _deviceList;
+  final List<DeviceEntity> _deviceList;
   @override
   @JsonKey()
-  List<String> get deviceList {
+  List<DeviceEntity> get deviceList {
     if (_deviceList is EqualUnmodifiableListView) return _deviceList;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_deviceList);
@@ -171,14 +173,14 @@ abstract class _HomeState implements HomeState {
   const factory _HomeState(
       {required final HomeStateStatus status,
       final Failure? error,
-      final List<String> deviceList}) = _$HomeStateImpl;
+      final List<DeviceEntity> deviceList}) = _$HomeStateImpl;
 
   @override
   HomeStateStatus get status;
   @override
   Failure? get error;
   @override
-  List<String> get deviceList;
+  List<DeviceEntity> get deviceList;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
