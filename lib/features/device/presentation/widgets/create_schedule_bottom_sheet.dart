@@ -1,20 +1,18 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:oflow/features/device/presentation/bloc/device_bloc.dart';
 import 'package:wheel_picker/wheel_picker.dart';
 
 import '../../../../core/constants/colors.dart';
-import '../bloc/device_bloc.dart';
-import '../bloc/device_state.dart';
+import '../../domain/entity/schedule_entity.dart';
 
 class CreateScheduleBottomSheet extends StatefulWidget {
-  final String deviceMac;
+  final ScheduleEntity? schedule;
 
   const CreateScheduleBottomSheet({
     super.key,
-    required this.deviceMac,
+    this.schedule,
   });
 
   @override
@@ -23,30 +21,85 @@ class CreateScheduleBottomSheet extends StatefulWidget {
 }
 
 class _CreateScheduleBottomSheetState extends State<CreateScheduleBottomSheet> {
-  late final WheelPickerController hourWheelController;
-  late final WheelPickerController minuteWheelController;
+  final ValueNotifier<List<int>> selectedDaysNotifier = ValueNotifier([]);
+
+  late final WheelPickerController startTimeHourWheelController;
+  late final WheelPickerController startTimeMinuteWheelController;
   late final WheelPickerController amPmWheelController;
 
-  int selectedHour = 0;
-  int selectedMinute = 0;
+  late final WheelPickerController durationHourWheelController;
+  late final WheelPickerController durationMinuteWheelController;
+
+  int selectedStartTimeHour = 0;
+  int selectedStartTimeMinute = 0;
   bool isAM = true; // true for AM, false for PM
 
-  // Selected days of the week (1-7 where 1 is Monday, 7 is Sunday)
-  final List<int> selectedDays = [];
+  int selectedDurationHour = 0;
+  int selectedDurationMinute = 0;
 
   @override
   void initState() {
     super.initState();
-    hourWheelController = WheelPickerController(itemCount: 12);
-    minuteWheelController = WheelPickerController(itemCount: 60);
+    startTimeHourWheelController = WheelPickerController(itemCount: 12);
+    startTimeMinuteWheelController = WheelPickerController(itemCount: 60);
     amPmWheelController = WheelPickerController(itemCount: 2);
+
+    durationHourWheelController = WheelPickerController(itemCount: 12);
+    durationMinuteWheelController = WheelPickerController(itemCount: 60);
+
+    if (widget.schedule != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _initializeFromExistingSchedule();
+      });
+    }
+  }
+
+  void _initializeFromExistingSchedule() async {
+    if (widget.schedule != null) {
+      final schedule = widget.schedule!;
+
+      // Convert 24-hour to 12-hour format
+      int displayHour = schedule.startTime.hour % 12;
+      if (displayHour == 0) displayHour = 12;
+      isAM = schedule.startTime.hour < 12;
+
+      // Set initial values
+      selectedStartTimeHour = displayHour;
+      selectedStartTimeMinute = schedule.startTime.minute;
+
+      // Set initial values for duration
+      selectedDurationHour = schedule.duration ~/ 60;
+      selectedDurationMinute = schedule.duration % 60;
+
+      // Animate wheels to correct positions
+      await Future.wait([
+        startTimeHourWheelController.shiftTo(
+          index: displayHour,
+        ),
+        startTimeMinuteWheelController.shiftTo(
+          index: schedule.startTime.minute,
+        ),
+        amPmWheelController.shiftTo(
+          index: isAM ? 0 : 1,
+        ),
+        durationHourWheelController.shiftTo(
+          index: selectedDurationHour,
+        ),
+        durationMinuteWheelController.shiftTo(
+          index: selectedDurationMinute,
+        ),
+      ]);
+
+      // Set selected days
+      selectedDaysNotifier.value = schedule.scheduleDays;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
-      height: 400,
+      height: 700,
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,8 +111,14 @@ class _CreateScheduleBottomSheetState extends State<CreateScheduleBottomSheet> {
                 .bodyMedium
                 ?.copyWith(fontWeight: FontWeight.w600),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           const Divider(),
+          Text(
+            "Starting Time",
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w500,
+                ),
+          ),
           SizedBox(
             height: 120,
             child: Row(
@@ -69,9 +128,9 @@ class _CreateScheduleBottomSheetState extends State<CreateScheduleBottomSheet> {
                     children: [
                       Expanded(
                         child: WheelPicker(
-                          controller: hourWheelController,
+                          controller: startTimeHourWheelController,
                           onIndexChanged: (index) {
-                            selectedHour = index == 0 ? 12 : index;
+                            selectedStartTimeHour = index == 0 ? 12 : index;
                           },
                           style: const WheelPickerStyle(
                             squeeze: 0.8,
@@ -111,9 +170,9 @@ class _CreateScheduleBottomSheetState extends State<CreateScheduleBottomSheet> {
                     children: [
                       Expanded(
                         child: WheelPicker(
-                          controller: minuteWheelController,
+                          controller: startTimeMinuteWheelController,
                           onIndexChanged: (index) {
-                            selectedMinute = index;
+                            selectedStartTimeMinute = index;
                           },
                           style: const WheelPickerStyle(
                             squeeze: 0.8,
@@ -177,7 +236,101 @@ class _CreateScheduleBottomSheetState extends State<CreateScheduleBottomSheet> {
                         ),
                       ),
                       const SizedBox(
-                          height: 17), // Adjust to align with other labels
+                        height: 17,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Text(
+            "Duration",
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w500,
+                ),
+          ),
+          SizedBox(
+            height: 120,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: WheelPicker(
+                          controller: durationHourWheelController,
+                          onIndexChanged: (index) {
+                            selectedDurationHour = index;
+                          },
+                          style: const WheelPickerStyle(
+                            squeeze: 0.8,
+                            diameterRatio: .5,
+                            surroundingOpacity: .25,
+                            magnification: 1,
+                            itemExtent: 54 * 1.2,
+                          ),
+                          builder: (context, index) {
+                            return Text(
+                              index.toString().padLeft(2, "0"),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineLarge
+                                  ?.copyWith(
+                                    fontSize: 50,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                            );
+                          },
+                        ),
+                      ),
+                      Text(
+                        "Hour",
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color:
+                                  KAppColors.textPrimary.withValues(alpha: 0.4),
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: WheelPicker(
+                          controller: durationMinuteWheelController,
+                          onIndexChanged: (index) {
+                            selectedDurationMinute = index;
+                          },
+                          style: const WheelPickerStyle(
+                            squeeze: 0.8,
+                            diameterRatio: .5,
+                            surroundingOpacity: .25,
+                            magnification: 1,
+                            itemExtent: 54 * 1.2,
+                          ),
+                          builder: (context, index) {
+                            return Text(
+                              index.toString().padLeft(2, "0"),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineLarge
+                                  ?.copyWith(
+                                    fontSize: 50,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                            );
+                          },
+                        ),
+                      ),
+                      Text(
+                        "Min",
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color:
+                                  KAppColors.textPrimary.withValues(alpha: 0.4),
+                            ),
+                      ),
                     ],
                   ),
                 ),
@@ -200,8 +353,8 @@ class _CreateScheduleBottomSheetState extends State<CreateScheduleBottomSheet> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: _handleUpdateTimerValue,
-              child: const Text("Save"),
+              onPressed: _handleSaveSchedule,
+              child: Text(widget.schedule == null ? "Create" : "Update"),
             ),
           ),
         ],
@@ -212,61 +365,73 @@ class _CreateScheduleBottomSheetState extends State<CreateScheduleBottomSheet> {
   Widget _buildDaySelectionChips() {
     final dayNames = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: List.generate(
-        7,
-        (index) {
-          final weekday = index + 1; // 1-7 (Monday to Sunday)
-          final isSelected = selectedDays.contains(weekday);
+    return ValueListenableBuilder(
+      valueListenable: selectedDaysNotifier,
+      builder: (context, selectedDays, _) {
+        return Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: List.generate(
+            7,
+            (index) {
+              final weekday = index + 1; // 1-7 (Monday to Sunday)
+              final isSelected = selectedDays.contains(weekday);
 
-          return FilterChip(
-            selected: isSelected,
-            label: Text(
-              dayNames[index],
-              style: TextStyle(
-                color: isSelected ? Colors.white : KAppColors.textPrimary,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            selectedColor: KAppColors.accent,
-            backgroundColor:
-                isSelected ? KAppColors.accent : KAppColors.containerBackground,
-            showCheckmark: false,
-            shape: CircleBorder(
-              side: BorderSide(
-                color: isSelected
+              return FilterChip(
+                selected: isSelected,
+                label: Text(
+                  dayNames[index],
+                  style: TextStyle(
+                    color: isSelected ? Colors.white : KAppColors.textPrimary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                selectedColor: KAppColors.accent,
+                backgroundColor: isSelected
                     ? KAppColors.accent
-                    : KAppColors.textPrimary.withValues(alpha: 0.2),
-              ),
-            ),
-            onSelected: (value) {
-              setState(() {
-                if (value) {
-                  selectedDays.add(weekday);
-                } else {
-                  selectedDays.remove(weekday);
-                }
-              });
+                    : KAppColors.containerBackground,
+                showCheckmark: false,
+                shape: CircleBorder(
+                  side: BorderSide(
+                    color: isSelected
+                        ? KAppColors.accent
+                        : KAppColors.textPrimary.withValues(alpha: 0.2),
+                  ),
+                ),
+                onSelected: (value) {
+                  if (value) {
+                    selectedDays.add(weekday);
+                  } else {
+                    selectedDays.remove(weekday);
+                  }
+                  selectedDaysNotifier.value = List.from(selectedDays);
+                },
+              );
             },
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
-  void _handleUpdateTimerValue() {
-    final durationInMins = (selectedHour * 60) + selectedMinute;
-    final DeviceState state = context.read<DeviceBloc>().state;
-    context.read<DeviceBloc>().publishToTopic(
-          "${widget.deviceMac}/vals",
-          jsonEncode(
-            state.deviceValueDetails?.copyWith(
-              offTime: durationInMins.toString(),
-            ),
-          ),
-        );
-    context.pop();
+  void _handleSaveSchedule() {
+    if (widget.schedule != null) {
+      final startingTime = DateTime(
+        0,
+        0,
+        0,
+        isAM ? selectedStartTimeHour : selectedStartTimeHour + 12,
+        selectedStartTimeMinute,
+      );
+      final duration = (selectedDurationHour * 60) + selectedDurationMinute;
+      final updatedSchedule = widget.schedule!.copyWith(
+        day: selectedDaysNotifier.value.join(','),
+        duration: duration,
+        time: DateFormat('HH:mm').format(startingTime).toString(),
+      );
+      context.read<DeviceBloc>().updateSchedule(updatedSchedule);
+      Navigator.of(context).pop();
+      return;
+    }
   }
 }

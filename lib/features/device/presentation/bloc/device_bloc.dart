@@ -185,12 +185,13 @@ class DeviceBloc extends Cubit<DeviceState> {
             case "schedule":
               final Map<String, dynamic> data = _convertMessageToMap(message);
               appLogger.i('Received message: $data');
+              final schedules = (data["schedule"] as List)
+                  .map((e) => ScheduleEntity.fromJsonWithId(e))
+                  .toList();
               emit(
                 state.copyWith(
                   status: DeviceStateStatus.data,
-                  schedules: (data["schedule"] as List)
-                      .map((e) => ScheduleEntity.fromJson(e))
-                      .toList(),
+                  schedules: schedules,
                 ),
               );
               break;
@@ -237,6 +238,33 @@ class DeviceBloc extends Cubit<DeviceState> {
     );
     appLogger
         .i('Publishing message to $topic: $message with id $msgIdentifier');
+  }
+
+  void updateSchedule(ScheduleEntity updatedSchedule) {
+    List<ScheduleEntity> currentSchedules = List.from(state.schedules);
+    currentSchedules = currentSchedules.map((schedule) {
+      if (schedule.id == updatedSchedule.id) {
+        return updatedSchedule;
+      }
+      return schedule;
+    }).toList();
+    emit(
+      state.copyWith(
+        status: DeviceStateStatus.data,
+        schedules: currentSchedules,
+      ),
+    );
+  }
+
+  void deleteSchedule(String id) {
+    List<ScheduleEntity> currentSchedules = List.from(state.schedules);
+    currentSchedules.removeWhere((schedule) => schedule.id == id);
+    emit(
+      state.copyWith(
+        status: DeviceStateStatus.data,
+        schedules: currentSchedules,
+      ),
+    );
   }
 
   Map<String, dynamic> _convertMessageToMap(MqttReceivedMessage message) {

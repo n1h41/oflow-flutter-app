@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 part 'generated/schedule_entity.freezed.dart';
 part 'generated/schedule_entity.g.dart';
@@ -8,10 +9,20 @@ class ScheduleEntity with _$ScheduleEntity {
   const ScheduleEntity._();
 
   const factory ScheduleEntity({
+    required String id,
     required String day,
     required int duration,
     required String time,
   }) = _ScheduleEntity;
+
+  factory ScheduleEntity.fromJson(Map<String, dynamic> json) =>
+      _$ScheduleEntityFromJson(json);
+
+  factory ScheduleEntity.fromJsonWithId(Map<String, dynamic> json) {
+    final jsonCopy = Map<String, dynamic>.from(json);
+    jsonCopy['id'] ??= const Uuid().v4();
+    return _$ScheduleEntityFromJson(jsonCopy);
+  }
 
   List<int> get scheduleDays {
     return day.split(',').map((e) => int.parse(e)).toList();
@@ -24,6 +35,9 @@ class ScheduleEntity with _$ScheduleEntity {
     return DateTime(0, 0, 0, hour, minute);
   }
 
-  factory ScheduleEntity.fromJson(Map<String, dynamic> json) =>
-      _$ScheduleEntityFromJson(json);
+  Map<String, dynamic> toJsonWithoutId() {
+    final jsonCopy = Map<String, dynamic>.from(toJson());
+    jsonCopy.remove('id');
+    return jsonCopy;
+  }
 }

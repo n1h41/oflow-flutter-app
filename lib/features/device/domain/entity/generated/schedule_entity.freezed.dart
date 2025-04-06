@@ -20,6 +20,7 @@ ScheduleEntity _$ScheduleEntityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ScheduleEntity {
+  String get id => throw _privateConstructorUsedError;
   String get day => throw _privateConstructorUsedError;
   int get duration => throw _privateConstructorUsedError;
   String get time => throw _privateConstructorUsedError;
@@ -40,7 +41,7 @@ abstract class $ScheduleEntityCopyWith<$Res> {
           ScheduleEntity value, $Res Function(ScheduleEntity) then) =
       _$ScheduleEntityCopyWithImpl<$Res, ScheduleEntity>;
   @useResult
-  $Res call({String day, int duration, String time});
+  $Res call({String id, String day, int duration, String time});
 }
 
 /// @nodoc
@@ -58,11 +59,16 @@ class _$ScheduleEntityCopyWithImpl<$Res, $Val extends ScheduleEntity>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? day = null,
     Object? duration = null,
     Object? time = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       day: null == day
           ? _value.day
           : day // ignore: cast_nullable_to_non_nullable
@@ -87,7 +93,7 @@ abstract class _$$ScheduleEntityImplCopyWith<$Res>
       __$$ScheduleEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String day, int duration, String time});
+  $Res call({String id, String day, int duration, String time});
 }
 
 /// @nodoc
@@ -103,11 +109,16 @@ class __$$ScheduleEntityImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? day = null,
     Object? duration = null,
     Object? time = null,
   }) {
     return _then(_$ScheduleEntityImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       day: null == day
           ? _value.day
           : day // ignore: cast_nullable_to_non_nullable
@@ -128,12 +139,17 @@ class __$$ScheduleEntityImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ScheduleEntityImpl extends _ScheduleEntity {
   const _$ScheduleEntityImpl(
-      {required this.day, required this.duration, required this.time})
+      {required this.id,
+      required this.day,
+      required this.duration,
+      required this.time})
       : super._();
 
   factory _$ScheduleEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$ScheduleEntityImplFromJson(json);
 
+  @override
+  final String id;
   @override
   final String day;
   @override
@@ -143,7 +159,7 @@ class _$ScheduleEntityImpl extends _ScheduleEntity {
 
   @override
   String toString() {
-    return 'ScheduleEntity(day: $day, duration: $duration, time: $time)';
+    return 'ScheduleEntity(id: $id, day: $day, duration: $duration, time: $time)';
   }
 
   @override
@@ -151,6 +167,7 @@ class _$ScheduleEntityImpl extends _ScheduleEntity {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ScheduleEntityImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.day, day) || other.day == day) &&
             (identical(other.duration, duration) ||
                 other.duration == duration) &&
@@ -159,7 +176,7 @@ class _$ScheduleEntityImpl extends _ScheduleEntity {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, day, duration, time);
+  int get hashCode => Object.hash(runtimeType, id, day, duration, time);
 
   /// Create a copy of ScheduleEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -180,7 +197,8 @@ class _$ScheduleEntityImpl extends _ScheduleEntity {
 
 abstract class _ScheduleEntity extends ScheduleEntity {
   const factory _ScheduleEntity(
-      {required final String day,
+      {required final String id,
+      required final String day,
       required final int duration,
       required final String time}) = _$ScheduleEntityImpl;
   const _ScheduleEntity._() : super._();
@@ -188,6 +206,8 @@ abstract class _ScheduleEntity extends ScheduleEntity {
   factory _ScheduleEntity.fromJson(Map<String, dynamic> json) =
       _$ScheduleEntityImpl.fromJson;
 
+  @override
+  String get id;
   @override
   String get day;
   @override

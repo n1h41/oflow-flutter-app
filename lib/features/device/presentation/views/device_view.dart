@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -13,7 +11,6 @@ import '../../../../core/constants/colors.dart';
 import '../../domain/entity/device_status_entity.dart';
 import '../bloc/device_bloc.dart';
 import '../bloc/device_state.dart';
-import '../mixins/mqtt_mixin.dart';
 import '../widgets/device_tile.dart';
 import '../widgets/power_setting_bottom_sheet.dart';
 import '../widgets/timer_bottom_sheet.dart';
@@ -30,9 +27,8 @@ class DeviceView extends StatefulWidget {
   State<DeviceView> createState() => _DeviceViewState();
 }
 
-class _DeviceViewState extends State<DeviceView> with MqttMixin {
+class _DeviceViewState extends State<DeviceView> {
   late final ValueNotifier<bool> timerStatusNotifier;
-
   late final ValueNotifier<bool> isLoadingNotifier;
 
   @override
@@ -70,7 +66,7 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
                     color: KAppColors.containerBackground,
                     boxShadow: [
                       BoxShadow(
-                        color: KAppColors.shadowColor.withOpacity(0.1),
+                        color: KAppColors.shadowColor.withValues(alpha: 0.1),
                         blurRadius: 14,
                         spreadRadius: 0,
                         offset: const Offset(0, 0),
@@ -343,7 +339,8 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
                                 shape: BoxShape.circle,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: KAppColors.accent.withOpacity(0.1),
+                                    color: KAppColors.accent
+                                        .withValues(alpha: 0.1),
                                     blurRadius: 16,
                                     spreadRadius: 0,
                                     offset: const Offset(0, 9),
@@ -392,9 +389,9 @@ class _DeviceViewState extends State<DeviceView> with MqttMixin {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: state.deviceStatus?.p == "1"
-                                      ? KAppColors.accent.withOpacity(0.8)
+                                      ? KAppColors.accent.withValues(alpha: 0.8)
                                       : KAppColors.containerBackgroundDark
-                                          .withOpacity(0.2),
+                                          .withValues(alpha: 0.2),
                                 ),
                               );
                             },

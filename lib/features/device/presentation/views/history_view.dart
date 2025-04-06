@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oflow/features/device/presentation/bloc/device_bloc.dart';
 import 'package:oflow/features/device/presentation/bloc/device_state.dart';
-import 'package:oflow/features/device/presentation/mixins/mqtt_mixin.dart';
 
 import '../../../../core/constants/colors.dart';
 import '../widgets/history_tile.dart';
@@ -16,7 +15,7 @@ class HistoryView extends StatefulWidget {
   State<HistoryView> createState() => _HistoryViewState();
 }
 
-class _HistoryViewState extends State<HistoryView> with MqttMixin {
+class _HistoryViewState extends State<HistoryView> {
   late final ValueNotifier<bool> isLoadingNotifier;
   late final ValueNotifier<List<int>> historyDataListNotifier;
 
