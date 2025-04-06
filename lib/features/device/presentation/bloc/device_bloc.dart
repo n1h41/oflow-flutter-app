@@ -240,14 +240,10 @@ class DeviceBloc extends Cubit<DeviceState> {
         .i('Publishing message to $topic: $message with id $msgIdentifier');
   }
 
-  void updateSchedule(ScheduleEntity updatedSchedule) {
+  void createSchedule(ScheduleEntity schedule, String deviceId) {
     List<ScheduleEntity> currentSchedules = List.from(state.schedules);
-    currentSchedules = currentSchedules.map((schedule) {
-      if (schedule.id == updatedSchedule.id) {
-        return updatedSchedule;
-      }
-      return schedule;
-    }).toList();
+    currentSchedules.add(schedule);
+    publishSchedule(deviceId, currentSchedules);
     emit(
       state.copyWith(
         status: DeviceStateStatus.data,
@@ -256,14 +252,41 @@ class DeviceBloc extends Cubit<DeviceState> {
     );
   }
 
-  void deleteSchedule(String id) {
+  void updateSchedule(ScheduleEntity updatedSchedule, String deviceId) {
     List<ScheduleEntity> currentSchedules = List.from(state.schedules);
-    currentSchedules.removeWhere((schedule) => schedule.id == id);
+    currentSchedules = currentSchedules.map((schedule) {
+      if (schedule.id == updatedSchedule.id) {
+        return updatedSchedule;
+      }
+      return schedule;
+    }).toList();
+    publishSchedule(deviceId, currentSchedules);
     emit(
       state.copyWith(
         status: DeviceStateStatus.data,
         schedules: currentSchedules,
       ),
+    );
+  }
+
+  void deleteSchedule(String id, String deviceId) {
+    List<ScheduleEntity> currentSchedules = List.from(state.schedules);
+    currentSchedules.removeWhere((schedule) => schedule.id == id);
+    publishSchedule(deviceId, currentSchedules);
+    emit(
+      state.copyWith(
+        status: DeviceStateStatus.data,
+        schedules: currentSchedules,
+      ),
+    );
+  }
+
+  void publishSchedule(String deviceId, List<ScheduleEntity> schedules) {
+    publishToTopic(
+      "$deviceId/schedule",
+      jsonEncode({
+        "schedule": schedules.map((e) => e.toJsonWithoutId()).toList(),
+      }),
     );
   }
 

@@ -54,7 +54,9 @@ class ScheduleView extends StatelessWidget {
           IconButton(
             onPressed: () => showModalBottomSheet(
               context: context,
-              builder: (context) => const CreateScheduleBottomSheet(),
+              builder: (context) => CreateScheduleBottomSheet(
+                deviceMac: deviceMac,
+              ),
             ),
             icon: const Icon(
               Icons.add_circle,
@@ -103,6 +105,7 @@ class ScheduleView extends StatelessWidget {
                         context: context,
                         builder: (context) => CreateScheduleBottomSheet(
                           schedule: schedule,
+                          deviceMac: deviceMac,
                         ),
                       );
                     },
@@ -120,7 +123,10 @@ class ScheduleView extends StatelessWidget {
     );
   }
 
-  void _handleDeleteSchedule() {}
+  void _handleDeleteSchedule(BuildContext context, String id) {
+    context.read<DeviceBloc>().deleteSchedule(id, deviceMac);
+    Navigator.of(context).pop();
+  }
 
   void _showDeleteConfirmation(BuildContext context, ScheduleEntity schedule) {
     showDialog(
@@ -135,7 +141,7 @@ class ScheduleView extends StatelessWidget {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: _handleDeleteSchedule,
+              onPressed: () => _handleDeleteSchedule(context, schedule.id),
               child: const Text(
                 'Delete',
                 style: TextStyle(color: KAppColors.textError),

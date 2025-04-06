@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:oflow/features/device/presentation/bloc/device_bloc.dart';
+import 'package:uuid/uuid.dart';
 import 'package:wheel_picker/wheel_picker.dart';
 
 import '../../../../core/constants/colors.dart';
@@ -9,10 +10,12 @@ import '../../domain/entity/schedule_entity.dart';
 
 class CreateScheduleBottomSheet extends StatefulWidget {
   final ScheduleEntity? schedule;
+  final String deviceMac;
 
   const CreateScheduleBottomSheet({
     super.key,
     this.schedule,
+    required this.deviceMac,
   });
 
   @override
@@ -416,22 +419,49 @@ class _CreateScheduleBottomSheetState extends State<CreateScheduleBottomSheet> {
 
   void _handleSaveSchedule() {
     if (widget.schedule != null) {
-      final startingTime = DateTime(
-        0,
-        0,
-        0,
-        isAM ? selectedStartTimeHour : selectedStartTimeHour + 12,
-        selectedStartTimeMinute,
-      );
-      final duration = (selectedDurationHour * 60) + selectedDurationMinute;
-      final updatedSchedule = widget.schedule!.copyWith(
-        day: selectedDaysNotifier.value.join(','),
-        duration: duration,
-        time: DateFormat('HH:mm').format(startingTime).toString(),
-      );
-      context.read<DeviceBloc>().updateSchedule(updatedSchedule);
-      Navigator.of(context).pop();
-      return;
+      return _updateExistingSchedule();
     }
+    _createSchedule();
+  }
+
+  void _updateExistingSchedule() {
+    final startingTime = DateTime(
+      0,
+      0,
+      0,
+      isAM ? selectedStartTimeHour : selectedStartTimeHour + 12,
+      selectedStartTimeMinute,
+    );
+    final duration = (selectedDurationHour * 60) + selectedDurationMinute;
+    final updatedSchedule = widget.schedule!.copyWith(
+      day: selectedDaysNotifier.value.join(','),
+      duration: duration,
+      time: DateFormat('HH:mm').format(startingTime).toString(),
+    );
+    context
+        .read<DeviceBloc>()
+        .updateSchedule(updatedSchedule, widget.deviceMac);
+    Navigator.of(context).pop();
+    return;
+  }
+
+  void _createSchedule() {
+    final startingTime = DateTime(
+      0,
+      0,
+      0,
+      isAM ? selectedStartTimeHour : selectedStartTimeHour + 12,
+      selectedStartTimeMinute,
+    );
+    final duration = (selectedDurationHour * 60) + selectedDurationMinute;
+    final newSchedule = ScheduleEntity(
+      id: const Uuid().v4(),
+      day: selectedDaysNotifier.value.join(','),
+      duration: duration,
+      time: DateFormat('HH:mm').format(startingTime).toString(),
+    );
+    context.read<DeviceBloc>().createSchedule(newSchedule, widget.deviceMac);
+    Navigator.of(context).pop();
+    return;
   }
 }
