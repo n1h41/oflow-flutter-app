@@ -93,13 +93,13 @@ class ScheduleEntry extends StatelessWidget {
 
   String getWeekdayName(int weekday) {
     final weekdays = [
+      'SUN',
       'MON',
       'TUE',
       'WED',
       'THU',
       'FRI',
       'SAT',
-      'SUN',
     ];
 
     return weekdays[weekday - 1];

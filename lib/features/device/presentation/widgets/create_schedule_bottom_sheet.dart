@@ -366,7 +366,15 @@ class _CreateScheduleBottomSheetState extends State<CreateScheduleBottomSheet> {
   }
 
   Widget _buildDaySelectionChips() {
-    final dayNames = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+    final dayNames = [
+      'S',
+      'M',
+      'T',
+      'W',
+      'T',
+      'F',
+      'S',
+    ];
 
     return ValueListenableBuilder(
       valueListenable: selectedDaysNotifier,
