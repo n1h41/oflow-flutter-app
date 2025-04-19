@@ -1,0 +1,634 @@
+INFO:     [19-04-2025 10:19:18] Set chroma_server_nofile to 65535
+DEBUG:    [19-04-2025 10:19:18] Starting component System
+DEBUG:    [19-04-2025 10:19:18] Starting component OpenTelemetryClient
+DEBUG:    [19-04-2025 10:19:18] Starting component SqliteDB
+DEBUG:    [19-04-2025 10:19:18] Starting component SimpleQuotaEnforcer
+DEBUG:    [19-04-2025 10:19:18] Starting component Posthog
+DEBUG:    [19-04-2025 10:19:18] Starting component SimpleRateLimitEnforcer
+DEBUG:    [19-04-2025 10:19:18] Starting component LocalSegmentManager
+DEBUG:    [19-04-2025 10:19:18] Starting component LocalExecutor
+DEBUG:    [19-04-2025 10:19:18] Starting component SegmentAPI
+DEBUG:    [19-04-2025 10:19:18] Starting component SimpleAsyncRateLimitEnforcer
+INFO:     [19-04-2025 10:19:18] Started server process [4012]
+INFO:     [19-04-2025 10:19:18] Waiting for application startup.
+INFO:     [19-04-2025 10:19:18] Application startup complete.
+INFO:     [19-04-2025 10:19:18] Uvicorn running on http://localhost:50439 (Press CTRL+C to quit)
+INFO:     [19-04-2025 10:19:18] 127.0.0.1:40484 - "GET /api/v1/heartbeat HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:18] 127.0.0.1:40498 - "GET /api/v2/auth/identity HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:18] 127.0.0.1:40498 - "GET /api/v2/tenants/default_tenant HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:18] 127.0.0.1:40498 - "GET /api/v2/tenants/default_tenant/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "GET /api/v2/pre-flight-checks HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:27] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+DEBUG:    [19-04-2025 10:19:28] Starting component PersistentLocalHnswSegment
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:28] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:29] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:29] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:29] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:29] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:29] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:29] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:29] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:29] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:30] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:30] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:30] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:30] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:30] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:30] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:30] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:30] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:30] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:31] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:31] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:31] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:31] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:31] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:31] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:31] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:31] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:31] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:31] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:31] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:32] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:32] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:32] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:32] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:32] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:32] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:32] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:32] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:32] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:33] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:33] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:33] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:33] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:33] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:33] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:33] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:33] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:33] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:34] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:34] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:34] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:34] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:34] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:34] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:34] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:34] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:34] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:34] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:35] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:35] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:35] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:35] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:35] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:35] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:35] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:35] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:35] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:35] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:36] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:36] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:36] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:36] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:36] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:36] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:36] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:36] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:37] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:37] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:37] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:37] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:37] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:37] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:37] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:37] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:38] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:38] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:38] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:38] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:38] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:38] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:38] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:38] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:39] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:39] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:39] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:39] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:39] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:39] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:39] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:39] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:39] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:40] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:40] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:40] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:40] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:40] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:40] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:40] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:41] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:41] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:41] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:41] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:41] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:41] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:41] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:41] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:42] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:42] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:42] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:42] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:42] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:42] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:42] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:42] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:43] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:43] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:43] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:43] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:43] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:43] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:43] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:44] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:44] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:44] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:44] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:44] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:44] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:44] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:44] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:44] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:45] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:45] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:45] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:45] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:45] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:45] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:45] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:45] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:46] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:46] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:46] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:46] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:46] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:46] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:46] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:47] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:47] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:47] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:47] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:47] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:47] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:47] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:47] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:47] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:47] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:48] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:48] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:48] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:48] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:48] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:48] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:48] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:48] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:49] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:49] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:49] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:49] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:49] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:49] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:49] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:49] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:49] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:49] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:50] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:50] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:50] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:50] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:50] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:50] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:50] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:50] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:50] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:51] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:51] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:51] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:51] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:51] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:51] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:51] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:51] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:52] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:52] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:52] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:52] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:52] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:52] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:52] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:52] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:52] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:52] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:53] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:53] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:53] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:53] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:53] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:53] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:53] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:53] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:54] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:54] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:54] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:54] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:19:54] 127.0.0.1:60416 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:19:54] Shutting down
+INFO:     [19-04-2025 10:19:54] Waiting for application shutdown.
+DEBUG:    [19-04-2025 10:19:54] Stopping component System
+DEBUG:    [19-04-2025 10:19:54] Stopping component SegmentAPI
+DEBUG:    [19-04-2025 10:19:54] Stopping component LocalExecutor
+DEBUG:    [19-04-2025 10:19:54] Stopping component PersistentLocalHnswSegment
+DEBUG:    [19-04-2025 10:19:54] Stopping component LocalSegmentManager
+DEBUG:    [19-04-2025 10:19:54] Stopping component SimpleAsyncRateLimitEnforcer
+DEBUG:    [19-04-2025 10:19:54] Stopping component SimpleRateLimitEnforcer
+DEBUG:    [19-04-2025 10:19:54] Stopping component Posthog
+DEBUG:    [19-04-2025 10:19:54] Stopping component SimpleQuotaEnforcer
+DEBUG:    [19-04-2025 10:19:54] Stopping component SqliteDB
+DEBUG:    [19-04-2025 10:19:54] Stopping component OpenTelemetryClient
+INFO:     [19-04-2025 10:19:54] Application shutdown complete.
+INFO:     [19-04-2025 10:19:54] Finished server process [4012]
+INFO:     [19-04-2025 10:19:59] Set chroma_server_nofile to 65535
+DEBUG:    [19-04-2025 10:19:59] Starting component System
+DEBUG:    [19-04-2025 10:19:59] Starting component OpenTelemetryClient
+DEBUG:    [19-04-2025 10:19:59] Starting component SqliteDB
+DEBUG:    [19-04-2025 10:19:59] Starting component SimpleQuotaEnforcer
+DEBUG:    [19-04-2025 10:19:59] Starting component Posthog
+DEBUG:    [19-04-2025 10:19:59] Starting component SimpleRateLimitEnforcer
+DEBUG:    [19-04-2025 10:19:59] Starting component LocalSegmentManager
+DEBUG:    [19-04-2025 10:19:59] Starting component LocalExecutor
+DEBUG:    [19-04-2025 10:19:59] Starting component SegmentAPI
+DEBUG:    [19-04-2025 10:19:59] Starting component SimpleAsyncRateLimitEnforcer
+INFO:     [19-04-2025 10:19:59] Started server process [4500]
+INFO:     [19-04-2025 10:19:59] Waiting for application startup.
+INFO:     [19-04-2025 10:19:59] Application startup complete.
+INFO:     [19-04-2025 10:19:59] Uvicorn running on http://localhost:35661 (Press CTRL+C to quit)
+INFO:     [19-04-2025 10:19:59] 127.0.0.1:60846 - "GET /api/v1/heartbeat HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:00] 127.0.0.1:60856 - "GET /api/v2/auth/identity HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:00] 127.0.0.1:60856 - "GET /api/v2/tenants/default_tenant HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:00] 127.0.0.1:60856 - "GET /api/v2/tenants/default_tenant/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+DEBUG:    [19-04-2025 10:20:07] Collection 17064b443d39b340955f13581831b54af96d8343988e055ed12b8e3504b0366 already exists, returning existing collection.
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "GET /api/v2/pre-flight-checks HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+DEBUG:    [19-04-2025 10:20:07] Starting component PersistentLocalHnswSegment
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/delete HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/delete HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/delete HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/delete HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/delete HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/delete HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:07] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/delete HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:08] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:08] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:08] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/delete HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:08] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:08] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/delete HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:08] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:08] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:08] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:08] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:08] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/delete HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:08] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:08] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/delete HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:09] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:09] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:09] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/delete HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:09] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:09] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:09] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:09] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:09] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:10] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:10] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:10] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:10] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:10] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:10] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:10] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/add HTTP/1.1" 201
+INFO:     [19-04-2025 10:20:10] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/get HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:11] 127.0.0.1:56814 - "POST /api/v2/tenants/default_tenant/databases/default_database/collections/d2fc0369-1494-4fa7-877d-5dd8bea2ea88/delete HTTP/1.1" 200
+INFO:     [19-04-2025 10:20:11] Shutting down
+INFO:     [19-04-2025 10:20:11] Waiting for application shutdown.
+DEBUG:    [19-04-2025 10:20:11] Stopping component System
+DEBUG:    [19-04-2025 10:20:11] Stopping component SegmentAPI
+DEBUG:    [19-04-2025 10:20:11] Stopping component LocalExecutor
+DEBUG:    [19-04-2025 10:20:11] Stopping component PersistentLocalHnswSegment
+DEBUG:    [19-04-2025 10:20:11] Stopping component LocalSegmentManager
+DEBUG:    [19-04-2025 10:20:11] Stopping component SimpleAsyncRateLimitEnforcer
+DEBUG:    [19-04-2025 10:20:11] Stopping component SimpleRateLimitEnforcer
+DEBUG:    [19-04-2025 10:20:11] Stopping component Posthog
+DEBUG:    [19-04-2025 10:20:11] Stopping component SimpleQuotaEnforcer
+DEBUG:    [19-04-2025 10:20:11] Stopping component SqliteDB
+DEBUG:    [19-04-2025 10:20:11] Stopping component OpenTelemetryClient
+INFO:     [19-04-2025 10:20:11] Application shutdown complete.
+INFO:     [19-04-2025 10:20:11] Finished server process [4500]

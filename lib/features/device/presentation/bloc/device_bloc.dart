@@ -296,6 +296,10 @@ class DeviceBloc extends Cubit<DeviceState> {
     return jsonDecode(msgString);
   }
 
+  resetState() {
+    emit(DeviceState.initial());
+  }
+
   @override
   Future<void> close() {
     _mqttClient2?.disconnect();

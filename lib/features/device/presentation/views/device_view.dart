@@ -454,6 +454,8 @@ class _DeviceViewState extends State<DeviceView> {
       return;
     }
     context.read<DeviceBloc>().unsubscribeFromAllTopics();
+    // clear states in devicebloc
+    context.read<DeviceBloc>().resetState();
   }
 
   void _subscribeToAllTopics() {
