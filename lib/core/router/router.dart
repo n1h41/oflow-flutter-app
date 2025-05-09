@@ -27,7 +27,9 @@ class AppRouter {
               ),
               GoRoute(
                 path: '/schedule',
-                builder: (context, state) => const ScheduleView(),
+                builder: (context, state) => ScheduleView(
+                  deviceMac: state.pathParameters['deviceMac']!,
+                ),
               )
             ],
           ),

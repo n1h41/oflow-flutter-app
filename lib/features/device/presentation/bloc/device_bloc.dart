@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mqtt5_client/mqtt5_browser_client.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
 import 'package:mqtt5_client/mqtt5_server_client.dart';
+import 'package:oflow/features/device/domain/entity/schedule_entity.dart';
 
 import '../../../../core/constants/exceptions/failure.dart';
 import '../../../../core/utils/helpers/aws_helpers.dart';
@@ -181,6 +182,19 @@ class DeviceBloc extends Cubit<DeviceState> {
                 ),
               );
               break;
+            case "schedule":
+              final Map<String, dynamic> data = _convertMessageToMap(message);
+              appLogger.i('Received message: $data');
+              final schedules = (data["schedule"] as List)
+                  .map((e) => ScheduleEntity.fromJsonWithId(e))
+                  .toList();
+              emit(
+                state.copyWith(
+                  status: DeviceStateStatus.data,
+                  schedules: schedules,
+                ),
+              );
+              break;
             default:
               break;
           }
@@ -226,10 +240,64 @@ class DeviceBloc extends Cubit<DeviceState> {
         .i('Publishing message to $topic: $message with id $msgIdentifier');
   }
 
-  _convertMessageToMap(MqttReceivedMessage message) {
+  void createSchedule(ScheduleEntity schedule, String deviceId) {
+    List<ScheduleEntity> currentSchedules = List.from(state.schedules);
+    currentSchedules.add(schedule);
+    publishSchedule(deviceId, currentSchedules);
+    emit(
+      state.copyWith(
+        status: DeviceStateStatus.data,
+        schedules: currentSchedules,
+      ),
+    );
+  }
+
+  void updateSchedule(ScheduleEntity updatedSchedule, String deviceId) {
+    List<ScheduleEntity> currentSchedules = List.from(state.schedules);
+    currentSchedules = currentSchedules.map((schedule) {
+      if (schedule.id == updatedSchedule.id) {
+        return updatedSchedule;
+      }
+      return schedule;
+    }).toList();
+    publishSchedule(deviceId, currentSchedules);
+    emit(
+      state.copyWith(
+        status: DeviceStateStatus.data,
+        schedules: currentSchedules,
+      ),
+    );
+  }
+
+  void deleteSchedule(String id, String deviceId) {
+    List<ScheduleEntity> currentSchedules = List.from(state.schedules);
+    currentSchedules.removeWhere((schedule) => schedule.id == id);
+    publishSchedule(deviceId, currentSchedules);
+    emit(
+      state.copyWith(
+        status: DeviceStateStatus.data,
+        schedules: currentSchedules,
+      ),
+    );
+  }
+
+  void publishSchedule(String deviceId, List<ScheduleEntity> schedules) {
+    publishToTopic(
+      "$deviceId/schedule",
+      jsonEncode({
+        "schedule": schedules.map((e) => e.toJsonWithoutId()).toList(),
+      }),
+    );
+  }
+
+  Map<String, dynamic> _convertMessageToMap(MqttReceivedMessage message) {
     MqttPublishMessage msg = message.payload as MqttPublishMessage;
     final msgString = MqttUtilities.bytesToStringAsString(msg.payload.message!);
     return jsonDecode(msgString);
+  }
+
+  resetState() {
+    emit(DeviceState.initial());
   }
 
   @override

@@ -37,19 +37,6 @@ class _AddDevicePopupState extends State<AddDevicePopup> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // ElevatedButton(
-                //   onPressed: () {},
-                //   child: Text(
-                //     "Scan QR Code",
-                //     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                //           color: KAppColors.textWhite,
-                //           fontWeight: FontWeight.w600,
-                //         ),
-                //   ),
-                // ),
-                // const SizedBox(height: 10),
-                // const Divider(),
-                // const Text("OR"),
                 const SizedBox(height: 10),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -59,7 +46,6 @@ class _AddDevicePopupState extends State<AddDevicePopup> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                // create textformfiled with height of 50
                 Container(
                   height: 50,
                   decoration: BoxDecoration(
