@@ -36,11 +36,19 @@ class _PowerSettingBottomSheetState extends State<PowerSettingBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      height: 480,
-      width: double.infinity,
-      child: Column(
+    return FractionallySizedBox(
+      widthFactor: MediaQuery.of(context).size.width < 600 ? 0.95 : 0.35,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxWidth: 400,
+          maxHeight: 500,
+        ),
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width < 600 ? 16 : 24,
+            vertical: MediaQuery.of(context).size.width < 600 ? 16 : 24,
+          ),
+          child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -153,9 +161,11 @@ class _PowerSettingBottomSheetState extends State<PowerSettingBottomSheet> {
               child: const Text("Save"),
             ),
           ),
-        ],
-      ),
-    );
+        ], // children of Column
+      ), // Column
+    ), // Container
+  ), // ConstrainedBox
+); // FractionallySizedBox
   }
 
   void _handlerUpdatePowerSettings() {

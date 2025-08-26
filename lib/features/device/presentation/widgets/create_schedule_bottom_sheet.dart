@@ -100,9 +100,14 @@ class _CreateScheduleBottomSheetState extends State<CreateScheduleBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: Column(
+    return FractionallySizedBox(
+      widthFactor: MediaQuery.of(context).size.width < 600 ? 0.95 : 0.35,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxWidth: 400,
+          maxHeight: 500,
+        ),
+        child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -387,12 +392,13 @@ class _CreateScheduleBottomSheetState extends State<CreateScheduleBottomSheet> {
                     child: Text(widget.schedule == null ? "Create" : "Update"),
                   ),
                 ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+              ], // children of ListView
+            ), // ListView
+          ), // Flexible
+        ], // children of Column
+      ), // Column
+    ), // ConstrainedBox
+); // FractionallySizedBox
   }
 
   Widget _buildDaySelectionChips() {
