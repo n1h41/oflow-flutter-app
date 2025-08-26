@@ -7,8 +7,6 @@ import 'package:oflow/features/home/presentation/bloc/home_bloc.dart';
 import '../../../../core/router/router.dart';
 import '../../../../core/service_locator.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../auth/domain/usecase/usecase.dart';
-import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../home/domain/repository/repository.dart';
 
 class MyApp extends StatelessWidget {
@@ -26,12 +24,6 @@ class MyApp extends StatelessWidget {
           create: (_) => HomeBloc(
             router: getIt<AppRouter>().router,
             repository: getIt<HomeRepository>(),
-          ),
-        ),
-        BlocProvider<AuthBloc>(
-          create: (_) => AuthBloc(
-            usecase: getIt<AuthUsecase>(),
-            router: getIt<AppRouter>().router,
           ),
         ),
       ],

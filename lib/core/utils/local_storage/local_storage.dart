@@ -10,7 +10,7 @@ class LocalStorage {
 
   static late final SharedPreferences _prefs;
 
-  // INFO: Initialize the local storage. Call this method before using the local storage.
+  ///Initialize the local storage. Call this method before using the local storage.
   Future<void> init() async {
     try {
       _prefs = await SharedPreferences.getInstance();
