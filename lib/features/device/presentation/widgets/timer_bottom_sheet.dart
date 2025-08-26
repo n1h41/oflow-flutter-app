@@ -182,19 +182,23 @@ class _TimerBottomSheetState extends State<TimerBottomSheet> {
   }
 
   void _handleUpdateTimerValue() {
-    /* selectedDurationNotifier.value =
-        "${selectedHour.toString().padLeft(2, "0")}:${selectedMinute.toString().padLeft(2, "0")}"; */
-    // convert to minutes
     final durationInMins = (selectedHour * 60) + selectedMinute;
+    if (durationInMins == 0) {
+      // Optionally show a message to the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Timer value cannot be zero.')),
+      );
+      return;
+    }
     final DeviceState state = context.read<DeviceBloc>().state;
     context.read<DeviceBloc>().publishToTopic(
-          "${widget.deviceMac}/vals",
-          jsonEncode(
-            state.deviceValueDetails?.copyWith(
-              offTime: durationInMins.toString(),
-            ),
-          ),
-        );
+      "${widget.deviceMac}/vals",
+      jsonEncode(
+        state.deviceValueDetails?.copyWith(
+          offTime: durationInMins.toString(),
+        ),
+      ),
+    );
     context.pop();
   }
 }
