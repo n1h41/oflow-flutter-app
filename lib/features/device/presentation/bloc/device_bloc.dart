@@ -2,11 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mqtt5_client/mqtt5_browser_client.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
-import 'package:mqtt5_client/mqtt5_server_client.dart';
+import 'package:oflow/features/device/data/mqtt_client_factory.dart';
 import 'package:oflow/features/device/domain/entity/schedule_entity.dart';
 
 import '../../../../core/constants/exceptions/failure.dart';
@@ -56,23 +54,13 @@ class DeviceBloc extends Cubit<DeviceState> {
       endpoint: baseUrl,
       urlPath: urlPath,
     );
-    if (kIsWeb) {
-      _mqttClient2 = MqttBrowserClient.withPort(
-        signedUrl,
-        identityId,
-        port,
-        maxConnectionAttempts: 2,
-      );
-    } else {
-      _mqttClient2 = MqttServerClient.withPort(
-        signedUrl,
-        identityId,
-        port,
-        maxConnectionAttempts: 2,
-      );
-      (_mqttClient2! as MqttServerClient).useWebSocket = true;
-      (_mqttClient2! as MqttServerClient).secure = false;
-    }
+    _mqttClient2 = createMqttClient(
+      signedUrl,
+      identityId,
+      port,
+    );
+// If you need to set additional properties, check the type:
+
     _mqttClient2!.logging(on: false);
     _mqttClient2!.autoReconnect = true;
     _mqttClient2!.disconnectOnNoResponsePeriod = 90;

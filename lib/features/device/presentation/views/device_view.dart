@@ -367,8 +367,8 @@ class _DeviceViewState extends State<DeviceView> {
                                       child: Center(
                                         child: SvgPicture.asset(
                                           KAppAssets.power,
-                                          color: state.deviceStatus?.p == "1"
-                                              ? KAppColors.textWhite
+                                          colorFilter: state.deviceStatus?.p == "1"
+                                              ? const ColorFilter.mode(KAppColors.textWhite, BlendMode.srcIn)
                                               : null,
                                         ),
                                       ),
