@@ -38,11 +38,19 @@ class _TimerBottomSheetState extends State<TimerBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      height: 474,
-      width: double.infinity,
-      child: Column(
+    return FractionallySizedBox(
+      widthFactor: MediaQuery.of(context).size.width < 600 ? 0.95 : 0.35,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxWidth: 400,
+          maxHeight: 500,
+        ),
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width < 600 ? 16 : 24,
+            vertical: MediaQuery.of(context).size.width < 600 ? 16 : 24,
+          ),
+          child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -160,9 +168,11 @@ class _TimerBottomSheetState extends State<TimerBottomSheet> {
               child: const Text("Save"),
             ),
           ),
-        ],
-      ),
-    );
+        ], // children of Column
+      ), // Column
+    ), // Container
+  ), // ConstrainedBox
+); // FractionallySizedBox
   }
 
   String getDeviceTimerValue(ValsEntity? vals) {

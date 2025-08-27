@@ -20,7 +20,7 @@ Future<void> main() async {
   }
 }
 
-_configureAmplify() async {
+Future<void> _configureAmplify() async {
   try {
     await Amplify.addPlugin(AmplifyAuthCognito());
     await Amplify.configure(amplifyConfig);
