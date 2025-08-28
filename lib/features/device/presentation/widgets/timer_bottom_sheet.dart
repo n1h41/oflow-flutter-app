@@ -51,128 +51,130 @@ class _TimerBottomSheetState extends State<TimerBottomSheet> {
             vertical: MediaQuery.of(context).size.width < 600 ? 16 : 24,
           ),
           child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "On & Off Timer",
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 20),
-          const Divider(),
-          BlocBuilder<DeviceBloc, DeviceState>(
-            builder: (context, state) => switch (state.status) {
-              DeviceStateStatus.data => Text(
-                  "You currently have the running time set to ${getDeviceTimerValue(state.deviceValueDetails)}. To adjust the running time, please enter the desired new duration in minutes. Tap 'Save' to apply the changes.",
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: KAppColors.textPrimary,
-                      ),
-                ),
-              _ => const SizedBox.shrink(),
-            },
-          ),
-          SizedBox(
-            height: 200,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: WheelPicker(
-                          controller: hourWheelController,
-                          onIndexChanged: (index) {
-                            selectedHour = index;
-                          },
-                          style: const WheelPickerStyle(
-                            squeeze: 0.8,
-                            diameterRatio: .5,
-                            surroundingOpacity: .25,
-                            magnification: 1,
-                            itemExtent: 54 * 1.2,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "On & Off Timer",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 20),
+              const Divider(),
+              BlocBuilder<DeviceBloc, DeviceState>(
+                builder: (context, state) => switch (state.status) {
+                  DeviceStateStatus.data => Text(
+                      "You currently have the running time set to ${getDeviceTimerValue(state.deviceValueDetails)}. To adjust the running time, please enter the desired new duration in minutes. Tap 'Save' to apply the changes.",
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: KAppColors.textPrimary,
                           ),
-                          builder: (context, index) {
-                            return Text(
-                              index.toString().padLeft(2, "0"),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineLarge
-                                  ?.copyWith(
-                                    fontSize: 50,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                            );
-                          },
-                        ),
-                      ),
-                      Text(
-                        "Hour",
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color:
-                                  KAppColors.textPrimary.withValues(alpha: 0.4),
+                    ),
+                  _ => const SizedBox.shrink(),
+                },
+              ),
+              SizedBox(
+                height: 200,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: WheelPicker(
+                              controller: hourWheelController,
+                              onIndexChanged: (index) {
+                                selectedHour = index;
+                              },
+                              style: const WheelPickerStyle(
+                                squeeze: 0.8,
+                                diameterRatio: .5,
+                                surroundingOpacity: .25,
+                                magnification: 1,
+                                itemExtent: 54 * 1.2,
+                              ),
+                              builder: (context, index) {
+                                return Text(
+                                  index.toString().padLeft(2, "0"),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineLarge
+                                      ?.copyWith(
+                                        fontSize: 50,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                );
+                              },
                             ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: WheelPicker(
-                          controller: minuteWheelController,
-                          onIndexChanged: (index) {
-                            selectedMinute = index;
-                          },
-                          style: const WheelPickerStyle(
-                            squeeze: 0.8,
-                            diameterRatio: .5,
-                            surroundingOpacity: .25,
-                            magnification: 1,
-                            itemExtent: 54 * 1.2,
                           ),
-                          builder: (context, index) {
-                            return Text(
-                              index.toString().padLeft(2, "0"),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineLarge
-                                  ?.copyWith(
-                                    fontSize: 50,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                            );
-                          },
-                        ),
+                          Text(
+                            "Hour",
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: KAppColors.textPrimary
+                                          .withValues(alpha: 0.4),
+                                    ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        " Min",
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color:
-                                  KAppColors.textPrimary.withValues(alpha: 0.4),
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: WheelPicker(
+                              controller: minuteWheelController,
+                              onIndexChanged: (index) {
+                                selectedMinute = index;
+                              },
+                              style: const WheelPickerStyle(
+                                squeeze: 0.8,
+                                diameterRatio: .5,
+                                surroundingOpacity: .25,
+                                magnification: 1,
+                                itemExtent: 54 * 1.2,
+                              ),
+                              builder: (context, index) {
+                                return Text(
+                                  index.toString().padLeft(2, "0"),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineLarge
+                                      ?.copyWith(
+                                        fontSize: 50,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                );
+                              },
                             ),
+                          ),
+                          Text(
+                            " Min",
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: KAppColors.textPrimary
+                                          .withValues(alpha: 0.4),
+                                    ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          const Spacer(),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _handleUpdateTimerValue,
-              child: const Text("Save"),
-            ),
-          ),
-        ], // children of Column
-      ), // Column
-    ), // Container
-  ), // ConstrainedBox
-); // FractionallySizedBox
+              ),
+              const Spacer(),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _handleUpdateTimerValue,
+                  child: const Text("Save"),
+                ),
+              ),
+            ], // children of Column
+          ), // Column
+        ), // Container
+      ), // ConstrainedBox
+    ); // FractionallySizedBox
   }
 
   String getDeviceTimerValue(ValsEntity? vals) {
@@ -202,13 +204,13 @@ class _TimerBottomSheetState extends State<TimerBottomSheet> {
     }
     final DeviceState state = context.read<DeviceBloc>().state;
     context.read<DeviceBloc>().publishToTopic(
-      "${widget.deviceMac}/vals",
-      jsonEncode(
-        state.deviceValueDetails?.copyWith(
-          offTime: durationInMins.toString(),
-        ),
-      ),
-    );
+          "${widget.deviceMac}/vals",
+          jsonEncode(
+            state.deviceValueDetails!.copyWith(
+              offTime: durationInMins.toString(),
+            ),
+          ),
+        );
     context.pop();
   }
 }

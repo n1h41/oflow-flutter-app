@@ -90,10 +90,9 @@ class _QRScannerWidgetState extends State<QRScannerWidget> {
                 // Scanner frame
                 Align(
                   alignment: Alignment.center,
-                  child: Container(
+                  child: SizedBox(
                     height: 250,
                     width: 250,
-                    
                     child: Stack(
                       children: [
                         // Corner brackets
