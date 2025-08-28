@@ -119,47 +119,48 @@ class DeviceBloc extends Cubit<DeviceState> {
       (event) {
         for (MqttReceivedMessage message in event) {
           final topic = message.topic!.split('/').last;
+          String msg = _convertMsgFromBytesToString(message);
+          appLogger.i('Received message: $msg');
+
+          if (msg == "null") {
+            continue;
+          }
+
           switch (topic) {
             case "status":
-              appLogger.i('Received message: ${_convertMessageToMap(message)}');
               emit(
                 state.copyWith(
                   status: DeviceStateStatus.data,
                   deviceStatus: DeviceStatusEntity.fromJson(
-                    _convertMessageToMap(message),
+                    jsonDecode(msg),
                   ),
                 ),
               );
               break;
             case "pow":
-              appLogger.i('Received message: ${_convertMessageToMap(message)}');
               emit(
                 state.copyWith(
                   status: DeviceStateStatus.data,
                   devicePowerDetails: PowEntity.fromJson(
-                    _convertMessageToMap(message),
+                    jsonDecode(msg),
                   ),
                 ),
               );
               break;
             case "vals":
-              appLogger.i('Received message: ${_convertMessageToMap(message)}');
               emit(
                 state.copyWith(
                   status: DeviceStateStatus.data,
                   deviceValueDetails: ValsEntity.fromJson(
-                    _convertMessageToMap(message),
+                    jsonDecode(msg),
                   ),
                 ),
               );
               break;
             case "chats":
-              MqttPublishMessage msg = message.payload as MqttPublishMessage;
-              final msgString =
-                  MqttUtilities.bytesToStringAsString(msg.payload.message!);
-              var splittedValue = msgString.split(',');
-              splittedValue
-                  .removeLast(); // INFO: Removing the last empty string
+              var splittedValue = msg.split(',');
+              // Removing the last empty string
+              splittedValue.removeLast();
               splittedValue = splittedValue.reversed.toList();
               appLogger.i('Received message: $splittedValue');
               emit(
@@ -171,7 +172,7 @@ class DeviceBloc extends Cubit<DeviceState> {
               );
               break;
             case "schedule":
-              final Map<String, dynamic> data = _convertMessageToMap(message);
+              final Map<String, dynamic> data = jsonDecode(msg);
               appLogger.i('Received message: $data');
               final schedules = (data["schedule"] as List)
                   .map((e) => ScheduleEntity.fromJsonWithId(e))
@@ -278,10 +279,10 @@ class DeviceBloc extends Cubit<DeviceState> {
     );
   }
 
-  Map<String, dynamic> _convertMessageToMap(MqttReceivedMessage message) {
+  String _convertMsgFromBytesToString(MqttReceivedMessage message) {
     MqttPublishMessage msg = message.payload as MqttPublishMessage;
     final msgString = MqttUtilities.bytesToStringAsString(msg.payload.message!);
-    return jsonDecode(msgString);
+    return msgString;
   }
 
   resetState() {
