@@ -45,7 +45,6 @@ Map<String, dynamic> _$$CredentialsImplToJson(_$CredentialsImpl instance) =>
     };
 
 _$ResultMetadataImpl _$$ResultMetadataImplFromJson(Map<String, dynamic> json) =>
-    // ignore: prefer_const_constructors
     _$ResultMetadataImpl();
 
 Map<String, dynamic> _$$ResultMetadataImplToJson(

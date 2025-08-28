@@ -36,7 +36,7 @@ class HomeDatasourceImpl extends BaseDatasource implements HomeDatasource {
     } on TypeError catch (e) {
       throw DataParsingFailure(message: e.toString());
     } on DioException catch (e) {
-      appLogger.e(e);
+      AppLogger.instance.e(e);
       if (e.type == DioExceptionType.connectionError) {
         throw NoNetworkFailure();
       }

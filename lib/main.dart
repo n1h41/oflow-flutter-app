@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'core/service_locator.dart';
 import 'core/utils/local_storage/local_storage.dart';
 import 'features/app/presentation/views/app.dart';
+import 'core/utils/helpers/logger.dart';
 
 import 'amplify_outputs.dart';
 
@@ -14,6 +15,7 @@ Future<void> main() async {
     await _configureAmplify();
     initialiseDependencies();
     await LocalStorage.instance.init();
+    await AppLogger.init();
     runApp(const MyApp());
   } on Exception catch (e) {
     safePrint(e.toString());
