@@ -12,7 +12,12 @@ class AppLogger {
     _logFile = File('${directory.path}/debugLog.txt');
     _instance = Logger(
       printer: PrettyPrinter(),
-      output: FileOutput(file: _logFile!),
+      output: MultiOutput(
+        [
+          ConsoleOutput(),
+          FileOutput(file: _logFile!),
+        ],
+      ),
     );
   }
 

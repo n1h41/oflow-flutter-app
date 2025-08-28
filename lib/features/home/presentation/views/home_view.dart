@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:oflow/core/utils/helpers/logger.dart';
+import 'package:oflow/features/home/presentation/views/_debug_log_dialog.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
 
 import '../../../../core/constants/colors.dart';
@@ -80,6 +82,35 @@ class _HomeViewState extends State<HomeView> {
           ],
         ),
         actions: [
+          if (kDebugMode)
+            IconButton(
+              icon: const Icon(Icons.article_outlined),
+              tooltip: 'View Debug Log',
+              onPressed: () async {
+                final loggerFile = AppLogger.logFile;
+                if (loggerFile == null || !await loggerFile.exists()) {
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('No log file found.'),
+                  ));
+                  return;
+                }
+                try {
+                  final logText = await loggerFile.readAsString();
+                  if (!mounted) return;
+                  showDialog(
+                    context: context,
+                    builder: (context) =>
+                        DebugLogDialog(logText: logText, logFile: loggerFile),
+                  );
+                } catch (e) {
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('Failed to read log file.'),
+                  ));
+                }
+              },
+            ),
           IconButton(
             icon: const Icon(Icons.bug_report),
             tooltip: 'Send Logs to Developer',
