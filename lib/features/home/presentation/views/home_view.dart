@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:oflow/core/utils/helpers/logger.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
 
 import '../../../../core/constants/colors.dart';
@@ -78,6 +80,30 @@ class _HomeViewState extends State<HomeView> {
           ],
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.bug_report),
+            tooltip: 'Send Logs to Developer',
+            onPressed: () async {
+              final loggerFile = AppLogger.logFile;
+              if (loggerFile == null || !await loggerFile.exists()) {
+                if (!mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('No log file found.'),
+                ));
+                return;
+              }
+              try {
+                await Share.shareFiles([loggerFile.path],
+                    text: 'App error log for developer');
+                if (!mounted) return;
+              } catch (e) {
+                if (!mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Failed to share log file: $e'),
+                ));
+              }
+            },
+          ),
           IconButton(
             onPressed: _logoutHanlder,
             icon: const Icon(Icons.logout),

@@ -24,7 +24,7 @@ class DeviceBloc extends Cubit<DeviceState> {
       _mqttClient2?.connectionStatus?.state ?? MqttConnectionState.disconnected;
 
   Future<void> initMqttClient(AuthSession session) async {
-    appLogger.i('Initializing MQTT client');
+    AppLogger.instance.i('Initializing MQTT client');
     emit(state.copyWith(status: DeviceStateStatus.loading));
     await configMqttClient(session);
   }
@@ -74,7 +74,7 @@ class DeviceBloc extends Cubit<DeviceState> {
   Future<void> _connectToBroker() async {
     try {
       final status = await _mqttClient2!.connect();
-      appLogger.i("MQTT Connection Status: $status");
+      AppLogger.instance.i("MQTT Connection Status: $status");
       emit(
         state.copyWith(
           status: DeviceStateStatus.data,
@@ -82,7 +82,7 @@ class DeviceBloc extends Cubit<DeviceState> {
       );
       _listenForMessages();
     } on MqttNoConnectionException catch (e) {
-      appLogger.i('MQTT client exception - $e');
+      AppLogger.instance.i('MQTT client exception - $e');
       _mqttClient2?.disconnect();
       emit(
         state.copyWith(
@@ -92,7 +92,7 @@ class DeviceBloc extends Cubit<DeviceState> {
         ),
       );
     } on SocketException catch (e) {
-      appLogger.i('No internet available - $e');
+      AppLogger.instance.i('No internet available - $e');
       _mqttClient2?.disconnect();
       emit(
         state.copyWith(
@@ -102,7 +102,7 @@ class DeviceBloc extends Cubit<DeviceState> {
         ),
       );
     } catch (e) {
-      appLogger.i('Exception - $e');
+      AppLogger.instance.i('Exception - $e');
       _mqttClient2?.disconnect();
       emit(
         state.copyWith(
@@ -120,9 +120,10 @@ class DeviceBloc extends Cubit<DeviceState> {
         for (MqttReceivedMessage message in event) {
           final topic = message.topic!.split('/').last;
           String msg = _convertMsgFromBytesToString(message);
-          appLogger.i('Received message: $msg');
+          AppLogger.instance.i('Received message: $msg');
 
           if (msg == "null") {
+            AppLogger.instance.e('!! Recieved NULL value from $topic');
             continue;
           }
 
@@ -162,7 +163,7 @@ class DeviceBloc extends Cubit<DeviceState> {
               // Removing the last empty string
               splittedValue.removeLast();
               splittedValue = splittedValue.reversed.toList();
-              appLogger.i('Received message: $splittedValue');
+              AppLogger.instance.i('Received message: $splittedValue');
               emit(
                 state.copyWith(
                   status: DeviceStateStatus.data,
@@ -173,7 +174,7 @@ class DeviceBloc extends Cubit<DeviceState> {
               break;
             case "schedule":
               final Map<String, dynamic> data = jsonDecode(msg);
-              appLogger.i('Received message: $data');
+              AppLogger.instance.i('Received message: $data');
               final schedules = (data["schedule"] as List)
                   .map((e) => ScheduleEntity.fromJsonWithId(e))
                   .toList();
@@ -195,7 +196,7 @@ class DeviceBloc extends Cubit<DeviceState> {
   void subscribeToTopic(String topic, [MqttQos qosLevel = MqttQos.atMostOnce]) {
     final subscription = _mqttClient2?.subscribe(topic, qosLevel);
     if (subscription != null) {
-      appLogger.i('Subscribed to topic: $topic');
+      AppLogger.instance.i('Subscribed to topic: $topic');
       emit(
         state.copyWith(
           status: DeviceStateStatus.data,
@@ -207,7 +208,7 @@ class DeviceBloc extends Cubit<DeviceState> {
 
   void unsubscribeFromAllTopics() {
     if (state.subscriptions.isEmpty) return;
-    appLogger.i('Unsubscribing from all topics');
+    AppLogger.instance.i('Unsubscribing from all topics');
     _mqttClient2?.unsubscribeSubscriptionList(state.subscriptions);
   }
 
@@ -225,7 +226,7 @@ class DeviceBloc extends Cubit<DeviceState> {
       builder.payload!,
       retain: true,
     );
-    appLogger
+    AppLogger.instance
         .i('Publishing message to $topic: $message with id $msgIdentifier');
   }
 
