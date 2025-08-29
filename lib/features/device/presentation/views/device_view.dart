@@ -367,9 +367,12 @@ class _DeviceViewState extends State<DeviceView> {
                                       child: Center(
                                         child: SvgPicture.asset(
                                           KAppAssets.power,
-                                          colorFilter: state.deviceStatus?.p == "1"
-                                              ? const ColorFilter.mode(KAppColors.textWhite, BlendMode.srcIn)
-                                              : null,
+                                          colorFilter:
+                                              state.deviceStatus?.p == "1"
+                                                  ? const ColorFilter.mode(
+                                                      KAppColors.textWhite,
+                                                      BlendMode.srcIn)
+                                                  : null,
                                         ),
                                       ),
                                     ),
@@ -440,16 +443,20 @@ class _DeviceViewState extends State<DeviceView> {
     }
     final currentPowerStatus =
         context.read<DeviceBloc>().state.deviceStatus?.p == "1";
+    
+    final deviceBloc = context.read<DeviceBloc>();
+    deviceBloc.setDeviceAndSubscribe(widget.deviceMac); // Ensure device ID is set
+    
     if (currentPowerStatus) {
-      context.read<DeviceBloc>().publishToTopic('${widget.deviceMac}/status',
+      deviceBloc.publishToTopic('${widget.deviceMac}/status',
           jsonEncode(const DeviceStatusEntity(p: "0", o: "1").toJson()));
     } else {
-      context.read<DeviceBloc>().publishToTopic('${widget.deviceMac}/status',
+      deviceBloc.publishToTopic('${widget.deviceMac}/status',
           jsonEncode(const DeviceStatusEntity(p: "1", o: "1").toJson()));
     }
   }
 
-  _unsubscribeFromAllTopics() {
+  void _unsubscribeFromAllTopics() {
     if (!mounted) {
       return;
     }
@@ -459,16 +466,12 @@ class _DeviceViewState extends State<DeviceView> {
   }
 
   void _subscribeToAllTopics() {
-    context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/status');
-    context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/pow');
-    context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/vals');
-    context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/chats');
-    context.read<DeviceBloc>().subscribeToTopic('${widget.deviceMac}/schedule');
+    context.read<DeviceBloc>().setDeviceAndSubscribe(widget.deviceMac);
   }
 
   void _checkMqttConnection() async {
     final deviceBloc = context.read<DeviceBloc>();
-    if (deviceBloc.mqttConnectionStatus != MqttConnectionState.connected) {
+    if (!deviceBloc.isConnected) {
       context.pop();
       return;
     }

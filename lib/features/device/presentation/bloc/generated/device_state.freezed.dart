@@ -24,9 +24,8 @@ mixin _$DeviceState {
   PowEntity? get devicePowerDetails => throw _privateConstructorUsedError;
   ValsEntity? get deviceValueDetails => throw _privateConstructorUsedError;
   String? get deviceMac => throw _privateConstructorUsedError;
-  List<MqttSubscription> get subscriptions =>
-      throw _privateConstructorUsedError;
   List<ScheduleEntity> get schedules => throw _privateConstructorUsedError;
+  bool get isConnected => throw _privateConstructorUsedError;
 
   /// Create a copy of DeviceState
   /// with the given fields replaced by the non-null parameter values.
@@ -50,8 +49,8 @@ abstract class $DeviceStateCopyWith<$Res> {
       PowEntity? devicePowerDetails,
       ValsEntity? deviceValueDetails,
       String? deviceMac,
-      List<MqttSubscription> subscriptions,
-      List<ScheduleEntity> schedules});
+      List<ScheduleEntity> schedules,
+      bool isConnected});
 
   $DeviceStatusEntityCopyWith<$Res>? get deviceStatus;
   $PowEntityCopyWith<$Res>? get devicePowerDetails;
@@ -81,8 +80,8 @@ class _$DeviceStateCopyWithImpl<$Res, $Val extends DeviceState>
     Object? devicePowerDetails = freezed,
     Object? deviceValueDetails = freezed,
     Object? deviceMac = freezed,
-    Object? subscriptions = null,
     Object? schedules = null,
+    Object? isConnected = null,
   }) {
     return _then(_value.copyWith(
       status: null == status
@@ -117,14 +116,14 @@ class _$DeviceStateCopyWithImpl<$Res, $Val extends DeviceState>
           ? _value.deviceMac
           : deviceMac // ignore: cast_nullable_to_non_nullable
               as String?,
-      subscriptions: null == subscriptions
-          ? _value.subscriptions
-          : subscriptions // ignore: cast_nullable_to_non_nullable
-              as List<MqttSubscription>,
       schedules: null == schedules
           ? _value.schedules
           : schedules // ignore: cast_nullable_to_non_nullable
               as List<ScheduleEntity>,
+      isConnected: null == isConnected
+          ? _value.isConnected
+          : isConnected // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -188,8 +187,8 @@ abstract class _$$DeviceStateImplCopyWith<$Res>
       PowEntity? devicePowerDetails,
       ValsEntity? deviceValueDetails,
       String? deviceMac,
-      List<MqttSubscription> subscriptions,
-      List<ScheduleEntity> schedules});
+      List<ScheduleEntity> schedules,
+      bool isConnected});
 
   @override
   $DeviceStatusEntityCopyWith<$Res>? get deviceStatus;
@@ -220,8 +219,8 @@ class __$$DeviceStateImplCopyWithImpl<$Res>
     Object? devicePowerDetails = freezed,
     Object? deviceValueDetails = freezed,
     Object? deviceMac = freezed,
-    Object? subscriptions = null,
     Object? schedules = null,
+    Object? isConnected = null,
   }) {
     return _then(_$DeviceStateImpl(
       status: null == status
@@ -256,14 +255,14 @@ class __$$DeviceStateImplCopyWithImpl<$Res>
           ? _value.deviceMac
           : deviceMac // ignore: cast_nullable_to_non_nullable
               as String?,
-      subscriptions: null == subscriptions
-          ? _value._subscriptions
-          : subscriptions // ignore: cast_nullable_to_non_nullable
-              as List<MqttSubscription>,
       schedules: null == schedules
           ? _value._schedules
           : schedules // ignore: cast_nullable_to_non_nullable
               as List<ScheduleEntity>,
+      isConnected: null == isConnected
+          ? _value.isConnected
+          : isConnected // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -280,10 +279,9 @@ class _$DeviceStateImpl implements _DeviceState {
       this.devicePowerDetails,
       this.deviceValueDetails,
       this.deviceMac,
-      final List<MqttSubscription> subscriptions = const [],
-      final List<ScheduleEntity> schedules = const []})
+      final List<ScheduleEntity> schedules = const [],
+      this.isConnected = false})
       : _deviceHistoryDatalist = deviceHistoryDatalist,
-        _subscriptions = subscriptions,
         _schedules = schedules;
 
   @override
@@ -310,15 +308,6 @@ class _$DeviceStateImpl implements _DeviceState {
   final ValsEntity? deviceValueDetails;
   @override
   final String? deviceMac;
-  final List<MqttSubscription> _subscriptions;
-  @override
-  @JsonKey()
-  List<MqttSubscription> get subscriptions {
-    if (_subscriptions is EqualUnmodifiableListView) return _subscriptions;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_subscriptions);
-  }
-
   final List<ScheduleEntity> _schedules;
   @override
   @JsonKey()
@@ -329,8 +318,12 @@ class _$DeviceStateImpl implements _DeviceState {
   }
 
   @override
+  @JsonKey()
+  final bool isConnected;
+
+  @override
   String toString() {
-    return 'DeviceState(status: $status, errorMessage: $errorMessage, error: $error, deviceHistoryDatalist: $deviceHistoryDatalist, deviceStatus: $deviceStatus, devicePowerDetails: $devicePowerDetails, deviceValueDetails: $deviceValueDetails, deviceMac: $deviceMac, subscriptions: $subscriptions, schedules: $schedules)';
+    return 'DeviceState(status: $status, errorMessage: $errorMessage, error: $error, deviceHistoryDatalist: $deviceHistoryDatalist, deviceStatus: $deviceStatus, devicePowerDetails: $devicePowerDetails, deviceValueDetails: $deviceValueDetails, deviceMac: $deviceMac, schedules: $schedules, isConnected: $isConnected)';
   }
 
   @override
@@ -353,9 +346,9 @@ class _$DeviceStateImpl implements _DeviceState {
             (identical(other.deviceMac, deviceMac) ||
                 other.deviceMac == deviceMac) &&
             const DeepCollectionEquality()
-                .equals(other._subscriptions, _subscriptions) &&
-            const DeepCollectionEquality()
-                .equals(other._schedules, _schedules));
+                .equals(other._schedules, _schedules) &&
+            (identical(other.isConnected, isConnected) ||
+                other.isConnected == isConnected));
   }
 
   @override
@@ -369,8 +362,8 @@ class _$DeviceStateImpl implements _DeviceState {
       devicePowerDetails,
       deviceValueDetails,
       deviceMac,
-      const DeepCollectionEquality().hash(_subscriptions),
-      const DeepCollectionEquality().hash(_schedules));
+      const DeepCollectionEquality().hash(_schedules),
+      isConnected);
 
   /// Create a copy of DeviceState
   /// with the given fields replaced by the non-null parameter values.
@@ -391,8 +384,8 @@ abstract class _DeviceState implements DeviceState {
       final PowEntity? devicePowerDetails,
       final ValsEntity? deviceValueDetails,
       final String? deviceMac,
-      final List<MqttSubscription> subscriptions,
-      final List<ScheduleEntity> schedules}) = _$DeviceStateImpl;
+      final List<ScheduleEntity> schedules,
+      final bool isConnected}) = _$DeviceStateImpl;
 
   @override
   DeviceStateStatus get status;
@@ -411,9 +404,9 @@ abstract class _DeviceState implements DeviceState {
   @override
   String? get deviceMac;
   @override
-  List<MqttSubscription> get subscriptions;
-  @override
   List<ScheduleEntity> get schedules;
+  @override
+  bool get isConnected;
 
   /// Create a copy of DeviceState
   /// with the given fields replaced by the non-null parameter values.

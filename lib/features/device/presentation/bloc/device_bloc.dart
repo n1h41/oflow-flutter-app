@@ -1,215 +1,243 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
-import 'package:oflow/features/device/data/mqtt_client_factory.dart';
+import 'package:oflow/features/device/data/mqtt_service.dart';
 import 'package:oflow/features/device/domain/entity/schedule_entity.dart';
 
 import '../../../../core/constants/exceptions/failure.dart';
-import '../../../../core/utils/helpers/aws_helpers.dart';
+import '../../../../core/service_locator.dart';
 import '../../../../core/utils/helpers/logger.dart';
 import '../../domain/entity/device_status_entity.dart';
 import '../../domain/entity/pow_entity.dart';
 import '../../domain/entity/vals_entity.dart';
+import '../../../../core/utils/helpers/vals_publisher_log.dart';
 import 'device_state.dart';
 
 class DeviceBloc extends Cubit<DeviceState> {
   DeviceBloc() : super(DeviceState.initial());
 
-  MqttClient? _mqttClient2;
-
-  MqttConnectionState get mqttConnectionStatus =>
-      _mqttClient2?.connectionStatus?.state ?? MqttConnectionState.disconnected;
+  final MqttService _mqttService = getIt<MqttService>();
+  StreamSubscription<MqttConnectionState>? _connectionSubscription;
+  final List<StreamSubscription> _topicSubscriptions = [];
+  
+  /// Get current MQTT connection status
+  bool get isConnected => _mqttService.isConnected;
 
   Future<void> initMqttClient(AuthSession session) async {
-    AppLogger.instance.i('Initializing MQTT client');
+    AppLogger.instance.i('Initializing MQTT client - isConnected: ${_mqttService.isConnected}, isInitialized: ${_mqttService.isInitialized}');
     emit(state.copyWith(status: DeviceStateStatus.loading));
+    
+    // Only initialize if not already connected
+    if (_mqttService.isConnected) {
+      AppLogger.instance.i('MQTT client already connected, skipping initialization');
+      emit(state.copyWith(
+        isConnected: true,
+        status: DeviceStateStatus.data,
+      ));
+      return;
+    }
+    
     await configMqttClient(session);
   }
 
   Future<void> configMqttClient(AuthSession authSession) async {
-    var identityId = '';
-    var signedUrl = '';
-    const port = 443;
-    const region = 'us-east-1';
-    // Your AWS IoT Core endpoint url
-    const baseUrl = 'a82k06ko9a2kk-ats.iot.$region.amazonaws.com';
-    const scheme = 'wss://';
-    const urlPath = '/mqtt';
-    // AWS IoT MQTT default port for websockets
-
-    final AWSCredentials credentials =
-        authSession.toJson()["credentials"] as AWSCredentials;
-
-    identityId = authSession.toJson()["identityId"] as String;
-
-    signedUrl = getWebSocketURL(
-      accessKey: credentials.accessKeyId,
-      secretKey: credentials.secretAccessKey,
-      sessionToken: credentials.sessionToken!,
-      region: region,
-      scheme: scheme,
-      endpoint: baseUrl,
-      urlPath: urlPath,
-    );
-    _mqttClient2 = createMqttClient(
-      signedUrl,
-      identityId,
-      port,
-    );
-// If you need to set additional properties, check the type:
-
-    _mqttClient2!.logging(on: false);
-    _mqttClient2!.autoReconnect = true;
-    _mqttClient2!.disconnectOnNoResponsePeriod = 90;
-    _mqttClient2!.keepAlivePeriod = 30;
-    final MqttConnectMessage connMess =
-        MqttConnectMessage().withClientIdentifier(identityId);
-    _mqttClient2!.connectionMessage = connMess;
-    await _connectToBroker();
-  }
-
-  Future<void> _connectToBroker() async {
     try {
-      final status = await _mqttClient2!.connect();
-      AppLogger.instance.i("MQTT Connection Status: $status");
-      emit(
-        state.copyWith(
-          status: DeviceStateStatus.data,
-        ),
+      // Initialize MQTT service
+      await _mqttService.initialize(authSession);
+      
+      // Set up connection state listener
+      _connectionSubscription = _mqttService.connectionStateStream.listen(
+        (connectionState) {
+          final isConnected = connectionState == MqttConnectionState.connected;
+          emit(state.copyWith(
+            isConnected: isConnected,
+            status: isConnected ? DeviceStateStatus.data : DeviceStateStatus.loading,
+          ));
+        },
       );
-      _listenForMessages();
-    } on MqttNoConnectionException catch (e) {
-      AppLogger.instance.i('MQTT client exception - $e');
-      _mqttClient2?.disconnect();
-      emit(
-        state.copyWith(
-          status: DeviceStateStatus.error,
-          errorMessage: 'MQTT client exception - $e',
-          error: ServerFailure(message: "MQTT server error: $e"),
-        ),
-      );
-    } on SocketException catch (e) {
-      AppLogger.instance.i('No internet available - $e');
-      _mqttClient2?.disconnect();
-      emit(
-        state.copyWith(
-          status: DeviceStateStatus.error,
-          errorMessage: 'Internet not available - $e',
-          error: NoNetworkFailure(),
-        ),
-      );
+      
+      // Connect to MQTT broker
+      await _mqttService.connect();
+      
     } catch (e) {
-      AppLogger.instance.i('Exception - $e');
-      _mqttClient2?.disconnect();
-      emit(
-        state.copyWith(
-          status: DeviceStateStatus.error,
-          errorMessage: 'Exception - $e',
-          error: ServerFailure(message: "Exception: $e"),
-        ),
-      );
+      AppLogger.instance.e('Failed to initialize MQTT client: $e');
+      
+      Failure failure;
+      if (e is SocketException) {
+        failure = NoNetworkFailure();
+      } else {
+        failure = ServerFailure(message: "MQTT initialization error: $e");
+      }
+      
+      emit(state.copyWith(
+        status: DeviceStateStatus.error,
+        errorMessage: 'Failed to initialize MQTT client: $e',
+        error: failure,
+      ));
     }
   }
 
-  void _listenForMessages() {
-    _mqttClient2?.updates.listen(
-      (event) {
-        for (MqttReceivedMessage message in event) {
-          final topic = message.topic!.split('/').last;
-          String msg = _convertMsgFromBytesToString(message);
-          AppLogger.instance.i('Received message: $msg');
-
-          if (msg == "null") {
-            AppLogger.instance.e('!! Recieved NULL value from $topic');
-            continue;
-          }
-
-          switch (topic) {
-            case "status":
-              emit(
-                state.copyWith(
-                  status: DeviceStateStatus.data,
-                  deviceStatus: DeviceStatusEntity.fromJson(
-                    jsonDecode(msg),
-                  ),
-                ),
-              );
-              break;
-            case "pow":
-              emit(
-                state.copyWith(
-                  status: DeviceStateStatus.data,
-                  devicePowerDetails: PowEntity.fromJson(
-                    jsonDecode(msg),
-                  ),
-                ),
-              );
-              break;
-            case "vals":
-              emit(
-                state.copyWith(
-                  status: DeviceStateStatus.data,
-                  deviceValueDetails: ValsEntity.fromJson(
-                    jsonDecode(msg),
-                  ),
-                ),
-              );
-              break;
-            case "chats":
-              var splittedValue = msg.split(',');
-              // Removing the last empty string
-              splittedValue.removeLast();
-              splittedValue = splittedValue.reversed.toList();
-              AppLogger.instance.i('Received message: $splittedValue');
-              emit(
-                state.copyWith(
-                  status: DeviceStateStatus.data,
-                  deviceHistoryDatalist:
-                      splittedValue.map((e) => int.parse(e)).toList(),
-                ),
-              );
-              break;
-            case "schedule":
-              final Map<String, dynamic> data = jsonDecode(msg);
-              AppLogger.instance.i('Received message: $data');
-              final schedules = (data["schedule"] as List)
-                  .map((e) => ScheduleEntity.fromJsonWithId(e))
-                  .toList();
-              emit(
-                state.copyWith(
-                  status: DeviceStateStatus.data,
-                  schedules: schedules,
-                ),
-              );
-              break;
-            default:
-              break;
-          }
+  /// Set device ID and subscribe to its topics
+  void setDeviceAndSubscribe(String deviceId) {
+    _mqttService.setDeviceId(deviceId);
+    _subscribeToDeviceTopics();
+  }
+  
+  /// Subscribe to all device-specific topics
+  void _subscribeToDeviceTopics() {
+    // Subscribe to status topic
+    final statusStream = _mqttService.subscribeToDeviceTopic('status');
+    _topicSubscriptions.add(
+      statusStream.listen((message) {
+        try {
+          final deviceStatus = DeviceStatusEntity.fromJson(jsonDecode(message));
+          emit(state.copyWith(
+            status: DeviceStateStatus.data,
+            deviceStatus: deviceStatus,
+          ));
+        } catch (e) {
+          AppLogger.instance.e('Failed to parse status: $e');
         }
-      },
+      }),
+    );
+    
+    // Subscribe to power topic
+    final powStream = _mqttService.subscribeToDeviceTopic('pow');
+    _topicSubscriptions.add(
+      powStream.listen((message) {
+        try {
+          final powerDetails = PowEntity.fromJson(jsonDecode(message));
+          emit(state.copyWith(
+            status: DeviceStateStatus.data,
+            devicePowerDetails: powerDetails,
+          ));
+        } catch (e) {
+          AppLogger.instance.e('Failed to parse power details: $e');
+        }
+      }),
+    );
+    
+    // Subscribe to vals topic
+    final valsStream = _mqttService.subscribeToDeviceTopic('vals');
+    _topicSubscriptions.add(
+      valsStream.listen((message) {
+        _handleValsMessage(message);
+      }),
+    );
+    
+    // Subscribe to charts topic
+    final chartsStream = _mqttService.subscribeToDeviceTopic('chats');
+    _topicSubscriptions.add(
+      chartsStream.listen((message) {
+        _handleChartsMessage(message);
+      }),
+    );
+    
+    // Subscribe to schedule topic
+    final scheduleStream = _mqttService.subscribeToDeviceTopic('schedule');
+    _topicSubscriptions.add(
+      scheduleStream.listen((message) {
+        _handleScheduleMessage(message);
+      }),
     );
   }
 
-  void subscribeToTopic(String topic, [MqttQos qosLevel = MqttQos.atMostOnce]) {
-    final subscription = _mqttClient2?.subscribe(topic, qosLevel);
-    if (subscription != null) {
-      AppLogger.instance.i('Subscribed to topic: $topic');
-      emit(
-        state.copyWith(
+  
+  /// Handle vals topic messages
+  void _handleValsMessage(String message) async {
+    if (message == "null") {
+      final lastVal = await ValsPublisherLog.get();
+      if (lastVal != null) {
+        try {
+          final jsonStart = lastVal.indexOf('] ');
+          final jsonStr = jsonStart != -1
+              ? lastVal.substring(jsonStart + 2)
+              : lastVal;
+          final valsEntity = ValsEntity.fromJson(jsonDecode(jsonStr));
+          emit(state.copyWith(
+            status: DeviceStateStatus.data,
+            deviceValueDetails: valsEntity,
+          ));
+        } catch (e) {
+          AppLogger.instance.e('Failed to parse last published vals: $e');
+          emit(state.copyWith(
+            status: DeviceStateStatus.error,
+            errorMessage: 'Failed to parse last published vals',
+          ));
+        }
+      } else {
+        AppLogger.instance.e('No last published vals value available');
+        emit(state.copyWith(
+          status: DeviceStateStatus.error,
+          errorMessage: 'No last published vals value available',
+        ));
+      }
+    } else {
+      try {
+        final valsEntity = ValsEntity.fromJson(jsonDecode(message));
+        emit(state.copyWith(
           status: DeviceStateStatus.data,
-          subscriptions: [...state.subscriptions, subscription],
-        ),
-      );
+          deviceValueDetails: valsEntity,
+        ));
+      } catch (e) {
+        AppLogger.instance.e('Failed to parse vals: $e');
+        emit(state.copyWith(
+          status: DeviceStateStatus.error,
+          errorMessage: 'Failed to parse vals',
+        ));
+      }
     }
+  }
+  
+  /// Handle charts topic messages
+  void _handleChartsMessage(String message) {
+    var splittedValue = message.split(',');
+    splittedValue.removeLast();
+    splittedValue = splittedValue.reversed.toList();
+    AppLogger.instance.i('Received charts message: $splittedValue');
+    emit(state.copyWith(
+      status: DeviceStateStatus.data,
+      deviceHistoryDatalist:
+          splittedValue.map((e) => int.tryParse(e) ?? 0).toList(),
+    ));
+  }
+  
+  /// Handle schedule topic messages
+  void _handleScheduleMessage(String message) {
+    try {
+      final Map<String, dynamic> data = jsonDecode(message);
+      AppLogger.instance.i('Received schedule message: $data');
+      final schedules = (data["schedule"] as List)
+          .map((e) => ScheduleEntity.fromJsonWithId(e))
+          .toList();
+      emit(state.copyWith(
+        status: DeviceStateStatus.data,
+        schedules: schedules,
+      ));
+    } catch (e) {
+      AppLogger.instance.e('Failed to parse schedule: $e');
+      emit(state.copyWith(
+        status: DeviceStateStatus.error,
+        errorMessage: 'Failed to parse schedule',
+      ));
+    }
+  }
+
+  void subscribeToTopic(
+    String topic, [
+    MqttQos qosLevel = MqttQos.atLeastOnce,
+  ]) {
+    _mqttService.subscribe(topic, qosLevel);
+    AppLogger.instance.i('Subscribed to topic: $topic');
   }
 
   void unsubscribeFromAllTopics() {
-    if (state.subscriptions.isEmpty) return;
-    AppLogger.instance.i('Unsubscribing from all topics');
-    _mqttClient2?.unsubscribeSubscriptionList(state.subscriptions);
+    _mqttService.unsubscribeFromAllTopics();
+    AppLogger.instance.i('Unsubscribed from all topics');
   }
 
   void publishToTopic(
@@ -217,17 +245,14 @@ class DeviceBloc extends Cubit<DeviceState> {
     String message, {
     MqttQos qosLevel = MqttQos.atMostOnce,
   }) {
-    final builder = MqttPayloadBuilder();
-    builder.addString(message);
-
-    final msgIdentifier = _mqttClient2!.publishMessage(
-      topic,
-      qosLevel,
-      builder.payload!,
-      retain: true,
-    );
-    AppLogger.instance
-        .i('Publishing message to $topic: $message with id $msgIdentifier');
+		if (!messageIsInJsonFormat(message)) {
+			AppLogger.instance.e('Message is not in JSON format: $message - not publishing to topic: $topic - StackTrace: ${StackTrace.current}');
+			return;
+		}
+    _mqttService.publish(topic, message, qosLevel: qosLevel);
+    if (topic.endsWith('vals')) {
+      ValsPublisherLog.set(message);
+    }
   }
 
   void createSchedule(ScheduleEntity schedule, String deviceId) {
@@ -272,27 +297,40 @@ class DeviceBloc extends Cubit<DeviceState> {
   }
 
   void publishSchedule(String deviceId, List<ScheduleEntity> schedules) {
-    publishToTopic(
-      "$deviceId/schedule",
+    _mqttService.setDeviceId(deviceId);
+    _mqttService.publishToDeviceTopic(
+      "schedule",
       jsonEncode({
         "schedule": schedules.map((e) => e.toJsonWithoutId()).toList(),
       }),
     );
   }
 
-  String _convertMsgFromBytesToString(MqttReceivedMessage message) {
-    MqttPublishMessage msg = message.payload as MqttPublishMessage;
-    final msgString = MqttUtilities.bytesToStringAsString(msg.payload.message!);
-    return msgString;
-  }
+	bool messageIsInJsonFormat(String message) {
+		try {
+			jsonDecode(message);
+			return true;
+		} catch (e) {
+			return false;
+		}
+	}
 
-  resetState() {
+  void resetState() {
     emit(DeviceState.initial());
   }
 
   @override
   Future<void> close() {
-    _mqttClient2?.disconnect();
+    // Cancel all subscriptions
+    _connectionSubscription?.cancel();
+    for (var subscription in _topicSubscriptions) {
+      subscription.cancel();
+    }
+    _topicSubscriptions.clear();
+    
+    // Disconnect MQTT service
+    _mqttService.disconnect();
+    
     return super.close();
   }
 }

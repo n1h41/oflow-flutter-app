@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 class DebugLogDialog extends StatefulWidget {
   final String logText;
   final File logFile;
-  const DebugLogDialog({required this.logText, required this.logFile});
+  const DebugLogDialog(
+      {super.key, required this.logText, required this.logFile});
 
   @override
   State<DebugLogDialog> createState() => DebugLogDialogState();
@@ -32,10 +33,13 @@ class DebugLogDialogState extends State<DebugLogDialog> {
       lines = lines.sublist(lines.length - _tailLines);
     }
     if (_filter.isNotEmpty) {
-      lines = lines.where((line) => line.toLowerCase().contains(_filter.toLowerCase())).toList();
+      lines = lines
+          .where((line) => line.toLowerCase().contains(_filter.toLowerCase()))
+          .toList();
     }
     setState(() {
-      _displayText = lines.isEmpty ? 'No matching log entries.' : lines.join('\n');
+      _displayText =
+          lines.isEmpty ? 'No matching log entries.' : lines.join('\n');
     });
   }
 
@@ -108,8 +112,9 @@ class DebugLogDialogState extends State<DebugLogDialog> {
           label: const Text('Copy'),
           onPressed: () async {
             await Clipboard.setData(ClipboardData(text: _displayText));
-            if (!mounted) return;
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Copied to clipboard')));
+            if (!context.mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Copied to clipboard')));
           },
         ),
         TextButton.icon(
@@ -117,11 +122,12 @@ class DebugLogDialogState extends State<DebugLogDialog> {
           label: const Text('Clear Log'),
           onPressed: () async {
             await widget.logFile.writeAsString('');
-            if (!mounted) return;
+            if (!context.mounted) return;
             setState(() {
               _displayText = '';
             });
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Log file cleared')));
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Log file cleared')));
           },
         ),
         TextButton(
