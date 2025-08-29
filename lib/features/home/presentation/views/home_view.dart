@@ -8,7 +8,6 @@ import 'package:oflow/core/utils/helpers/logger.dart';
 import 'package:oflow/features/home/presentation/views/_debug_log_dialog.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/foundation.dart';
-import 'package:mqtt5_client/mqtt5_client.dart';
 
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/popup/loaders.dart';
@@ -89,7 +88,7 @@ class _HomeViewState extends State<HomeView> {
               onPressed: () async {
                 final loggerFile = AppLogger.logFile;
                 if (loggerFile == null || !await loggerFile.exists()) {
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text('No log file found.'),
                   ));
@@ -97,14 +96,14 @@ class _HomeViewState extends State<HomeView> {
                 }
                 try {
                   final logText = await loggerFile.readAsString();
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   showDialog(
                     context: context,
                     builder: (context) =>
                         DebugLogDialog(logText: logText, logFile: loggerFile),
                   );
                 } catch (e) {
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text('Failed to read log file.'),
                   ));
@@ -117,18 +116,18 @@ class _HomeViewState extends State<HomeView> {
             onPressed: () async {
               final loggerFile = AppLogger.logFile;
               if (loggerFile == null || !await loggerFile.exists()) {
-                if (!mounted) return;
+                if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   content: Text('No log file found.'),
                 ));
                 return;
               }
               try {
-                await Share.shareFiles([loggerFile.path],
+                await Share.shareXFiles([XFile(loggerFile.path)],
                     text: 'App error log for developer');
-                if (!mounted) return;
+                if (!context.mounted) return;
               } catch (e) {
-                if (!mounted) return;
+                if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text('Failed to share log file: $e'),
                 ));
@@ -342,7 +341,7 @@ class _HomeViewState extends State<HomeView> {
     final deviceBloc = context.read<DeviceBloc>();
     final deviceBlocStateStatus = deviceBloc.state.status;
     if (deviceBlocStateStatus == DeviceStateStatus.loading &&
-        deviceBloc.mqttConnectionStatus == MqttConnectionState.connecting) {
+        !deviceBloc.isConnected) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -353,7 +352,7 @@ class _HomeViewState extends State<HomeView> {
       );
       return;
     }
-    if (deviceBloc.mqttConnectionStatus == MqttConnectionState.disconnected) {
+    if (!deviceBloc.isConnected) {
       final text = deviceBloc.state.status == DeviceStateStatus.error
           ? deviceBloc.state.errorMessage ?? "An error occurred"
           : "Please wait for the device to connect";
@@ -387,18 +386,28 @@ class _HomeViewState extends State<HomeView> {
             identityId: identityId as String,
             policyName: "esp_p",
           );
-      // INFO: Init mqtt client only after attaching iot policy to user identity
-      _initMqttClient();
+      // Init mqtt client only after attaching iot policy to user identity
+      // Only initialize if not already connected
+      if (!mounted) {
+        return;
+      }
+      final deviceBloc = context.read<DeviceBloc>();
+      if (!deviceBloc.isConnected) {
+        _initMqttClient();
+      } else {
+        AppLogger.instance
+            .i('MQTT client already connected, skipping initialization');
+      }
     }
   }
 
   void _retryHandler() async {
-    final AuthSession authSession = await Amplify.Auth.fetchAuthSession();
     if (!mounted) {
       return;
     }
-    context.read<DeviceBloc>().initMqttClient(authSession);
+    // First reload device list
     _loadDeviceList();
+    // Then attach IoT policy, which will initialize MQTT client
     _attachIotPolicy();
   }
 
