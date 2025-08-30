@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
+import 'package:oflow/features/home/presentation/bloc/home_bloc.dart';
+import 'package:oflow/features/home/presentation/widgets/mqtt_connection_indicator_widget.dart';
 
 import '../../../../core/constants/assets.dart';
 import '../../../../core/constants/colors.dart';
@@ -36,6 +38,7 @@ class _DeviceViewState extends State<DeviceView> {
     super.initState();
     timerStatusNotifier = ValueNotifier<bool>(false);
     isLoadingNotifier = ValueNotifier<bool>(true);
+    // _subscribeToAllTopics();
     _checkMqttConnection();
   }
 
@@ -86,6 +89,9 @@ class _DeviceViewState extends State<DeviceView> {
             "Motor",
             style: Theme.of(context).textTheme.bodyLarge,
           ),
+          actions: const [
+            MqttConnectionIndicatorWidget(),
+          ],
         ),
         body: Column(
           children: [
@@ -443,10 +449,11 @@ class _DeviceViewState extends State<DeviceView> {
     }
     final currentPowerStatus =
         context.read<DeviceBloc>().state.deviceStatus?.p == "1";
-    
+
     final deviceBloc = context.read<DeviceBloc>();
-    deviceBloc.setDeviceAndSubscribe(widget.deviceMac); // Ensure device ID is set
-    
+    deviceBloc
+        .setDeviceAndSubscribe(widget.deviceMac); // Ensure device ID is set
+
     if (currentPowerStatus) {
       deviceBloc.publishToTopic('${widget.deviceMac}/status',
           jsonEncode(const DeviceStatusEntity(p: "0", o: "1").toJson()));
@@ -456,12 +463,9 @@ class _DeviceViewState extends State<DeviceView> {
     }
   }
 
-  void _unsubscribeFromAllTopics() {
-    if (!mounted) {
-      return;
-    }
-    context.read<DeviceBloc>().unsubscribeFromAllTopics();
-    // clear states in devicebloc
+  Future<void> _unsubscribeFromAllTopics() async {
+    await context.read<DeviceBloc>().unsubscribeFromAllTopics();
+    if (!mounted) return;
     context.read<DeviceBloc>().resetState();
   }
 
@@ -469,13 +473,13 @@ class _DeviceViewState extends State<DeviceView> {
     context.read<DeviceBloc>().setDeviceAndSubscribe(widget.deviceMac);
   }
 
-  void _checkMqttConnection() async {
-    final deviceBloc = context.read<DeviceBloc>();
-    if (!deviceBloc.isConnected) {
+  Future<void> _checkMqttConnection() async {
+    final isMqttConnected = context.read<HomeBloc>().state.isMqttConnected;
+    if (!isMqttConnected) {
       context.pop();
       return;
     }
-    _unsubscribeFromAllTopics();
+    await _unsubscribeFromAllTopics();
     _subscribeToAllTopics();
   }
 }

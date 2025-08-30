@@ -37,7 +37,7 @@ class _PowerSettingBottomSheetState extends State<PowerSettingBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return FractionallySizedBox(
-      widthFactor: MediaQuery.of(context).size.width < 600 ? 0.95 : 0.35,
+      widthFactor: 0.95,
       child: ConstrainedBox(
         constraints: const BoxConstraints(
           maxWidth: 400,
@@ -49,123 +49,123 @@ class _PowerSettingBottomSheetState extends State<PowerSettingBottomSheet> {
             vertical: MediaQuery.of(context).size.width < 600 ? 16 : 24,
           ),
           child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Power Settings",
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 20),
-          const Divider(),
-          const SizedBox(height: 10),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Min Voltage",
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                    const SizedBox(height: 10),
-                    // create textformfiled with height of 50
-                    Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: KAppColors.borderPrimary,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Power Settings",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 20),
+              const Divider(),
+              const SizedBox(height: 10),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Min Voltage",
+                          style: Theme.of(context).textTheme.labelMedium,
                         ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: TextFormField(
-                        controller: _minVoltageController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: "Enter min voltage",
-                          hintStyle: Theme.of(context).textTheme.labelSmall,
-                          border: InputBorder.none,
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 10),
+                        const SizedBox(height: 10),
+                        // create textformfiled with height of 50
+                        Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: KAppColors.borderPrimary,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextFormField(
+                            controller: _minVoltageController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              hintText: "Enter min voltage",
+                              hintStyle: Theme.of(context).textTheme.labelSmall,
+                              border: InputBorder.none,
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      "Min Current",
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                    const SizedBox(height: 10),
-                    // create textformfiled with height of 50
-                    Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: KAppColors.borderPrimary,
+                        const SizedBox(height: 10),
+                        Text(
+                          "Min Current",
+                          style: Theme.of(context).textTheme.labelMedium,
                         ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: TextFormField(
-                        controller: _minCurrentController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: "Enter min current",
-                          hintStyle: Theme.of(context).textTheme.labelSmall,
-                          border: InputBorder.none,
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 10),
+                        const SizedBox(height: 10),
+                        // create textformfiled with height of 50
+                        Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: KAppColors.borderPrimary,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextFormField(
+                            controller: _minCurrentController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              hintText: "Enter min current",
+                              hintStyle: Theme.of(context).textTheme.labelSmall,
+                              border: InputBorder.none,
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      "Max Current",
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                    const SizedBox(height: 10),
-                    // create textformfiled with height of 50
-                    Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: KAppColors.borderPrimary,
+                        const SizedBox(height: 10),
+                        Text(
+                          "Max Current",
+                          style: Theme.of(context).textTheme.labelMedium,
                         ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: TextFormField(
-                        controller: _maxCurrentController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: "Enter max current",
-                          hintStyle: Theme.of(context).textTheme.labelSmall,
-                          border: InputBorder.none,
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 10),
+                        const SizedBox(height: 10),
+                        // create textformfiled with height of 50
+                        Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: KAppColors.borderPrimary,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextFormField(
+                            controller: _maxCurrentController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              hintText: "Enter max current",
+                              hintStyle: Theme.of(context).textTheme.labelSmall,
+                              border: InputBorder.none,
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _handlerUpdatePowerSettings,
-              child: const Text("Save"),
-            ),
-          ),
-        ], // children of Column
-      ), // Column
-    ), // Container
-  ), // ConstrainedBox
-); // FractionallySizedBox
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _handlerUpdatePowerSettings,
+                  child: const Text("Save"),
+                ),
+              ),
+            ], // children of Column
+          ), // Column
+        ), // Container
+      ), // ConstrainedBox
+    ); // FractionallySizedBox
   }
 
   void _handlerUpdatePowerSettings() {

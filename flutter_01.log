@@ -1,0 +1,90 @@
+Flutter crash report.
+Please report a bug at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter debug-adapter
+
+## exception
+
+RPCError: readyToResume: (-32603) Unexpected DWDS error for resume: WipError -32000 Promise was collected
+
+```
+#0      new _OutstandingRequest (package:vm_service/src/vm_service.dart:268:34)
+#1      VmService._call.<anonymous closure> (package:vm_service/src/vm_service.dart:1950:25)
+#2      VmService._call (package:vm_service/src/vm_service.dart:1962:8)
+#3      VmService.callServiceExtension (package:vm_service/src/vm_service.dart:1901:14)
+#4      VmService.callMethod (package:vm_service/src/vm_service.dart:1884:12)
+#5      DdsExtension._callHelper (package:dds_service_extensions/dds_service_extensions.dart:365:12)
+#6      DdsExtension.readyToResume (package:dds_service_extensions/dds_service_extensions.dart:323:12)
+<asynchronous suspension>
+#7      IsolateManager._readyToResume (package:dds/src/dap/isolate_manager.dart:425:7)
+<asynchronous suspension>
+#8      IsolateManager.readyToResumeThread (package:dds/src/dap/isolate_manager.dart:306:5)
+<asynchronous suspension>
+#9      IsolateManager._handlePause (package:dds/src/dap/isolate_manager.dart:695:7)
+<asynchronous suspension>
+#10     IsolateManager.handleEvent (package:dds/src/dap/isolate_manager.dart:207:7)
+<asynchronous suspension>
+#11     DartDebugAdapter.handleDebugEvent (package:dds/src/dap/adapters/dart.dart:2470:5)
+<asynchronous suspension>
+#12     DartDebugAdapter._withErrorHandling (package:dds/src/dap/adapters/dart.dart:2832:14)
+<asynchronous suspension>
+```
+
+## flutter doctor
+
+```
+[✓] Flutter (Channel stable, 3.35.2, on Arch Linux 6.15.2-arch1-1.2-g14, locale en_US.UTF-8) [66ms]
+    • Flutter version 3.35.2 on channel stable at /home/n1h41/development/flutter
+    • Upstream repository https://github.com/flutter/flutter.git
+    • Framework revision 05db968908 (5 days ago), 2025-08-25 10:21:35 -0700
+    • Engine revision a8bfdfc394
+    • Dart version 3.9.0
+    • DevTools version 2.48.0
+    • Feature flags: enable-web, enable-linux-desktop, enable-macos-desktop, enable-windows-desktop, enable-android, enable-ios, cli-animations, enable-lldb-debugging
+
+[!] Android toolchain - develop for Android devices (Android SDK version 35.0.1) [3.1s]
+    • Android SDK at /home/n1h41/Android/Sdk
+    • Emulator version 35.3.11.0 (build_id 12836668) (CL:N/A)
+    • Platform android-36, build-tools 35.0.1
+    • Java binary at: /home/n1h41/.local/share/JetBrains/Toolbox/apps/android-studio/jbr/bin/java
+      This is the JDK bundled with the latest Android Studio installation on this machine.
+      To manually set the JDK path, use: `flutter config --jdk-dir="path/to/jdk"`.
+    • Java version OpenJDK Runtime Environment (build 21.0.6+-13391695-b895.109)
+    ! Some Android licenses not accepted. To resolve this, run: flutter doctor --android-licenses
+
+[✓] Chrome - develop for the web [16ms]
+    • CHROME_EXECUTABLE = /opt/google/chrome/chrome
+
+[✓] Linux toolchain - develop for Linux desktop [764ms]
+    • clang version 20.1.6
+    • cmake version 4.0.3-dirty
+    • ninja version 1.12.1
+    • pkg-config version 2.4.3
+    • OpenGL core renderer: Mesa Intel(R) Arc(tm) Graphics (MTL)
+    • OpenGL core version: 4.6 (Core Profile) Mesa 25.1.3-arch1.3
+    • OpenGL core shading language version: 4.60
+    • OpenGL ES renderer: Mesa Intel(R) Arc(tm) Graphics (MTL)
+    • OpenGL ES version: OpenGL ES 3.2 Mesa 25.1.3-arch1.3
+    • OpenGL ES shading language version: OpenGL ES GLSL ES 3.20
+    • GL_EXT_framebuffer_blit: yes
+    • GL_EXT_texture_format_BGRA8888: yes
+
+[✓] Android Studio (version 2025.1.1) [11ms]
+    • Android Studio at /home/n1h41/.local/share/JetBrains/Toolbox/apps/android-studio
+    • Flutter plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/9212-flutter
+    • Dart plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/6351-dart
+    • Java version OpenJDK Runtime Environment (build 21.0.6+-13391695-b895.109)
+
+[✓] Connected device (2 available) [115ms]
+    • Linux (desktop) • linux  • linux-x64      • Arch Linux 6.15.2-arch1-1.2-g14
+    • Chrome (web)    • chrome • web-javascript • Google Chrome 136.0.7103.92
+
+[✓] Network resources [654ms]
+    • All expected network resources are available.
+
+! Doctor found issues in 1 category.
+```

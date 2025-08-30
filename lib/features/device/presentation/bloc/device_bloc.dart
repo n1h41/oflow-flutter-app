@@ -1,15 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
 import 'package:oflow/features/device/data/mqtt_service.dart';
 import 'package:oflow/features/device/domain/entity/schedule_entity.dart';
 
-import '../../../../core/constants/exceptions/failure.dart';
-import '../../../../core/service_locator.dart';
 import '../../../../core/utils/helpers/logger.dart';
 import '../../domain/entity/device_status_entity.dart';
 import '../../domain/entity/pow_entity.dart';
@@ -18,75 +14,20 @@ import '../../../../core/utils/helpers/vals_publisher_log.dart';
 import 'device_state.dart';
 
 class DeviceBloc extends Cubit<DeviceState> {
-  DeviceBloc() : super(DeviceState.initial());
+  final MqttService _mqttService;
 
-  final MqttService _mqttService = getIt<MqttService>();
-  StreamSubscription<MqttConnectionState>? _connectionSubscription;
+  DeviceBloc({required MqttService mqttService})
+      : _mqttService = mqttService,
+        super(DeviceState.initial());
+
   final List<StreamSubscription> _topicSubscriptions = [];
-  
-  /// Get current MQTT connection status
-  bool get isConnected => _mqttService.isConnected;
-
-  Future<void> initMqttClient(AuthSession session) async {
-    AppLogger.instance.i('Initializing MQTT client - isConnected: ${_mqttService.isConnected}, isInitialized: ${_mqttService.isInitialized}');
-    emit(state.copyWith(status: DeviceStateStatus.loading));
-    
-    // Only initialize if not already connected
-    if (_mqttService.isConnected) {
-      AppLogger.instance.i('MQTT client already connected, skipping initialization');
-      emit(state.copyWith(
-        isConnected: true,
-        status: DeviceStateStatus.data,
-      ));
-      return;
-    }
-    
-    await configMqttClient(session);
-  }
-
-  Future<void> configMqttClient(AuthSession authSession) async {
-    try {
-      // Initialize MQTT service
-      await _mqttService.initialize(authSession);
-      
-      // Set up connection state listener
-      _connectionSubscription = _mqttService.connectionStateStream.listen(
-        (connectionState) {
-          final isConnected = connectionState == MqttConnectionState.connected;
-          emit(state.copyWith(
-            isConnected: isConnected,
-            status: isConnected ? DeviceStateStatus.data : DeviceStateStatus.loading,
-          ));
-        },
-      );
-      
-      // Connect to MQTT broker
-      await _mqttService.connect();
-      
-    } catch (e) {
-      AppLogger.instance.e('Failed to initialize MQTT client: $e');
-      
-      Failure failure;
-      if (e is SocketException) {
-        failure = NoNetworkFailure();
-      } else {
-        failure = ServerFailure(message: "MQTT initialization error: $e");
-      }
-      
-      emit(state.copyWith(
-        status: DeviceStateStatus.error,
-        errorMessage: 'Failed to initialize MQTT client: $e',
-        error: failure,
-      ));
-    }
-  }
 
   /// Set device ID and subscribe to its topics
   void setDeviceAndSubscribe(String deviceId) {
     _mqttService.setDeviceId(deviceId);
     _subscribeToDeviceTopics();
   }
-  
+
   /// Subscribe to all device-specific topics
   void _subscribeToDeviceTopics() {
     // Subscribe to status topic
@@ -104,7 +45,7 @@ class DeviceBloc extends Cubit<DeviceState> {
         }
       }),
     );
-    
+
     // Subscribe to power topic
     final powStream = _mqttService.subscribeToDeviceTopic('pow');
     _topicSubscriptions.add(
@@ -120,7 +61,7 @@ class DeviceBloc extends Cubit<DeviceState> {
         }
       }),
     );
-    
+
     // Subscribe to vals topic
     final valsStream = _mqttService.subscribeToDeviceTopic('vals');
     _topicSubscriptions.add(
@@ -128,7 +69,7 @@ class DeviceBloc extends Cubit<DeviceState> {
         _handleValsMessage(message);
       }),
     );
-    
+
     // Subscribe to charts topic
     final chartsStream = _mqttService.subscribeToDeviceTopic('chats');
     _topicSubscriptions.add(
@@ -136,7 +77,7 @@ class DeviceBloc extends Cubit<DeviceState> {
         _handleChartsMessage(message);
       }),
     );
-    
+
     // Subscribe to schedule topic
     final scheduleStream = _mqttService.subscribeToDeviceTopic('schedule');
     _topicSubscriptions.add(
@@ -146,7 +87,6 @@ class DeviceBloc extends Cubit<DeviceState> {
     );
   }
 
-  
   /// Handle vals topic messages
   void _handleValsMessage(String message) async {
     if (message == "null") {
@@ -154,9 +94,8 @@ class DeviceBloc extends Cubit<DeviceState> {
       if (lastVal != null) {
         try {
           final jsonStart = lastVal.indexOf('] ');
-          final jsonStr = jsonStart != -1
-              ? lastVal.substring(jsonStart + 2)
-              : lastVal;
+          final jsonStr =
+              jsonStart != -1 ? lastVal.substring(jsonStart + 2) : lastVal;
           final valsEntity = ValsEntity.fromJson(jsonDecode(jsonStr));
           emit(state.copyWith(
             status: DeviceStateStatus.data,
@@ -192,7 +131,7 @@ class DeviceBloc extends Cubit<DeviceState> {
       }
     }
   }
-  
+
   /// Handle charts topic messages
   void _handleChartsMessage(String message) {
     var splittedValue = message.split(',');
@@ -205,7 +144,7 @@ class DeviceBloc extends Cubit<DeviceState> {
           splittedValue.map((e) => int.tryParse(e) ?? 0).toList(),
     ));
   }
-  
+
   /// Handle schedule topic messages
   void _handleScheduleMessage(String message) {
     try {
@@ -235,9 +174,10 @@ class DeviceBloc extends Cubit<DeviceState> {
     AppLogger.instance.i('Subscribed to topic: $topic');
   }
 
-  void unsubscribeFromAllTopics() {
-    _mqttService.unsubscribeFromAllTopics();
-    AppLogger.instance.i('Unsubscribed from all topics');
+  Future<void> unsubscribeFromAllTopics() async {
+    emit(state.copyWith(status: DeviceStateStatus.loading));
+    await _mqttService.unsubscribeFromAllTopics();
+    emit(state.copyWith(status: DeviceStateStatus.data));
   }
 
   void publishToTopic(
@@ -245,10 +185,11 @@ class DeviceBloc extends Cubit<DeviceState> {
     String message, {
     MqttQos qosLevel = MqttQos.atMostOnce,
   }) {
-		if (!messageIsInJsonFormat(message)) {
-			AppLogger.instance.e('Message is not in JSON format: $message - not publishing to topic: $topic - StackTrace: ${StackTrace.current}');
-			return;
-		}
+    if (!messageIsInJsonFormat(message)) {
+      AppLogger.instance.e(
+          'Message is not in JSON format: $message - not publishing to topic: $topic - StackTrace: ${StackTrace.current}');
+      return;
+    }
     _mqttService.publish(topic, message, qosLevel: qosLevel);
     if (topic.endsWith('vals')) {
       ValsPublisherLog.set(message);
@@ -306,31 +247,29 @@ class DeviceBloc extends Cubit<DeviceState> {
     );
   }
 
-	bool messageIsInJsonFormat(String message) {
-		try {
-			jsonDecode(message);
-			return true;
-		} catch (e) {
-			return false;
-		}
-	}
+  bool messageIsInJsonFormat(String message) {
+    try {
+      jsonDecode(message);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 
   void resetState() {
-    emit(DeviceState.initial());
+    emit(DeviceState.initial().copyWith(
+      isConnected: _mqttService.isConnected,
+    ));
   }
 
   @override
   Future<void> close() {
+    // unsubscribeFromAllTopics();
     // Cancel all subscriptions
-    _connectionSubscription?.cancel();
     for (var subscription in _topicSubscriptions) {
       subscription.cancel();
     }
     _topicSubscriptions.clear();
-    
-    // Disconnect MQTT service
-    _mqttService.disconnect();
-    
     return super.close();
   }
 }
