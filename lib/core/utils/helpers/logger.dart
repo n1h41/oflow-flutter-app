@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:logger/logger.dart';
-import 'package:path_provider/path_provider.dart';
 
 class AppLogger {
   static Logger? _instance;
@@ -8,16 +7,9 @@ class AppLogger {
 
   static Future<void> init() async {
     if (_instance != null) return;
-    final directory = await getApplicationDocumentsDirectory();
-    _logFile = File('${directory.path}/debugLog.txt');
     _instance = Logger(
       printer: PrettyPrinter(),
-      output: MultiOutput(
-        [
-          ConsoleOutput(),
-          FileOutput(file: _logFile!),
-        ],
-      ),
+      output: ConsoleOutput(),
     );
   }
 

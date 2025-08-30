@@ -10,8 +10,10 @@ enum HomeStateStatus { initial, loading, error, data }
 class HomeState with _$HomeState {
   const factory HomeState({
     required HomeStateStatus status,
+    String? errorMessage,
     Failure? error,
     @Default([]) List<DeviceEntity> deviceList,
+    @Default(false) bool isMqttConnected,
   }) = _HomeState;
 
   factory HomeState.initial() {

@@ -39,7 +39,7 @@ class _TimerBottomSheetState extends State<TimerBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return FractionallySizedBox(
-      widthFactor: MediaQuery.of(context).size.width < 600 ? 0.95 : 0.35,
+      widthFactor: 0.95,
       child: ConstrainedBox(
         constraints: const BoxConstraints(
           maxWidth: 400,

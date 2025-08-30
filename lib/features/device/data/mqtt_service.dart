@@ -115,7 +115,7 @@ class MqttService {
   void _configureClient(String clientId) {
     if (_client == null) return;
 
-    _client!.logging(on: true);
+    _client!.logging(on: false);
     _client!.autoReconnect = true;
     _client!.disconnectOnNoResponsePeriod = 90;
     _client!.keepAlivePeriod = 30;
@@ -239,10 +239,14 @@ class MqttService {
     return _topicStreams[topicSuffix]?.stream;
   }
 
-  void unsubscribeFromAllTopics() {
+  Future<void> unsubscribeFromAllTopics() async {
     if (_subscriptions.isEmpty || _client == null) return;
-    AppLogger.instance.i('Unsubscribing from all topics');
-    _client!.unsubscribeSubscriptionList(_subscriptions);
+    for (var sub in _subscriptions) {
+      AppLogger.instance.i('Unsubscribing from topic: ${sub.topic.rawTopic}');
+      _client!.unsubscribeStringTopic(sub.topic.rawTopic!);
+      // Small delay to avoid overwhelming the broker
+      await MqttUtilities.asyncSleep(2);
+    }
     _subscriptions.clear();
   }
 

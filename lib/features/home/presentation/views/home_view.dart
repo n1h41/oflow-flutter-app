@@ -5,15 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:oflow/core/utils/helpers/logger.dart';
-import 'package:oflow/features/home/presentation/views/_debug_log_dialog.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:flutter/foundation.dart';
+import 'package:oflow/features/home/presentation/widgets/mqtt_connection_indicator_widget.dart';
 
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/popup/loaders.dart';
 import '../../../device/domain/entity/device_entity.dart';
-import '../../../device/presentation/bloc/device_bloc.dart';
-import '../../../device/presentation/bloc/device_state.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_state.dart';
 import '../widgets/add_device_popup.dart';
@@ -81,59 +77,7 @@ class _HomeViewState extends State<HomeView> {
           ],
         ),
         actions: [
-          if (kDebugMode)
-            IconButton(
-              icon: const Icon(Icons.article_outlined),
-              tooltip: 'View Debug Log',
-              onPressed: () async {
-                final loggerFile = AppLogger.logFile;
-                if (loggerFile == null || !await loggerFile.exists()) {
-                  if (!context.mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('No log file found.'),
-                  ));
-                  return;
-                }
-                try {
-                  final logText = await loggerFile.readAsString();
-                  if (!context.mounted) return;
-                  showDialog(
-                    context: context,
-                    builder: (context) =>
-                        DebugLogDialog(logText: logText, logFile: loggerFile),
-                  );
-                } catch (e) {
-                  if (!context.mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('Failed to read log file.'),
-                  ));
-                }
-              },
-            ),
-          IconButton(
-            icon: const Icon(Icons.bug_report),
-            tooltip: 'Send Logs to Developer',
-            onPressed: () async {
-              final loggerFile = AppLogger.logFile;
-              if (loggerFile == null || !await loggerFile.exists()) {
-                if (!context.mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('No log file found.'),
-                ));
-                return;
-              }
-              try {
-                await Share.shareXFiles([XFile(loggerFile.path)],
-                    text: 'App error log for developer');
-                if (!context.mounted) return;
-              } catch (e) {
-                if (!context.mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Failed to share log file: $e'),
-                ));
-              }
-            },
-          ),
+          const MqttConnectionIndicatorWidget(),
           IconButton(
             onPressed: _logoutHanlder,
             icon: const Icon(Icons.logout),
@@ -338,10 +282,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void handleDeviceListItemTap(HomeState state, int index) {
-    final deviceBloc = context.read<DeviceBloc>();
-    final deviceBlocStateStatus = deviceBloc.state.status;
-    if (deviceBlocStateStatus == DeviceStateStatus.loading &&
-        !deviceBloc.isConnected) {
+    if (state.status == HomeStateStatus.loading && !state.isMqttConnected) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -352,9 +293,9 @@ class _HomeViewState extends State<HomeView> {
       );
       return;
     }
-    if (!deviceBloc.isConnected) {
-      final text = deviceBloc.state.status == DeviceStateStatus.error
-          ? deviceBloc.state.errorMessage ?? "An error occurred"
+    if (!state.isMqttConnected) {
+      final text = state.status == HomeStateStatus.error
+          ? state.errorMessage ?? "An error occurred"
           : "Please wait for the device to connect";
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -391,8 +332,8 @@ class _HomeViewState extends State<HomeView> {
       if (!mounted) {
         return;
       }
-      final deviceBloc = context.read<DeviceBloc>();
-      if (!deviceBloc.isConnected) {
+      final isMqttConnected = context.read<HomeBloc>().state.isMqttConnected;
+      if (!isMqttConnected) {
         _initMqttClient();
       } else {
         AppLogger.instance
@@ -416,7 +357,7 @@ class _HomeViewState extends State<HomeView> {
     if (!mounted) {
       return;
     }
-    await context.read<DeviceBloc>().initMqttClient(authSession);
+    await context.read<HomeBloc>().initMqttClient(authSession);
   }
 
   void _handlerCopyMacAddress(String macAddress) async {

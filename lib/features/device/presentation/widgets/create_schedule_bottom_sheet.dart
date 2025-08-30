@@ -101,304 +101,306 @@ class _CreateScheduleBottomSheetState extends State<CreateScheduleBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return FractionallySizedBox(
-      widthFactor: MediaQuery.of(context).size.width < 600 ? 0.95 : 0.35,
+      widthFactor: 0.95,
       child: ConstrainedBox(
         constraints: const BoxConstraints(
           maxWidth: 400,
           maxHeight: 500,
         ),
         child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 20,
-              left: 20,
-              bottom: 2,
-            ),
-            child: Text(
-              "Schedule",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(fontWeight: FontWeight.w600),
-            ),
-          ),
-          const SizedBox(height: 10),
-          const Divider(),
-          Flexible(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(
-                vertical: 20,
-                horizontal: 20,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 20,
+                left: 20,
+                bottom: 2,
               ),
-              shrinkWrap: true,
-              children: [
-                Text(
-                  "Starting Time",
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
+              child: Text(
+                "Schedule",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(fontWeight: FontWeight.w600),
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Divider(),
+            Flexible(
+              child: ListView(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20,
+                  horizontal: 20,
                 ),
-                SizedBox(
-                  height: 120,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: WheelPicker(
-                                controller: startTimeHourWheelController,
-                                onIndexChanged: (index) {
-                                  selectedStartTimeHour =
-                                      index == 0 ? 12 : index;
-                                },
-                                style: const WheelPickerStyle(
-                                  squeeze: 0.8,
-                                  diameterRatio: .5,
-                                  surroundingOpacity: .25,
-                                  magnification: 1,
-                                  itemExtent: 54 * 1.2,
-                                ),
-                                builder: (context, index) {
-                                  // Display 12 instead of 0
-                                  final displayValue = index == 0 ? 12 : index;
-                                  return Text(
-                                    displayValue.toString().padLeft(2, "0"),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineLarge
-                                        ?.copyWith(
-                                          fontSize: 50,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                  );
-                                },
-                              ),
-                            ),
-                            Text(
-                              "Hour",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                    color: KAppColors.textPrimary
-                                        .withValues(alpha: 0.4),
-                                  ),
-                            ),
-                          ],
+                shrinkWrap: true,
+                children: [
+                  Text(
+                    "Starting Time",
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
                         ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: WheelPicker(
-                                controller: startTimeMinuteWheelController,
-                                onIndexChanged: (index) {
-                                  selectedStartTimeMinute = index;
-                                },
-                                style: const WheelPickerStyle(
-                                  squeeze: 0.8,
-                                  diameterRatio: .5,
-                                  surroundingOpacity: .25,
-                                  magnification: 1,
-                                  itemExtent: 54 * 1.2,
-                                ),
-                                builder: (context, index) {
-                                  return Text(
-                                    index.toString().padLeft(2, "0"),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineLarge
-                                        ?.copyWith(
-                                          fontSize: 50,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                  );
-                                },
-                              ),
-                            ),
-                            Text(
-                              "Min",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                    color: KAppColors.textPrimary
-                                        .withValues(alpha: 0.4),
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: WheelPicker(
-                                controller: amPmWheelController,
-                                onIndexChanged: (index) {
-                                  isAM = index == 0;
-                                },
-                                style: const WheelPickerStyle(
-                                  squeeze: 0.8,
-                                  diameterRatio: .5,
-                                  surroundingOpacity: .25,
-                                  magnification: 1,
-                                  itemExtent: 54 * 1.2,
-                                ),
-                                builder: (context, index) {
-                                  return Text(
-                                    index == 0 ? "AM" : "PM",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineLarge
-                                        ?.copyWith(
-                                          fontSize: 40,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                  );
-                                },
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 17,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
                   ),
-                ),
-                Text(
-                  "Duration",
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-                SizedBox(
-                  height: 120,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: WheelPicker(
-                                controller: durationHourWheelController,
-                                onIndexChanged: (index) {
-                                  selectedDurationHour = index;
-                                },
-                                style: const WheelPickerStyle(
-                                  squeeze: 0.8,
-                                  diameterRatio: .5,
-                                  surroundingOpacity: .25,
-                                  magnification: 1,
-                                  itemExtent: 54 * 1.2,
-                                ),
-                                builder: (context, index) {
-                                  return Text(
-                                    index.toString().padLeft(2, "0"),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineLarge
-                                        ?.copyWith(
-                                          fontSize: 50,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                  );
-                                },
-                              ),
-                            ),
-                            Text(
-                              "Hour",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                    color: KAppColors.textPrimary
-                                        .withValues(alpha: 0.4),
+                  SizedBox(
+                    height: 120,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: WheelPicker(
+                                  controller: startTimeHourWheelController,
+                                  onIndexChanged: (index) {
+                                    selectedStartTimeHour =
+                                        index == 0 ? 12 : index;
+                                  },
+                                  style: const WheelPickerStyle(
+                                    squeeze: 0.8,
+                                    diameterRatio: .5,
+                                    surroundingOpacity: .25,
+                                    magnification: 1,
+                                    itemExtent: 54 * 1.2,
                                   ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: WheelPicker(
-                                controller: durationMinuteWheelController,
-                                onIndexChanged: (index) {
-                                  selectedDurationMinute = index;
-                                },
-                                style: const WheelPickerStyle(
-                                  squeeze: 0.8,
-                                  diameterRatio: .5,
-                                  surroundingOpacity: .25,
-                                  magnification: 1,
-                                  itemExtent: 54 * 1.2,
+                                  builder: (context, index) {
+                                    // Display 12 instead of 0
+                                    final displayValue =
+                                        index == 0 ? 12 : index;
+                                    return Text(
+                                      displayValue.toString().padLeft(2, "0"),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineLarge
+                                          ?.copyWith(
+                                            fontSize: 50,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    );
+                                  },
                                 ),
-                                builder: (context, index) {
-                                  return Text(
-                                    index.toString().padLeft(2, "0"),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineLarge
-                                        ?.copyWith(
-                                          fontSize: 50,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                  );
-                                },
                               ),
-                            ),
-                            Text(
-                              "Min",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                    color: KAppColors.textPrimary
-                                        .withValues(alpha: 0.4),
-                                  ),
-                            ),
-                          ],
+                              Text(
+                                "Hour",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: KAppColors.textPrimary
+                                          .withValues(alpha: 0.4),
+                                    ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: WheelPicker(
+                                  controller: startTimeMinuteWheelController,
+                                  onIndexChanged: (index) {
+                                    selectedStartTimeMinute = index;
+                                  },
+                                  style: const WheelPickerStyle(
+                                    squeeze: 0.8,
+                                    diameterRatio: .5,
+                                    surroundingOpacity: .25,
+                                    magnification: 1,
+                                    itemExtent: 54 * 1.2,
+                                  ),
+                                  builder: (context, index) {
+                                    return Text(
+                                      index.toString().padLeft(2, "0"),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineLarge
+                                          ?.copyWith(
+                                            fontSize: 50,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              Text(
+                                "Min",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: KAppColors.textPrimary
+                                          .withValues(alpha: 0.4),
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: WheelPicker(
+                                  controller: amPmWheelController,
+                                  onIndexChanged: (index) {
+                                    isAM = index == 0;
+                                  },
+                                  style: const WheelPickerStyle(
+                                    squeeze: 0.8,
+                                    diameterRatio: .5,
+                                    surroundingOpacity: .25,
+                                    magnification: 1,
+                                    itemExtent: 54 * 1.2,
+                                  ),
+                                  builder: (context, index) {
+                                    return Text(
+                                      index == 0 ? "AM" : "PM",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineLarge
+                                          ?.copyWith(
+                                            fontSize: 40,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 17,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  "Select Days",
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-                const SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.center,
-                  child: _buildDaySelectionChips(),
-                ),
-                const SizedBox(height: 30),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _handleSaveSchedule,
-                    child: Text(widget.schedule == null ? "Create" : "Update"),
+                  Text(
+                    "Duration",
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
                   ),
-                ),
-              ], // children of ListView
-            ), // ListView
-          ), // Flexible
-        ], // children of Column
-      ), // Column
-    ), // ConstrainedBox
-); // FractionallySizedBox
+                  SizedBox(
+                    height: 120,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: WheelPicker(
+                                  controller: durationHourWheelController,
+                                  onIndexChanged: (index) {
+                                    selectedDurationHour = index;
+                                  },
+                                  style: const WheelPickerStyle(
+                                    squeeze: 0.8,
+                                    diameterRatio: .5,
+                                    surroundingOpacity: .25,
+                                    magnification: 1,
+                                    itemExtent: 54 * 1.2,
+                                  ),
+                                  builder: (context, index) {
+                                    return Text(
+                                      index.toString().padLeft(2, "0"),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineLarge
+                                          ?.copyWith(
+                                            fontSize: 50,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              Text(
+                                "Hour",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: KAppColors.textPrimary
+                                          .withValues(alpha: 0.4),
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: WheelPicker(
+                                  controller: durationMinuteWheelController,
+                                  onIndexChanged: (index) {
+                                    selectedDurationMinute = index;
+                                  },
+                                  style: const WheelPickerStyle(
+                                    squeeze: 0.8,
+                                    diameterRatio: .5,
+                                    surroundingOpacity: .25,
+                                    magnification: 1,
+                                    itemExtent: 54 * 1.2,
+                                  ),
+                                  builder: (context, index) {
+                                    return Text(
+                                      index.toString().padLeft(2, "0"),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineLarge
+                                          ?.copyWith(
+                                            fontSize: 50,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              Text(
+                                "Min",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: KAppColors.textPrimary
+                                          .withValues(alpha: 0.4),
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    "Select Days",
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                  const SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.center,
+                    child: _buildDaySelectionChips(),
+                  ),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _handleSaveSchedule,
+                      child:
+                          Text(widget.schedule == null ? "Create" : "Update"),
+                    ),
+                  ),
+                ], // children of ListView
+              ), // ListView
+            ), // Flexible
+          ], // children of Column
+        ), // Column
+      ), // ConstrainedBox
+    ); // FractionallySizedBox
   }
 
   Widget _buildDaySelectionChips() {

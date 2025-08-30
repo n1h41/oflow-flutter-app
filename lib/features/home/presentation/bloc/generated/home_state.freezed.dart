@@ -17,8 +17,10 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$HomeState {
   HomeStateStatus get status => throw _privateConstructorUsedError;
+  String? get errorMessage => throw _privateConstructorUsedError;
   Failure? get error => throw _privateConstructorUsedError;
   List<DeviceEntity> get deviceList => throw _privateConstructorUsedError;
+  bool get isMqttConnected => throw _privateConstructorUsedError;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -33,7 +35,11 @@ abstract class $HomeStateCopyWith<$Res> {
       _$HomeStateCopyWithImpl<$Res, HomeState>;
   @useResult
   $Res call(
-      {HomeStateStatus status, Failure? error, List<DeviceEntity> deviceList});
+      {HomeStateStatus status,
+      String? errorMessage,
+      Failure? error,
+      List<DeviceEntity> deviceList,
+      bool isMqttConnected});
 }
 
 /// @nodoc
@@ -52,14 +58,20 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
   @override
   $Res call({
     Object? status = null,
+    Object? errorMessage = freezed,
     Object? error = freezed,
     Object? deviceList = null,
+    Object? isMqttConnected = null,
   }) {
     return _then(_value.copyWith(
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as HomeStateStatus,
+      errorMessage: freezed == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String?,
       error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -68,6 +80,10 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
           ? _value.deviceList
           : deviceList // ignore: cast_nullable_to_non_nullable
               as List<DeviceEntity>,
+      isMqttConnected: null == isMqttConnected
+          ? _value.isMqttConnected
+          : isMqttConnected // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -81,7 +97,11 @@ abstract class _$$HomeStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {HomeStateStatus status, Failure? error, List<DeviceEntity> deviceList});
+      {HomeStateStatus status,
+      String? errorMessage,
+      Failure? error,
+      List<DeviceEntity> deviceList,
+      bool isMqttConnected});
 }
 
 /// @nodoc
@@ -98,14 +118,20 @@ class __$$HomeStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = null,
+    Object? errorMessage = freezed,
     Object? error = freezed,
     Object? deviceList = null,
+    Object? isMqttConnected = null,
   }) {
     return _then(_$HomeStateImpl(
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as HomeStateStatus,
+      errorMessage: freezed == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String?,
       error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -114,6 +140,10 @@ class __$$HomeStateImplCopyWithImpl<$Res>
           ? _value._deviceList
           : deviceList // ignore: cast_nullable_to_non_nullable
               as List<DeviceEntity>,
+      isMqttConnected: null == isMqttConnected
+          ? _value.isMqttConnected
+          : isMqttConnected // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -123,12 +153,16 @@ class __$$HomeStateImplCopyWithImpl<$Res>
 class _$HomeStateImpl implements _HomeState {
   const _$HomeStateImpl(
       {required this.status,
+      this.errorMessage,
       this.error,
-      final List<DeviceEntity> deviceList = const []})
+      final List<DeviceEntity> deviceList = const [],
+      this.isMqttConnected = false})
       : _deviceList = deviceList;
 
   @override
   final HomeStateStatus status;
+  @override
+  final String? errorMessage;
   @override
   final Failure? error;
   final List<DeviceEntity> _deviceList;
@@ -141,8 +175,12 @@ class _$HomeStateImpl implements _HomeState {
   }
 
   @override
+  @JsonKey()
+  final bool isMqttConnected;
+
+  @override
   String toString() {
-    return 'HomeState(status: $status, error: $error, deviceList: $deviceList)';
+    return 'HomeState(status: $status, errorMessage: $errorMessage, error: $error, deviceList: $deviceList, isMqttConnected: $isMqttConnected)';
   }
 
   @override
@@ -151,14 +189,18 @@ class _$HomeStateImpl implements _HomeState {
         (other.runtimeType == runtimeType &&
             other is _$HomeStateImpl &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.errorMessage, errorMessage) ||
+                other.errorMessage == errorMessage) &&
             (identical(other.error, error) || other.error == error) &&
             const DeepCollectionEquality()
-                .equals(other._deviceList, _deviceList));
+                .equals(other._deviceList, _deviceList) &&
+            (identical(other.isMqttConnected, isMqttConnected) ||
+                other.isMqttConnected == isMqttConnected));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, status, error,
-      const DeepCollectionEquality().hash(_deviceList));
+  int get hashCode => Object.hash(runtimeType, status, errorMessage, error,
+      const DeepCollectionEquality().hash(_deviceList), isMqttConnected);
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -172,15 +214,21 @@ class _$HomeStateImpl implements _HomeState {
 abstract class _HomeState implements HomeState {
   const factory _HomeState(
       {required final HomeStateStatus status,
+      final String? errorMessage,
       final Failure? error,
-      final List<DeviceEntity> deviceList}) = _$HomeStateImpl;
+      final List<DeviceEntity> deviceList,
+      final bool isMqttConnected}) = _$HomeStateImpl;
 
   @override
   HomeStateStatus get status;
   @override
+  String? get errorMessage;
+  @override
   Failure? get error;
   @override
   List<DeviceEntity> get deviceList;
+  @override
+  bool get isMqttConnected;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.

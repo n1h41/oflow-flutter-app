@@ -1,7 +1,7 @@
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:oflow/features/device/presentation/bloc/device_bloc.dart';
+import 'package:oflow/features/device/data/mqtt_service.dart';
 import 'package:oflow/features/home/presentation/bloc/home_bloc.dart';
 
 import '../../../../core/router/router.dart';
@@ -15,15 +15,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<DeviceBloc>(
+        /* BlocProvider<DeviceBloc>(
           // lazy: false,
-          create: (_) => DeviceBloc(),
-        ),
+          create: (_) => DeviceBloc(
+            mqttService: getIt<MqttService>(),
+          ),
+        ), */
         BlocProvider<HomeBloc>(
           // lazy: false,
           create: (_) => HomeBloc(
             router: getIt<AppRouter>().router,
             repository: getIt<HomeRepository>(),
+            mqttService: getIt<MqttService>(),
           ),
         ),
       ],
